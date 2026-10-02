@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assistente Orario e Mappe ITIS Negrelli</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #0f1117;
+      color: #f1f5f9;
+      font-family: system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    #main-container {
+      flex: 1;
+      display: flex;
+      width: 100%;
+      height: calc(100vh - 72px);
+    }
+    #avatar-panel {
+      flex: 1.1;
+      position: relative;
+      background: radial-gradient(circle at center, #1e2230 0%, #0f1117 100%);
+    }
+    #status-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 15px;
+      color: #94a3b8;
+      pointer-events: none;
+      text-align: center;
+    }
+    #map-panel {
+      flex: 0.9;
+      background: #161922;
+      border-left: 1px solid #282f44;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      gap: 12px;
+    }
+    .card {
+      background: #1e2230;
+      border: 1px solid #2f374e;
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    #info-card h3 {
+      margin: 0 0 6px 0;
+      font-size: 16px;
+      color: #38bdf8;
+    }
+    #info-card p {
+      margin: 3px 0;
+      font-size: 13px;
+      color: #cbd5e1;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      background: #3b82f6;
+      color: white;
+      margin-top: 4px;
+    }
+    .floor-selector {
+      display: flex;
+      gap: 6px;
+    }
+    .floor-btn {
+      flex: 1;
+      background: #232838;
+      border: 1px solid #333c56;
+      color: #94a3b8;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .floor-btn.active {
+      background: #3b82f6;
+      color: #fff;
+      border-color: #60a5fa;
+    }
+    #map-viewport {
+      flex: 1;
+      background: #0f121a;
+      border: 1px solid #232838;
+      border-radius: 8px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    svg {
+      width: 95%;
+      height: 95%;
+    }
+    .room {
+      fill: #1e2538;
+      stroke: #3b4566;
+      stroke-width: 1.5;
+      transition: fill 0.3s, stroke 0.3s;
+    }
+    .room-label {
+      fill: #64748b;
+      font-size: 10px;
+      font-weight: 600;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+    .room.highlight {
+      fill: #1d4ed8;
+      stroke: #60a5fa;
+      stroke-width: 2.5;
+      filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.6));
+    }
+    .room.highlight + .room-label {
+      fill: #ffffff;
+      font-size: 11px;
+    }
+    #ui-bar {
+      height: 72px;
+      padding: 12px 20px;
+      background: #13161f;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      border-top: 1px solid #232838;
+    }
+    input[type="text"] {
+      flex: 1;
+      max-width: 480px;
+      padding: 11px 16px;
+      border-radius: 8px;
+      border: 1px solid #333c56;
+      background: #0b0d13;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+    input[type="text"]:focus {
+      border-color: #3b82f6;
+    }
+    button.action-btn {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 11px 18px;
+      font-size: 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    button.action-btn:hover { background: #1d4ed8; }
+    #mic-btn { background: #232838; border: 1px solid #333c56; }
+    #mic-btn.listening { background: #ef4444; border-color: #f87171; }
+  </style>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
+        "talkinghead": "https://cdn.jsdelivr.net/gh/met4citizen/TalkingHead@1.1.0/modules/talkinghead.mjs"
+      }
+    }
+  </script>
+</head>
+<body>
+
+  <div id="main-container">
+    <div id="avatar-panel">
+      <div id="status-overlay">Caricamento assistente...</div>
+    </div>
+
+    <div id="map-panel">
+      <div class="card" id="info-card">
+        <h3 id="card-title">In attesa di richiesta...</h3>
+        <p id="card-desc">Chiedi dove si trova un docente (es. «Schirò lunedì 4»)</p>
+        <div id="card-badge" style="display:none;" class="badge"></div>
+      </div>
+
+      <div class="floor-selector">
+        <button class="floor-btn" data-floor="0">Piano Terra</button>
+        <button class="floor-btn" data-floor="1">1° Piano</button>
+        <button class="floor-btn active" data-floor="2">2° Piano</button>
+      </div>
+
+      <div id="map-viewport">
+        <!-- Schema Planimetrico SVG Reattivo -->
+        <svg id="svg-map" viewBox="0 0 500 320">
+          <g id="map-corridors">
+            <rect x="40" y="130" width="420" height="40" fill="#141722" stroke="#232838" stroke-dasharray="4" />
+          </g>
+          <g id="map-rooms"></g>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div id="ui-bar">
+    <input type="text" id="query-input" placeholder="Es. Schirò martedì 2 ora, De Min adesso..." disabled />
+    <button class="action-btn" id="search-btn" disabled>Cerca</button>
+    <button class="action-btn" id="mic-btn" disabled title="Parla">🎙️</button>
+  </div>
+
+  <script type="module">
+    import { TalkingHead } from 'talkinghead';
+
+    const avatarPanel = document.getElementById('avatar-panel');
+    const statusOverlay = document.getElementById('status-overlay');
+    const inputField = document.getElementById('query-input');
+    const searchBtn = document.getElementById('search-btn');
+    const micBtn = document.getElementById('mic-btn');
+    const mapRoomsGroup = document.getElementById('map-rooms');
+    const cardTitle = document.getElementById('card-title');
+    const cardDesc = document.getElementById('card-desc');
+    const cardBadge = document.getElementById('card-badge');
+    const floorButtons = document.querySelectorAll('.floor-btn');
+
+    let orarioDb = null;
+    let isSpeaking = false;
+    let currentJaw = 0;
+    const morphMeshes = [];
+    const DAYS = ["domenica", "lunedi", "martedi", "mercoledi", "giovedi", "venerdi", "sabato"];
+    let currentFloor = "2";
+
+    // Layout planimetrico schematico per ciascun piano dell'ITIS Negrelli
+    const floorLayouts = {
+      "0": [
+        { id: "014", name: "Aula 014", x: 50, y: 50, w: 70, h: 70 },
+        { id: "015", name: "Aula 015", x: 130, y: 50, w: 70, h: 70 },
+        { id: "016", name: "Aula 016", x: 210, y: 50, w: 70, h: 70 },
+        { id: "017", name: "Aula 017", x: 290, y: 50, w: 70, h: 70 },
+        { id: "018", name: "Lab. Linux 018", x: 370, y: 50, w: 80, h: 70 },
+        { id: "019", name: "Aula 019", x: 50, y: 180, w: 80, h: 70 },
+        { id: "020", name: "Lab. Multim. 020", x: 140, y: 180, w: 140, h: 70 },
+        { id: "022", name: "Aula 022", x: 290, y: 180, w: 160, h: 70 }
+      ],
+      "1": [
+        { id: "110", name: "Aula 110", x: 50, y: 50, w: 65, h: 70 },
+        { id: "111", name: "Aula 111", x: 120, y: 50, w: 65, h: 70 },
+        { id: "112", name: "Aula 112", x: 190, y: 50, w: 65, h: 70 },
+        { id: "113", name: "Aula 113", x: 260, y: 50, w: 65, h: 70 },
+        { id: "114", name: "Aula 114", x: 330, y: 50, w: 65, h: 70 },
+        { id: "115", name: "Aula 115", x: 400, y: 50, w: 60, h: 70 },
+        { id: "116", name: "Aula 116", x: 50, y: 180, w: 65, h: 70 },
+        { id: "117", name: "Lab. CAD 117", x: 125, y: 180, w: 110, h: 70 },
+        { id: "118", name: "Lab. Costruz. 118", x: 245, y: 180, w: 100, h: 70 },
+        { id: "135", name: "Lab. Fisica 135", x: 355, y: 180, w: 105, h: 70 }
+      ],
+      "2": [
+        { id: "201", name: "Aula 201", x: 50, y: 50, w: 65, h: 70 },
+        { id: "202", name: "Aula 202", x: 120, y: 50, w: 65, h: 70 },
+        { id: "203", name: "Aula 203", x: 190, y: 50, w: 65, h: 70 },
+        { id: "204", name: "Aula 204", x: 260, y: 50, w: 65, h: 70 },
+        { id: "205", name: "Aula 205", x: 330, y: 50, w: 65, h: 70 },
+        { id: "209", name: "Aula 209", x: 400, y: 50, w: 60, h: 70 },
+        { id: "206", name: "Lab. Info 206", x: 50, y: 180, w: 120, h: 70 },
+        { id: "208", name: "Lab. Elettronica 208", x: 180, y: 180, w: 140, h: 70 },
+        { id: "223", name: "Lab. Sistemi 223", x: 330, y: 180, w: 130, h: 70 }
+      ]
+    };
+
+    function renderMap(floor, highlightRoomNum = null) {
+      currentFloor = floor;
+      floorButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.floor === floor);
+      });
+
+      mapRoomsGroup.innerHTML = '';
+      const rooms = floorLayouts[floor] || [];
+
+      rooms.forEach(r => {
+        const isTarget = highlightRoomNum && (
+          r.id === highlightRoomNum || 
+          r.name.toLowerCase().includes(highlightRoomNum.toLowerCase())
+        );
+
+        const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        rect.setAttribute("x", r.x);
+        rect.setAttribute("y", r.y);
+        rect.setAttribute("width", r.w);
+        rect.setAttribute("height", r.h);
+        rect.setAttribute("rx", "6");
+        rect.setAttribute("class", `room ${isTarget ? 'highlight' : ''}`);
+
+        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("x", r.x + r.w / 2);
+        text.setAttribute("y", r.y + r.h / 2 + 4);
+        text.setAttribute("class", "room-label");
+        text.textContent = r.name;
+
+        mapRoomsGroup.appendChild(rect);
+        mapRoomsGroup.appendChild(text);
+      });
+    }
+
+    async function loadSchedule() {
+      try {
+        const res = await fetch('./public/data/orario.json');
+        if (!res.ok) throw new Error();
+        const json = await res.json();
+        orarioDb = json.docenti;
+      } catch (e) {
+        console.warn("Dati orario.json non trovati.");
+      }
+    }
+
+    function speak(text) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'it-IT';
+      const voices = window.speechSynthesis.getVoices();
+      const itVoice = voices.find(v => v.lang.startsWith('it') || v.lang.startsWith('IT'));
+      if (itVoice) utterance.voice = itVoice;
+
+      utterance.onstart = () => { isSpeaking = true; };
+      utterance.onend = () => { isSpeaking = false; };
+      utterance.onerror = () => { isSpeaking = false; };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function locateAndHighlight(roomStr) {
+      if (!roomStr) return;
+      const numMatch = roomStr.match(/\b(\d{3})\b/);
+      if (numMatch) {
+        const num = numMatch[1];
+        const floor = num[0]; // 0xx -> '0', 1xx -> '1', 2xx -> '2'
+        if (['0', '1', '2'].includes(floor)) {
+          renderMap(floor, num);
+        }
+      }
+    }
+
+    function querySchedule(text) {
+      if (!orarioDb) {
+        speak("Il database dell'orario non è ancora pronto.");
+        return;
+      }
+
+      const q = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const profKeys = Object.keys(orarioDb);
+      const docente = profKeys.find(p => q.includes(p.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")));
+
+      if (!docente) {
+        cardTitle.textContent = "Docente non trovato";
+        cardDesc.textContent = "Verifica il cognome inserito.";
+        cardBadge.style.display = "none";
+        speak("Non ho trovato questo docente. Prova a specificare solo il cognome.");
+        return;
+      }
+
+      let targetDay = null;
+      for (const d of ["lunedi", "martedi", "mercoledi", "giovedi", "venerdi", "sabato"]) {
+        if (q.includes(d)) { targetDay = d; break; }
+      }
+
+      const now = new Date();
+      if (!targetDay) {
+        targetDay = q.includes("domani") ? DAYS[(now.getDay() + 1) % 7] : DAYS[now.getDay()];
+      }
+
+      if (targetDay === "domenica") {
+        cardTitle.textContent = "Domenica";
+        cardDesc.textContent = "L'istituto è chiuso.";
+        speak("Di domenica la scuola è chiusa.");
+        return;
+      }
+
+      let targetHour = null;
+      const oraMatch = q.match(/\b([1-5])\s*(?:ª|°|a|ora)?\b/);
+      if (oraMatch) targetHour = oraMatch[1];
+      else {
+        const h = now.getHours();
+        targetHour = (h >= 8 && h < 13) ? String(h - 7) : "1";
+      }
+
+      const slot = orarioDb[docente]?.[targetDay]?.[targetHour];
+
+      cardTitle.textContent = `Prof. ${docente}`;
+      cardBadge.style.display = "inline-block";
+      cardBadge.textContent = `${targetDay.toUpperCase()} • ORA ${targetHour}`;
+
+      if (!slot) {
+        cardDesc.textContent = "Nessuna lezione prevista (Ora buca o non in servizio).";
+        speak(`Il professor ${docente} ${targetDay} alla ${targetHour}ª ora non ha lezione.`);
+      } else if (slot.tipo === "disposizione") {
+        cardDesc.textContent = `A disposizione ${slot.aula ? 'in ' + slot.aula : ''}`;
+        speak(`Il professor ${docente} ${targetDay} alla ${targetHour}ª ora è a disposizione.`);
+        if (slot.aula) locateAndHighlight(slot.aula);
+      } else {
+        cardDesc.innerHTML = `<strong>${slot.aula}</strong> — Classe <strong>${slot.classe}</strong><br><small>${slot.materia}</small>`;
+        locateAndHighlight(slot.aula);
+
+        let msg = `Il professor ${docente} ${targetDay} alla ${targetHour}ª ora è in ${slot.aula} con la classe ${slot.classe} per ${slot.materia}.`;
+        if (slot.copresenza) msg += ` Insieme a ${slot.copresenza}.`;
+        speak(msg);
+      }
+    }
+
+    async function init() {
+      renderMap("2");
+      floorButtons.forEach(btn => {
+        btn.addEventListener('click', () => renderMap(btn.dataset.floor));
+      });
+
+      await loadSchedule();
+
+      const head = new TalkingHead(avatarPanel, {
+        ttsEndpoint: "https://dummy-tts.local",
+        cameraView: "upper"
+      });
+
+      await head.showAvatar({
+        url: './public/models/avatar.glb',
+        body: 'F',
+        avatarMood: 'neutral'
+      });
+
+      head.scene.traverse((node) => {
+        if (node.isMesh && node.morphTargetDictionary) {
+          const dict = node.morphTargetDictionary;
+          const jawIdx = dict['jawOpen'] ?? dict['mouthOpen'] ?? dict['viseme_aa'];
+          const funnelIdx = dict['mouthFunnel'] ?? dict['viseme_O'];
+
+          if (jawIdx !== undefined) {
+            morphMeshes.push({ mesh: node, jawIdx, funnelIdx });
+            node.onBeforeRender = () => {
+              if (isSpeaking) {
+                const t = performance.now() * 0.015;
+                const rawWave = Math.sin(t) * 0.5 + Math.sin(t * 1.8) * 0.3 + Math.sin(t * 0.4) * 0.2;
+                const targetJaw = Math.max(0, Math.min(0.75, rawWave * 1.2));
+                currentJaw += (targetJaw - currentJaw) * 0.35;
+              } else {
+                currentJaw += (0 - currentJaw) * 0.25;
+              }
+              node.morphTargetInfluences[jawIdx] = currentJaw;
+              if (funnelIdx !== undefined) node.morphTargetInfluences[funnelIdx] = currentJaw * 0.3;
+            };
+          }
+        }
+      });
+
+      statusOverlay.style.display = 'none';
+      inputField.disabled = false;
+      searchBtn.disabled = false;
+      micBtn.disabled = false;
+
+      function handleSearch() {
+        const val = inputField.value.trim();
+        if (val) querySchedule(val);
+      }
+
+      searchBtn.addEventListener('click', handleSearch);
+      inputField.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') handleSearch();
+      });
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        const recognizer = new SpeechRecognition();
+        recognizer.lang = 'it-IT';
+        recognizer.continuous = false;
+
+        micBtn.addEventListener('click', () => {
+          try {
+            recognizer.start();
+            micBtn.classList.add('listening');
+          } catch(e) { recognizer.stop(); }
+        });
+
+        recognizer.onresult = (evt) => {
+          const spokenText = evt.results[0][0].transcript;
+          inputField.value = spokenText;
+          querySchedule(spokenText);
+        };
+
+        recognizer.onend = () => micBtn.classList.remove('listening');
+        recognizer.onerror = () => micBtn.classList.remove('listening');
+      } else {
+        micBtn.style.display = 'none';
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
+EOF
