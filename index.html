@@ -37,7 +37,7 @@
       position: relative;
     }
 
-    /* Pannello Avatar con Sfondo Sfocato */
+    /* Pannello Avatar con Sfondo Atrio */
     #avatar-panel {
       flex: 1.15;
       position: relative;
@@ -70,6 +70,10 @@
       position: absolute;
       inset: 0;
       z-index: 3;
+    }
+
+    #avatar-view canvas {
+      background: transparent !important;
     }
 
     #status-overlay {
@@ -212,7 +216,7 @@
       50% { filter: drop-shadow(0 0 16px rgba(96, 165, 250, 0.9)); }
     }
 
-    /* Barra Interazione Bottom */
+    /* Barra Interazione */
     #ui-bar {
       height: 74px;
       padding: 14px 20px;
@@ -276,7 +280,6 @@
       50% { transform: scale(1.08); }
     }
 
-    /* Ottimizzazione Dispositivi Mobili */
     @media (max-width: 920px) {
       #main-container {
         flex-direction: column;
@@ -316,7 +319,7 @@
     <div id="map-panel">
       <div class="card" id="info-card">
         <h3 id="card-title">In attesa di richiesta...</h3>
-        <p id="card-desc">Chiedi ad esempio: «Schirò martedì terza ora» o «De Min adesso»</p>
+        <p id="card-desc">Chiedi ad esempio: «Curtolo martedì seconda ora» o «De Min adesso»</p>
         <div id="card-badge" style="display:none;" class="badge"></div>
       </div>
 
@@ -338,7 +341,7 @@
   </div>
 
   <div id="ui-bar">
-    <input type="text" id="query-input" placeholder="Es. Schirò martedì 2ª ora, Cassarino domani..." disabled />
+    <input type="text" id="query-input" placeholder="Es. Curtolo martedì 2, Schirò lunedì 4, De Min adesso..." disabled />
     <button class="action-btn" id="search-btn" disabled>Cerca</button>
     <button class="action-btn" id="mic-btn" disabled title="Interazione vocale">🎙️</button>
   </div>
@@ -364,7 +367,7 @@
     const DAYS = ["domenica", "lunedi", "martedi", "mercoledi", "giovedi", "venerdi", "sabato"];
     let currentFloor = "2";
 
-    // Planimetrie schematiche aggiornate ITIS Negrelli
+    // Planimetrie schematiche dell'ITIS Negrelli
     const floorLayouts = {
       "0": [
         { id: "014", name: "Aula 014", x: 45, y: 50, w: 70, h: 70 },
@@ -440,7 +443,7 @@
     async function loadSchedule() {
       try {
         const res = await fetch('./public/data/orario.json');
-        if (!res.ok) throw new Error("File orario.json non accessibile");
+        if (!res.ok) throw new Error();
         const json = await res.json();
         orarioDb = json.docenti;
       } catch (e) {
@@ -472,7 +475,7 @@
       const numMatch = roomStr.match(/\b(\d{3})\b/);
       if (numMatch) {
         const num = numMatch[1];
-        const floor = num[0]; // Piano 0, 1 o 2
+        const floor = num[0];
         if (['0', '1', '2'].includes(floor)) {
           renderMap(floor, num);
         }
@@ -486,9 +489,19 @@
     function parseNaturalQuery(text) {
       const q = normalizeText(text);
 
-      // 1. Docente
-      const profKeys = Object.keys(orarioDb || {});
-      const docente = profKeys.find(p => q.includes(normalizeText(p)));
+      // 1. Docente: ordinamento per lunghezza decrescente (Curto non cattura Curtolo)
+      const profKeys = Object.keys(orarioDb || {}).sort((a, b) => b.length - a.length);
+
+      let docente = profKeys.find(p => {
+        const cleanP = normalizeText(p);
+        const regex = new RegExp(`(^|[^a-z0-9à-ÿ])${cleanP}([^a-z0-9à-ÿ]|$)`, 'i');
+        return regex.test(q);
+      });
+
+      if (!docente) {
+        docente = profKeys.find(p => q.includes(normalizeText(p)));
+      }
+
       if (!docente) return { error: "DOCENTE_NOT_FOUND" };
 
       // 2. Giorno
@@ -505,7 +518,7 @@
 
       if (targetDay === "domenica") return { error: "SUNDAY", docente };
 
-      // 3. Ora (da testo o campana attuale)
+      // 3. Ora
       let targetHour = null;
       const hourWords = { "prima": "1", "seconda": "2", "terza": "3", "quarta": "4", "quinta": "5" };
       for (const [w, h] of Object.entries(hourWords)) {
@@ -517,15 +530,14 @@
         if (match) targetHour = match[1];
       }
 
-      // Se non specificata o richiesta per "adesso", usa le campane orarie reali
       if (!targetHour || q.includes("adesso") || q.includes("ora")) {
         const totalMinutes = now.getHours() * 60 + now.getMinutes();
-        if (totalMinutes >= 480 && totalMinutes < 535) targetHour = "1";       // 8:00 - 8:55
-        else if (totalMinutes >= 535 && totalMinutes < 590) targetHour = "2";  // 8:55 - 9:50
-        else if (totalMinutes >= 590 && totalMinutes < 660) targetHour = "3";  // 9:50 - 11:00
-        else if (totalMinutes >= 660 && totalMinutes < 720) targetHour = "4";  // 11:00 - 12:00
-        else if (totalMinutes >= 720 && totalMinutes < 795) targetHour = "5";  // 12:00 - 13:15
-        else targetHour = "1"; // Default prima ora
+        if (totalMinutes >= 480 && totalMinutes < 535) targetHour = "1";
+        else if (totalMinutes >= 535 && totalMinutes < 590) targetHour = "2";
+        else if (totalMinutes >= 590 && totalMinutes < 660) targetHour = "3";
+        else if (totalMinutes >= 660 && totalMinutes < 720) targetHour = "4";
+        else if (totalMinutes >= 720 && totalMinutes < 795) targetHour = "5";
+        else targetHour = "1";
       }
 
       return { docente, targetDay, targetHour };
@@ -575,7 +587,7 @@
         locateAndHighlight(slot.aula);
 
         let msg = `Il professor ${docente} ${targetDay} alla ${targetHour}ª ora si trova in ${slot.aula} con la classe ${slot.classe} per ${slot.materia}.`;
-        if (slot.copresenza) msg += ` Insieme al professor ${slot.copresenza}.`;
+        if (slot.copresenza) msg += ` Insieme al docente ${slot.copresenza}.`;
         speak(msg);
       }
     }
@@ -599,15 +611,14 @@
         avatarMood: 'neutral'
       });
 
-      // Rende Three.js trasparente per mostrare l'atrio sfocato retrostante
       if (head.renderer) {
         head.renderer.setClearColor(0x000000, 0);
+        head.renderer.domElement.style.background = 'transparent';
       }
       if (head.scene) {
         head.scene.background = null;
       }
 
-      // Mappatura Blendshape ARKit per il parlato locale
       head.scene.traverse((node) => {
         if (node.isMesh && node.morphTargetDictionary) {
           const dict = node.morphTargetDictionary;
@@ -637,7 +648,6 @@
       searchBtn.disabled = false;
       micBtn.disabled = false;
 
-      // Eventi di input
       function submitSearch() {
         const val = inputField.value.trim();
         if (val) handleQuery(val);
@@ -648,7 +658,6 @@
         if (e.key === 'Enter') submitSearch();
       });
 
-      // Supporto Microfono Web Speech
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (SpeechRecognition) {
         const recognizer = new SpeechRecognition();
@@ -674,7 +683,6 @@
         micBtn.style.display = 'none';
       }
 
-      // Adattamento al ridimensionamento schermo
       window.addEventListener('resize', () => {
         if (head && typeof head.onResize === 'function') {
           head.onResize();
