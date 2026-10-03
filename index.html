@@ -2,171 +2,295 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Assistente Orario e Mappe ITIS Negrelli</title>
   <style>
+    :root {
+      --bg-dark: #0b0d13;
+      --card-bg: rgba(22, 27, 39, 0.85);
+      --card-border: rgba(56, 68, 100, 0.6);
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --accent: #38bdf8;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      background: #0f1117;
-      color: #f1f5f9;
-      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
+
     #main-container {
       flex: 1;
       display: flex;
       width: 100%;
-      height: calc(100vh - 72px);
-    }
-    #avatar-panel {
-      flex: 1.1;
+      height: calc(100vh - 74px);
       position: relative;
-      background: radial-gradient(circle at center, #1e2230 0%, #0f1117 100%);
     }
+
+    /* Pannello Avatar con Sfondo Sfocato */
+    #avatar-panel {
+      flex: 1.15;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .blurred-background {
+      position: absolute;
+      inset: -20px;
+      background-image: url('./public/img/sfondo.jpg');
+      background-size: cover;
+      background-position: center;
+      filter: blur(7px) brightness(0.68) saturate(1.1);
+      transform: scale(1.05);
+      z-index: 1;
+    }
+
+    .vignette-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, transparent 35%, rgba(11, 13, 19, 0.85) 100%);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    #avatar-view {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+    }
+
     #status-overlay {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       font-size: 15px;
-      color: #94a3b8;
+      color: var(--text-muted);
+      z-index: 4;
       pointer-events: none;
-      text-align: center;
+      background: rgba(15, 23, 42, 0.8);
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(6px);
     }
+
+    /* Pannello Mappa e Dettagli */
     #map-panel {
-      flex: 0.9;
-      background: #161922;
-      border-left: 1px solid #282f44;
+      flex: 0.85;
+      background: var(--bg-dark);
+      border-left: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       flex-direction: column;
       padding: 16px;
       gap: 12px;
+      z-index: 10;
     }
+
     .card {
-      background: #1e2230;
-      border: 1px solid #2f374e;
-      border-radius: 10px;
-      padding: 14px 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
+
     #info-card h3 {
       margin: 0 0 6px 0;
-      font-size: 16px;
-      color: #38bdf8;
+      font-size: 17px;
+      color: var(--accent);
+      letter-spacing: -0.3px;
     }
+
     #info-card p {
       margin: 3px 0;
-      font-size: 13px;
+      font-size: 13.5px;
       color: #cbd5e1;
+      line-height: 1.4;
     }
+
     .badge {
       display: inline-block;
-      padding: 3px 8px;
+      padding: 4px 10px;
       border-radius: 6px;
       font-size: 11px;
-      font-weight: 600;
-      background: #3b82f6;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      background: var(--primary);
       color: white;
-      margin-top: 4px;
+      margin-top: 6px;
     }
+
     .floor-selector {
       display: flex;
-      gap: 6px;
+      gap: 8px;
     }
+
     .floor-btn {
       flex: 1;
-      background: #232838;
-      border: 1px solid #333c56;
-      color: #94a3b8;
-      padding: 6px 10px;
-      border-radius: 6px;
-      font-size: 12px;
+      background: #1c2230;
+      border: 1px solid #2f384f;
+      color: var(--text-muted);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12.5px;
       cursor: pointer;
-      font-weight: 500;
+      font-weight: 600;
+      transition: all 0.2s ease;
     }
+
     .floor-btn.active {
-      background: #3b82f6;
-      color: #fff;
+      background: var(--primary);
+      color: #ffffff;
       border-color: #60a5fa;
+      box-shadow: 0 0 12px rgba(37, 99, 235, 0.4);
     }
+
     #map-viewport {
       flex: 1;
       background: #0f121a;
-      border: 1px solid #232838;
-      border-radius: 8px;
+      border: 1px solid #242c3f;
+      border-radius: 10px;
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
     }
+
     svg {
       width: 95%;
       height: 95%;
     }
+
     .room {
-      fill: #1e2538;
-      stroke: #3b4566;
+      fill: #192030;
+      stroke: #334155;
       stroke-width: 1.5;
-      transition: fill 0.3s, stroke 0.3s;
+      rx: 6;
+      transition: fill 0.3s, stroke 0.3s, filter 0.3s;
     }
+
     .room-label {
-      fill: #64748b;
+      fill: #94a3b8;
       font-size: 10px;
       font-weight: 600;
       text-anchor: middle;
       pointer-events: none;
+      transition: fill 0.3s;
     }
+
     .room.highlight {
       fill: #1d4ed8;
       stroke: #60a5fa;
       stroke-width: 2.5;
-      filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.6));
+      animation: pulse-glow 2s infinite ease-in-out;
     }
+
     .room.highlight + .room-label {
       fill: #ffffff;
+      font-weight: 700;
       font-size: 11px;
     }
+
+    @keyframes pulse-glow {
+      0%, 100% { filter: drop-shadow(0 0 6px rgba(96, 165, 250, 0.5)); }
+      50% { filter: drop-shadow(0 0 16px rgba(96, 165, 250, 0.9)); }
+    }
+
+    /* Barra Interazione Bottom */
     #ui-bar {
-      height: 72px;
-      padding: 12px 20px;
-      background: #13161f;
+      height: 74px;
+      padding: 14px 20px;
+      background: #11141c;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 10px;
-      border-top: 1px solid #232838;
+      gap: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      z-index: 20;
     }
+
     input[type="text"] {
       flex: 1;
-      max-width: 480px;
-      padding: 11px 16px;
-      border-radius: 8px;
-      border: 1px solid #333c56;
-      background: #0b0d13;
+      max-width: 520px;
+      padding: 12px 18px;
+      border-radius: 10px;
+      border: 1px solid #334155;
+      background: #0a0c10;
       color: #fff;
-      font-size: 14px;
+      font-size: 14.5px;
       outline: none;
+      transition: border-color 0.2s;
     }
+
     input[type="text"]:focus {
-      border-color: #3b82f6;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
     }
+
     button.action-btn {
-      background: #2563eb;
+      background: var(--primary);
       color: white;
       border: none;
-      padding: 11px 18px;
-      font-size: 14px;
-      border-radius: 8px;
+      padding: 12px 20px;
+      font-size: 14.5px;
+      border-radius: 10px;
       cursor: pointer;
       font-weight: 600;
+      transition: background 0.2s;
     }
-    button.action-btn:hover { background: #1d4ed8; }
-    #mic-btn { background: #232838; border: 1px solid #333c56; }
-    #mic-btn.listening { background: #ef4444; border-color: #f87171; }
+
+    button.action-btn:hover { background: var(--primary-hover); }
+    button.action-btn:disabled { background: #334155; cursor: not-allowed; }
+
+    #mic-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 12px 16px;
+      font-size: 16px;
+    }
+
+    #mic-btn.listening {
+      background: #dc2626;
+      border-color: #ef4444;
+      animation: pulse-mic 1.2s infinite;
+    }
+
+    @keyframes pulse-mic {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    /* Ottimizzazione Dispositivi Mobili */
+    @media (max-width: 920px) {
+      #main-container {
+        flex-direction: column;
+        height: calc(100vh - 74px);
+      }
+      #avatar-panel {
+        flex: 1;
+      }
+      #map-panel {
+        flex: 1.2;
+        border-left: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+    }
   </style>
 
   <script type="importmap">
@@ -183,13 +307,16 @@
 
   <div id="main-container">
     <div id="avatar-panel">
+      <div class="blurred-background"></div>
+      <div class="vignette-overlay"></div>
+      <div id="avatar-view"></div>
       <div id="status-overlay">Caricamento assistente...</div>
     </div>
 
     <div id="map-panel">
       <div class="card" id="info-card">
         <h3 id="card-title">In attesa di richiesta...</h3>
-        <p id="card-desc">Chiedi dove si trova un docente (es. «Schirò lunedì 4»)</p>
+        <p id="card-desc">Chiedi ad esempio: «Schirò martedì terza ora» o «De Min adesso»</p>
         <div id="card-badge" style="display:none;" class="badge"></div>
       </div>
 
@@ -200,10 +327,9 @@
       </div>
 
       <div id="map-viewport">
-        <!-- Schema Planimetrico SVG Reattivo -->
         <svg id="svg-map" viewBox="0 0 500 320">
           <g id="map-corridors">
-            <rect x="40" y="130" width="420" height="40" fill="#141722" stroke="#232838" stroke-dasharray="4" />
+            <rect x="40" y="130" width="420" height="40" fill="#131722" stroke="#252d40" stroke-dasharray="4" rx="4" />
           </g>
           <g id="map-rooms"></g>
         </svg>
@@ -212,15 +338,15 @@
   </div>
 
   <div id="ui-bar">
-    <input type="text" id="query-input" placeholder="Es. Schirò martedì 2 ora, De Min adesso..." disabled />
+    <input type="text" id="query-input" placeholder="Es. Schirò martedì 2ª ora, Cassarino domani..." disabled />
     <button class="action-btn" id="search-btn" disabled>Cerca</button>
-    <button class="action-btn" id="mic-btn" disabled title="Parla">🎙️</button>
+    <button class="action-btn" id="mic-btn" disabled title="Interazione vocale">🎙️</button>
   </div>
 
   <script type="module">
     import { TalkingHead } from 'talkinghead';
 
-    const avatarPanel = document.getElementById('avatar-panel');
+    const avatarContainer = document.getElementById('avatar-view');
     const statusOverlay = document.getElementById('status-overlay');
     const inputField = document.getElementById('query-input');
     const searchBtn = document.getElementById('search-btn');
@@ -238,44 +364,47 @@
     const DAYS = ["domenica", "lunedi", "martedi", "mercoledi", "giovedi", "venerdi", "sabato"];
     let currentFloor = "2";
 
-    // Layout planimetrico schematico per ciascun piano dell'ITIS Negrelli
+    // Planimetrie schematiche aggiornate ITIS Negrelli
     const floorLayouts = {
       "0": [
-        { id: "014", name: "Aula 014", x: 50, y: 50, w: 70, h: 70 },
-        { id: "015", name: "Aula 015", x: 130, y: 50, w: 70, h: 70 },
-        { id: "016", name: "Aula 016", x: 210, y: 50, w: 70, h: 70 },
-        { id: "017", name: "Aula 017", x: 290, y: 50, w: 70, h: 70 },
-        { id: "018", name: "Lab. Linux 018", x: 370, y: 50, w: 80, h: 70 },
-        { id: "019", name: "Aula 019", x: 50, y: 180, w: 80, h: 70 },
-        { id: "020", name: "Lab. Multim. 020", x: 140, y: 180, w: 140, h: 70 },
-        { id: "022", name: "Aula 022", x: 290, y: 180, w: 160, h: 70 }
+        { id: "014", name: "Aula 014", x: 45, y: 50, w: 70, h: 70 },
+        { id: "015", name: "Aula 015", x: 125, y: 50, w: 70, h: 70 },
+        { id: "016", name: "Aula 016", x: 205, y: 50, w: 70, h: 70 },
+        { id: "017", name: "Aula 017", x: 285, y: 50, w: 70, h: 70 },
+        { id: "018", name: "Lab. Linux 018", x: 365, y: 50, w: 90, h: 70 },
+        { id: "019", name: "Aula 019", x: 45, y: 180, w: 85, h: 70 },
+        { id: "020", name: "Lab. Multim. 020", x: 140, y: 180, w: 130, h: 70 },
+        { id: "022", name: "Aula 022", x: 280, y: 180, w: 175, h: 70 }
       ],
       "1": [
-        { id: "110", name: "Aula 110", x: 50, y: 50, w: 65, h: 70 },
-        { id: "111", name: "Aula 111", x: 120, y: 50, w: 65, h: 70 },
-        { id: "112", name: "Aula 112", x: 190, y: 50, w: 65, h: 70 },
-        { id: "113", name: "Aula 113", x: 260, y: 50, w: 65, h: 70 },
-        { id: "114", name: "Aula 114", x: 330, y: 50, w: 65, h: 70 },
-        { id: "115", name: "Aula 115", x: 400, y: 50, w: 60, h: 70 },
-        { id: "116", name: "Aula 116", x: 50, y: 180, w: 65, h: 70 },
-        { id: "117", name: "Lab. CAD 117", x: 125, y: 180, w: 110, h: 70 },
-        { id: "118", name: "Lab. Costruz. 118", x: 245, y: 180, w: 100, h: 70 },
-        { id: "135", name: "Lab. Fisica 135", x: 355, y: 180, w: 105, h: 70 }
+        { id: "110", name: "Aula 110", x: 45, y: 50, w: 60, h: 70 },
+        { id: "111", name: "Aula 111", x: 112, y: 50, w: 60, h: 70 },
+        { id: "112", name: "Aula 112", x: 180, y: 50, w: 60, h: 70 },
+        { id: "113", name: "Aula 113", x: 248, y: 50, w: 60, h: 70 },
+        { id: "114", name: "Aula 114", x: 316, y: 50, w: 60, h: 70 },
+        { id: "115", name: "Aula 115", x: 384, y: 50, w: 70, h: 70 },
+        { id: "116", name: "Aula 116", x: 45, y: 180, w: 60, h: 70 },
+        { id: "117", name: "Lab. CAD 117", x: 112, y: 180, w: 90, h: 70 },
+        { id: "118", name: "Lab. Costruz. 118", x: 210, y: 180, w: 90, h: 70 },
+        { id: "134", name: "Aula 134", x: 308, y: 180, w: 70, h: 70 },
+        { id: "135", name: "Lab. Fisica 135", x: 386, y: 180, w: 70, h: 70 }
       ],
       "2": [
-        { id: "201", name: "Aula 201", x: 50, y: 50, w: 65, h: 70 },
-        { id: "202", name: "Aula 202", x: 120, y: 50, w: 65, h: 70 },
-        { id: "203", name: "Aula 203", x: 190, y: 50, w: 65, h: 70 },
-        { id: "204", name: "Aula 204", x: 260, y: 50, w: 65, h: 70 },
-        { id: "205", name: "Aula 205", x: 330, y: 50, w: 65, h: 70 },
-        { id: "209", name: "Aula 209", x: 400, y: 50, w: 60, h: 70 },
-        { id: "206", name: "Lab. Info 206", x: 50, y: 180, w: 120, h: 70 },
-        { id: "208", name: "Lab. Elettronica 208", x: 180, y: 180, w: 140, h: 70 },
-        { id: "223", name: "Lab. Sistemi 223", x: 330, y: 180, w: 130, h: 70 }
+        { id: "201", name: "Aula 201", x: 45, y: 50, w: 62, h: 70 },
+        { id: "202", name: "Aula 202", x: 114, y: 50, w: 62, h: 70 },
+        { id: "203", name: "Aula 203", x: 183, y: 50, w: 62, h: 70 },
+        { id: "204", name: "Aula 204", x: 252, y: 50, w: 62, h: 70 },
+        { id: "205", name: "Aula 205", x: 321, y: 50, w: 62, h: 70 },
+        { id: "209", name: "Aula 209", x: 390, y: 50, w: 65, h: 70 },
+        { id: "206", name: "Lab. Info 206", x: 45, y: 180, w: 90, h: 70 },
+        { id: "208", name: "Lab. Elettronica 208", x: 143, y: 180, w: 110, h: 70 },
+        { id: "210", name: "Lab. Lingue 210", x: 261, y: 180, w: 65, h: 70 },
+        { id: "214", name: "Spazio 214", x: 334, y: 180, w: 60, h: 70 },
+        { id: "223", name: "Lab. Sistemi 223", x: 400, y: 180, w: 60, h: 70 }
       ]
     };
 
-    function renderMap(floor, highlightRoomNum = null) {
+    function renderMap(floor, highlightId = null) {
       currentFloor = floor;
       floorButtons.forEach(btn => {
         btn.classList.toggle('active', btn.dataset.floor === floor);
@@ -285,9 +414,9 @@
       const rooms = floorLayouts[floor] || [];
 
       rooms.forEach(r => {
-        const isTarget = highlightRoomNum && (
-          r.id === highlightRoomNum || 
-          r.name.toLowerCase().includes(highlightRoomNum.toLowerCase())
+        const isTarget = highlightId && (
+          r.id === highlightId || 
+          r.name.toLowerCase().includes(highlightId.toLowerCase())
         );
 
         const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
@@ -295,7 +424,6 @@
         rect.setAttribute("y", r.y);
         rect.setAttribute("width", r.w);
         rect.setAttribute("height", r.h);
-        rect.setAttribute("rx", "6");
         rect.setAttribute("class", `room ${isTarget ? 'highlight' : ''}`);
 
         const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -312,11 +440,11 @@
     async function loadSchedule() {
       try {
         const res = await fetch('./public/data/orario.json');
-        if (!res.ok) throw new Error();
+        if (!res.ok) throw new Error("File orario.json non accessibile");
         const json = await res.json();
         orarioDb = json.docenti;
       } catch (e) {
-        console.warn("Dati orario.json non trovati.");
+        console.warn("Impossibile caricare il database dell'orario:", e);
       }
     }
 
@@ -326,6 +454,8 @@
 
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'it-IT';
+      utterance.rate = 1.0;
+
       const voices = window.speechSynthesis.getVoices();
       const itVoice = voices.find(v => v.lang.startsWith('it') || v.lang.startsWith('IT'));
       if (itVoice) utterance.voice = itVoice;
@@ -342,31 +472,26 @@
       const numMatch = roomStr.match(/\b(\d{3})\b/);
       if (numMatch) {
         const num = numMatch[1];
-        const floor = num[0]; // 0xx -> '0', 1xx -> '1', 2xx -> '2'
+        const floor = num[0]; // Piano 0, 1 o 2
         if (['0', '1', '2'].includes(floor)) {
           renderMap(floor, num);
         }
       }
     }
 
-    function querySchedule(text) {
-      if (!orarioDb) {
-        speak("Il database dell'orario non è ancora pronto.");
-        return;
-      }
+    function normalizeText(str) {
+      return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+    }
 
-      const q = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-      const profKeys = Object.keys(orarioDb);
-      const docente = profKeys.find(p => q.includes(p.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")));
+    function parseNaturalQuery(text) {
+      const q = normalizeText(text);
 
-      if (!docente) {
-        cardTitle.textContent = "Docente non trovato";
-        cardDesc.textContent = "Verifica il cognome inserito.";
-        cardBadge.style.display = "none";
-        speak("Non ho trovato questo docente. Prova a specificare solo il cognome.");
-        return;
-      }
+      // 1. Docente
+      const profKeys = Object.keys(orarioDb || {});
+      const docente = profKeys.find(p => q.includes(normalizeText(p)));
+      if (!docente) return { error: "DOCENTE_NOT_FOUND" };
 
+      // 2. Giorno
       let targetDay = null;
       for (const d of ["lunedi", "martedi", "mercoledi", "giovedi", "venerdi", "sabato"]) {
         if (q.includes(d)) { targetDay = d; break; }
@@ -374,43 +499,83 @@
 
       const now = new Date();
       if (!targetDay) {
-        targetDay = q.includes("domani") ? DAYS[(now.getDay() + 1) % 7] : DAYS[now.getDay()];
+        if (q.includes("domani")) targetDay = DAYS[(now.getDay() + 1) % 7];
+        else targetDay = DAYS[now.getDay()];
       }
 
-      if (targetDay === "domenica") {
-        cardTitle.textContent = "Domenica";
-        cardDesc.textContent = "L'istituto è chiuso.";
+      if (targetDay === "domenica") return { error: "SUNDAY", docente };
+
+      // 3. Ora (da testo o campana attuale)
+      let targetHour = null;
+      const hourWords = { "prima": "1", "seconda": "2", "terza": "3", "quarta": "4", "quinta": "5" };
+      for (const [w, h] of Object.entries(hourWords)) {
+        if (q.includes(w)) { targetHour = h; break; }
+      }
+
+      if (!targetHour) {
+        const match = q.match(/\b([1-5])\s*(?:ª|°|a|ora)?\b/);
+        if (match) targetHour = match[1];
+      }
+
+      // Se non specificata o richiesta per "adesso", usa le campane orarie reali
+      if (!targetHour || q.includes("adesso") || q.includes("ora")) {
+        const totalMinutes = now.getHours() * 60 + now.getMinutes();
+        if (totalMinutes >= 480 && totalMinutes < 535) targetHour = "1";       // 8:00 - 8:55
+        else if (totalMinutes >= 535 && totalMinutes < 590) targetHour = "2";  // 8:55 - 9:50
+        else if (totalMinutes >= 590 && totalMinutes < 660) targetHour = "3";  // 9:50 - 11:00
+        else if (totalMinutes >= 660 && totalMinutes < 720) targetHour = "4";  // 11:00 - 12:00
+        else if (totalMinutes >= 720 && totalMinutes < 795) targetHour = "5";  // 12:00 - 13:15
+        else targetHour = "1"; // Default prima ora
+      }
+
+      return { docente, targetDay, targetHour };
+    }
+
+    function handleQuery(text) {
+      if (!orarioDb) {
+        speak("Il database dell'orario non è ancora disponibile.");
+        return;
+      }
+
+      const res = parseNaturalQuery(text);
+
+      if (res.error === "DOCENTE_NOT_FOUND") {
+        cardTitle.textContent = "Docente non trovato";
+        cardDesc.textContent = "Verifica la correttezza del cognome inserito.";
+        cardBadge.style.display = "none";
+        speak("Non ho trovato questo docente. Prova a specificare solo il cognome.");
+        return;
+      }
+
+      if (res.error === "SUNDAY") {
+        cardTitle.textContent = `Prof. ${res.docente}`;
+        cardDesc.textContent = "L'istituto è chiuso di domenica.";
+        cardBadge.style.display = "inline-block";
+        cardBadge.textContent = "DOMENICA";
         speak("Di domenica la scuola è chiusa.");
         return;
       }
 
-      let targetHour = null;
-      const oraMatch = q.match(/\b([1-5])\s*(?:ª|°|a|ora)?\b/);
-      if (oraMatch) targetHour = oraMatch[1];
-      else {
-        const h = now.getHours();
-        targetHour = (h >= 8 && h < 13) ? String(h - 7) : "1";
-      }
-
+      const { docente, targetDay, targetHour } = res;
       const slot = orarioDb[docente]?.[targetDay]?.[targetHour];
 
       cardTitle.textContent = `Prof. ${docente}`;
       cardBadge.style.display = "inline-block";
-      cardBadge.textContent = `${targetDay.toUpperCase()} • ORA ${targetHour}`;
+      cardBadge.textContent = `${targetDay.toUpperCase()} • ${targetHour}ª ORA`;
 
       if (!slot) {
         cardDesc.textContent = "Nessuna lezione prevista (Ora buca o non in servizio).";
         speak(`Il professor ${docente} ${targetDay} alla ${targetHour}ª ora non ha lezione.`);
       } else if (slot.tipo === "disposizione") {
-        cardDesc.textContent = `A disposizione ${slot.aula ? 'in ' + slot.aula : ''}`;
+        cardDesc.textContent = `A disposizione ${slot.aula ? 'in ' + slot.aula : 'nell\'istituto'}.`;
         speak(`Il professor ${docente} ${targetDay} alla ${targetHour}ª ora è a disposizione.`);
         if (slot.aula) locateAndHighlight(slot.aula);
       } else {
-        cardDesc.innerHTML = `<strong>${slot.aula}</strong> — Classe <strong>${slot.classe}</strong><br><small>${slot.materia}</small>`;
+        cardDesc.innerHTML = `<strong>${slot.aula}</strong> • Classe <strong>${slot.classe}</strong><br><small style="color: #94a3b8;">${slot.materia}</small>`;
         locateAndHighlight(slot.aula);
 
-        let msg = `Il professor ${docente} ${targetDay} alla ${targetHour}ª ora è in ${slot.aula} con la classe ${slot.classe} per ${slot.materia}.`;
-        if (slot.copresenza) msg += ` Insieme a ${slot.copresenza}.`;
+        let msg = `Il professor ${docente} ${targetDay} alla ${targetHour}ª ora si trova in ${slot.aula} con la classe ${slot.classe} per ${slot.materia}.`;
+        if (slot.copresenza) msg += ` Insieme al professor ${slot.copresenza}.`;
         speak(msg);
       }
     }
@@ -423,7 +588,7 @@
 
       await loadSchedule();
 
-      const head = new TalkingHead(avatarPanel, {
+      const head = new TalkingHead(avatarContainer, {
         ttsEndpoint: "https://dummy-tts.local",
         cameraView: "upper"
       });
@@ -434,6 +599,15 @@
         avatarMood: 'neutral'
       });
 
+      // Rende Three.js trasparente per mostrare l'atrio sfocato retrostante
+      if (head.renderer) {
+        head.renderer.setClearColor(0x000000, 0);
+      }
+      if (head.scene) {
+        head.scene.background = null;
+      }
+
+      // Mappatura Blendshape ARKit per il parlato locale
       head.scene.traverse((node) => {
         if (node.isMesh && node.morphTargetDictionary) {
           const dict = node.morphTargetDictionary;
@@ -463,16 +637,18 @@
       searchBtn.disabled = false;
       micBtn.disabled = false;
 
-      function handleSearch() {
+      // Eventi di input
+      function submitSearch() {
         const val = inputField.value.trim();
-        if (val) querySchedule(val);
+        if (val) handleQuery(val);
       }
 
-      searchBtn.addEventListener('click', handleSearch);
+      searchBtn.addEventListener('click', submitSearch);
       inputField.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') handleSearch();
+        if (e.key === 'Enter') submitSearch();
       });
 
+      // Supporto Microfono Web Speech
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (SpeechRecognition) {
         const recognizer = new SpeechRecognition();
@@ -489,7 +665,7 @@
         recognizer.onresult = (evt) => {
           const spokenText = evt.results[0][0].transcript;
           inputField.value = spokenText;
-          querySchedule(spokenText);
+          handleQuery(spokenText);
         };
 
         recognizer.onend = () => micBtn.classList.remove('listening');
@@ -497,6 +673,13 @@
       } else {
         micBtn.style.display = 'none';
       }
+
+      // Adattamento al ridimensionamento schermo
+      window.addEventListener('resize', () => {
+        if (head && typeof head.onResize === 'function') {
+          head.onResize();
+        }
+      });
     }
 
     init();
