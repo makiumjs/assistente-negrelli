@@ -2,12 +2,12 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content" />
   <title>Assistente Orario e Mappe ITIS Negrelli</title>
   <style>
     :root {
       --bg-dark: #0b0d13;
-      --card-bg: rgba(22, 27, 39, 0.85);
+      --card-bg: rgba(22, 27, 39, 0.9);
       --card-border: rgba(56, 68, 100, 0.6);
       --primary: #2563eb;
       --primary-hover: #1d4ed8;
@@ -17,43 +17,48 @@
     }
 
     * { box-sizing: border-box; }
-    body {
+
+    html, body {
       margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      height: 100dvh;
       background: var(--bg-dark);
       color: var(--text);
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      height: 100vh;
       -webkit-font-smoothing: antialiased;
     }
 
     #main-container {
       flex: 1;
+      min-height: 0;
       display: flex;
       width: 100%;
-      height: calc(100vh - 74px);
       position: relative;
     }
 
-    /* Pannello Avatar con Sfondo Atrio */
+    /* Pannello Avatar con Atrio Sfocato */
     #avatar-panel {
-      flex: 1.15;
+      flex: 1.1;
       position: relative;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
+      background: #000;
     }
 
     .blurred-background {
       position: absolute;
-      inset: -20px;
+      inset: -15px;
       background-image: url('./public/img/sfondo.jpg');
       background-size: cover;
       background-position: center;
-      filter: blur(7px) brightness(0.68) saturate(1.1);
+      filter: blur(6px) brightness(0.68) saturate(1.1);
       transform: scale(1.05);
       z-index: 1;
     }
@@ -61,7 +66,7 @@
     .vignette-overlay {
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at center, transparent 35%, rgba(11, 13, 19, 0.85) 100%);
+      background: radial-gradient(circle at center, transparent 30%, rgba(11, 13, 19, 0.85) 100%);
       z-index: 2;
       pointer-events: none;
     }
@@ -81,12 +86,12 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 15px;
+      font-size: 14px;
       color: var(--text-muted);
       z-index: 4;
       pointer-events: none;
-      background: rgba(15, 23, 42, 0.8);
-      padding: 12px 24px;
+      background: rgba(15, 23, 42, 0.85);
+      padding: 10px 20px;
       border-radius: 8px;
       border: 1px solid var(--card-border);
       backdrop-filter: blur(6px);
@@ -94,54 +99,53 @@
 
     /* Pannello Mappa e Dettagli */
     #map-panel {
-      flex: 0.85;
+      flex: 0.9;
+      min-height: 0;
       background: var(--bg-dark);
       border-left: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       flex-direction: column;
-      padding: 16px;
-      gap: 12px;
+      padding: 12px;
+      gap: 8px;
       z-index: 10;
     }
 
     .card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 14px 18px;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      padding: 10px 14px;
+      backdrop-filter: blur(10px);
     }
 
     #info-card h3 {
-      margin: 0 0 6px 0;
-      font-size: 17px;
+      margin: 0 0 4px 0;
+      font-size: 15px;
       color: var(--accent);
-      letter-spacing: -0.3px;
     }
 
     #info-card p {
-      margin: 3px 0;
-      font-size: 13.5px;
+      margin: 2px 0;
+      font-size: 12.5px;
       color: #cbd5e1;
-      line-height: 1.4;
+      line-height: 1.35;
     }
 
     .badge {
       display: inline-block;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-size: 10.5px;
       font-weight: 700;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
       background: var(--primary);
       color: white;
-      margin-top: 6px;
+      margin-top: 4px;
     }
 
     .floor-selector {
       display: flex;
-      gap: 8px;
+      gap: 6px;
     }
 
     .floor-btn {
@@ -149,9 +153,9 @@
       background: #1c2230;
       border: 1px solid #2f384f;
       color: var(--text-muted);
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 12.5px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 11.5px;
       cursor: pointer;
       font-weight: 600;
       transition: all 0.2s ease;
@@ -161,14 +165,15 @@
       background: var(--primary);
       color: #ffffff;
       border-color: #60a5fa;
-      box-shadow: 0 0 12px rgba(37, 99, 235, 0.4);
+      box-shadow: 0 0 10px rgba(37, 99, 235, 0.35);
     }
 
     #map-viewport {
       flex: 1;
+      min-height: 130px;
       background: #0f121a;
       border: 1px solid #242c3f;
-      border-radius: 10px;
+      border-radius: 8px;
       position: relative;
       display: flex;
       align-items: center;
@@ -177,25 +182,24 @@
     }
 
     svg {
-      width: 95%;
-      height: 95%;
+      width: 98%;
+      height: 98%;
     }
 
     .room {
       fill: #192030;
       stroke: #334155;
       stroke-width: 1.5;
-      rx: 6;
+      rx: 5;
       transition: fill 0.3s, stroke 0.3s, filter 0.3s;
     }
 
     .room-label {
       fill: #94a3b8;
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 600;
       text-anchor: middle;
       pointer-events: none;
-      transition: fill 0.3s;
     }
 
     .room.highlight {
@@ -208,55 +212,56 @@
     .room.highlight + .room-label {
       fill: #ffffff;
       font-weight: 700;
-      font-size: 11px;
+      font-size: 10px;
     }
 
     @keyframes pulse-glow {
-      0%, 100% { filter: drop-shadow(0 0 6px rgba(96, 165, 250, 0.5)); }
-      50% { filter: drop-shadow(0 0 16px rgba(96, 165, 250, 0.9)); }
+      0%, 100% { filter: drop-shadow(0 0 5px rgba(96, 165, 250, 0.5)); }
+      50% { filter: drop-shadow(0 0 14px rgba(96, 165, 250, 0.85)); }
     }
 
-    /* Barra Interazione */
+    /* Barra Input Fisso in Basso */
     #ui-bar {
-      height: 74px;
-      padding: 14px 20px;
+      flex-shrink: 0;
+      width: 100%;
       background: #11141c;
+      padding: 10px 14px;
+      padding-bottom: max(10px, env(safe-area-inset-bottom));
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
-      z-index: 20;
+      z-index: 50;
+      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.4);
     }
 
     input[type="text"] {
       flex: 1;
-      max-width: 520px;
-      padding: 12px 18px;
-      border-radius: 10px;
+      max-width: 480px;
+      padding: 11px 14px;
+      border-radius: 8px;
       border: 1px solid #334155;
       background: #0a0c10;
       color: #fff;
-      font-size: 14.5px;
+      font-size: 16px;
       outline: none;
-      transition: border-color 0.2s;
     }
 
     input[type="text"]:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
     }
 
     button.action-btn {
       background: var(--primary);
       color: white;
       border: none;
-      padding: 12px 20px;
-      font-size: 14.5px;
-      border-radius: 10px;
+      padding: 11px 16px;
+      font-size: 14px;
+      border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
-      transition: background 0.2s;
+      flex-shrink: 0;
     }
 
     button.action-btn:hover { background: var(--primary-hover); }
@@ -265,8 +270,8 @@
     #mic-btn {
       background: #1e293b;
       border: 1px solid #334155;
-      padding: 12px 16px;
       font-size: 16px;
+      padding: 11px 14px;
     }
 
     #mic-btn.listening {
@@ -280,18 +285,33 @@
       50% { transform: scale(1.08); }
     }
 
-    @media (max-width: 920px) {
+    /* Layout Responsive Smartphone */
+    @media (max-width: 900px) {
       #main-container {
         flex-direction: column;
-        height: calc(100vh - 74px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
       }
+
       #avatar-panel {
-        flex: 1;
+        flex: none;
+        height: 190px;
+        min-height: 190px;
+        width: 100%;
       }
+
       #map-panel {
-        flex: 1.2;
+        flex: none;
+        width: 100%;
         border-left: none;
         border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 10px;
+        gap: 8px;
+      }
+
+      #map-viewport {
+        height: 140px;
+        min-height: 140px;
       }
     }
   </style>
@@ -319,7 +339,7 @@
     <div id="map-panel">
       <div class="card" id="info-card">
         <h3 id="card-title">In attesa di richiesta...</h3>
-        <p id="card-desc">Chiedi ad esempio: «Curtolo martedì seconda ora» o «De Min adesso»</p>
+        <p id="card-desc">Es: «Curtolo martedì 2» o «De Min adesso»</p>
         <div id="card-badge" style="display:none;" class="badge"></div>
       </div>
 
@@ -332,7 +352,7 @@
       <div id="map-viewport">
         <svg id="svg-map" viewBox="0 0 500 320">
           <g id="map-corridors">
-            <rect x="40" y="130" width="420" height="40" fill="#131722" stroke="#252d40" stroke-dasharray="4" rx="4" />
+            <rect x="35" y="130" width="430" height="40" fill="#131722" stroke="#252d40" stroke-dasharray="4" rx="4" />
           </g>
           <g id="map-rooms"></g>
         </svg>
@@ -341,9 +361,9 @@
   </div>
 
   <div id="ui-bar">
-    <input type="text" id="query-input" placeholder="Es. Curtolo martedì 2, Schirò lunedì 4, De Min adesso..." disabled />
+    <input type="text" id="query-input" placeholder="Docente, giorno, ora..." disabled />
     <button class="action-btn" id="search-btn" disabled>Cerca</button>
-    <button class="action-btn" id="mic-btn" disabled title="Interazione vocale">🎙️</button>
+    <button class="action-btn" id="mic-btn" disabled title="Voce">🎙️</button>
   </div>
 
   <script type="module">
@@ -363,47 +383,54 @@
     let orarioDb = null;
     let isSpeaking = false;
     let currentJaw = 0;
+    let lastJawUpdate = 0;
+    let activeUtterance = null; // Previene il Garbage Collection prematuro su Android
     const morphMeshes = [];
     const DAYS = ["domenica", "lunedi", "martedi", "mercoledi", "giovedi", "venerdi", "sabato"];
     let currentFloor = "2";
 
-    // Planimetrie schematiche dell'ITIS Negrelli
+    // Planimetrie complete ITIS Negrelli
     const floorLayouts = {
       "0": [
-        { id: "014", name: "Aula 014", x: 45, y: 50, w: 70, h: 70 },
-        { id: "015", name: "Aula 015", x: 125, y: 50, w: 70, h: 70 },
-        { id: "016", name: "Aula 016", x: 205, y: 50, w: 70, h: 70 },
-        { id: "017", name: "Aula 017", x: 285, y: 50, w: 70, h: 70 },
-        { id: "018", name: "Lab. Linux 018", x: 365, y: 50, w: 90, h: 70 },
-        { id: "019", name: "Aula 019", x: 45, y: 180, w: 85, h: 70 },
-        { id: "020", name: "Lab. Multim. 020", x: 140, y: 180, w: 130, h: 70 },
-        { id: "022", name: "Aula 022", x: 280, y: 180, w: 175, h: 70 }
+        { id: "014", name: "Aula 014", x: 40, y: 45, w: 68, h: 72 },
+        { id: "015", name: "Aula 015", x: 114, y: 45, w: 68, h: 72 },
+        { id: "016", name: "Aula 016", x: 188, y: 45, w: 68, h: 72 },
+        { id: "017", name: "Aula 017", x: 262, y: 45, w: 68, h: 72 },
+        { id: "018", name: "Lab. Linux 018", x: 336, y: 45, w: 124, h: 72 },
+        { id: "019", name: "Aula 019", x: 40, y: 180, w: 75, h: 72 },
+        { id: "020", name: "Lab. Multim. 020", x: 122, y: 180, w: 135, h: 72 },
+        { id: "022", name: "Aula 022", x: 264, y: 180, w: 196, h: 72 }
       ],
       "1": [
-        { id: "110", name: "Aula 110", x: 45, y: 50, w: 60, h: 70 },
-        { id: "111", name: "Aula 111", x: 112, y: 50, w: 60, h: 70 },
-        { id: "112", name: "Aula 112", x: 180, y: 50, w: 60, h: 70 },
-        { id: "113", name: "Aula 113", x: 248, y: 50, w: 60, h: 70 },
-        { id: "114", name: "Aula 114", x: 316, y: 50, w: 60, h: 70 },
-        { id: "115", name: "Aula 115", x: 384, y: 50, w: 70, h: 70 },
-        { id: "116", name: "Aula 116", x: 45, y: 180, w: 60, h: 70 },
-        { id: "117", name: "Lab. CAD 117", x: 112, y: 180, w: 90, h: 70 },
-        { id: "118", name: "Lab. Costruz. 118", x: 210, y: 180, w: 90, h: 70 },
-        { id: "134", name: "Aula 134", x: 308, y: 180, w: 70, h: 70 },
-        { id: "135", name: "Lab. Fisica 135", x: 386, y: 180, w: 70, h: 70 }
+        { id: "110", name: "Aula 110", x: 40, y: 45, w: 56, h: 72 },
+        { id: "111", name: "Aula 111", x: 101, y: 45, w: 56, h: 72 },
+        { id: "112", name: "Aula 112", x: 162, y: 45, w: 56, h: 72 },
+        { id: "113", name: "Aula 113", x: 223, y: 45, w: 56, h: 72 },
+        { id: "114", name: "Aula 114", x: 284, y: 45, w: 56, h: 72 },
+        { id: "115", name: "Aula 115", x: 345, y: 45, w: 56, h: 72 },
+        { id: "116", name: "Aula 116", x: 406, y: 45, w: 56, h: 72 },
+        { id: "117", name: "CAD 117", x: 40, y: 180, w: 64, h: 72 },
+        { id: "118", name: "Costr. 118", x: 110, y: 180, w: 68, h: 72 },
+        { id: "129", name: "Disegno 129", x: 184, y: 180, w: 68, h: 72 },
+        { id: "130", name: "Spazio 130", x: 258, y: 180, w: 48, h: 72 },
+        { id: "131", name: "Spazio 131", x: 312, y: 180, w: 48, h: 72 },
+        { id: "134", name: "Aula 134", x: 366, y: 180, w: 46, h: 72 },
+        { id: "135", name: "Fisica 135", x: 418, y: 180, w: 46, h: 72 }
       ],
       "2": [
-        { id: "201", name: "Aula 201", x: 45, y: 50, w: 62, h: 70 },
-        { id: "202", name: "Aula 202", x: 114, y: 50, w: 62, h: 70 },
-        { id: "203", name: "Aula 203", x: 183, y: 50, w: 62, h: 70 },
-        { id: "204", name: "Aula 204", x: 252, y: 50, w: 62, h: 70 },
-        { id: "205", name: "Aula 205", x: 321, y: 50, w: 62, h: 70 },
-        { id: "209", name: "Aula 209", x: 390, y: 50, w: 65, h: 70 },
-        { id: "206", name: "Lab. Info 206", x: 45, y: 180, w: 90, h: 70 },
-        { id: "208", name: "Lab. Elettronica 208", x: 143, y: 180, w: 110, h: 70 },
-        { id: "210", name: "Lab. Lingue 210", x: 261, y: 180, w: 65, h: 70 },
-        { id: "214", name: "Spazio 214", x: 334, y: 180, w: 60, h: 70 },
-        { id: "223", name: "Lab. Sistemi 223", x: 400, y: 180, w: 60, h: 70 }
+        { id: "201", name: "Aula 201", x: 40, y: 45, w: 56, h: 72 },
+        { id: "202", name: "Aula 202", x: 102, y: 45, w: 56, h: 72 },
+        { id: "203", name: "Aula 203", x: 164, y: 45, w: 56, h: 72 },
+        { id: "204", name: "Aula 204", x: 226, y: 45, w: 56, h: 72 },
+        { id: "205", name: "Aula 205", x: 288, y: 45, w: 56, h: 72 },
+        { id: "209", name: "Aula 209", x: 350, y: 45, w: 54, h: 72 },
+        { id: "224", name: "Aula 224", x: 410, y: 45, w: 52, h: 72 },
+        { id: "206", name: "Info 206", x: 40, y: 180, w: 85, h: 72 },
+        { id: "208", name: "Elettronica 208", x: 132, y: 180, w: 105, h: 72 },
+        { id: "210", name: "Lingue 210", x: 244, y: 180, w: 70, h: 72 },
+        { id: "213", name: "Spazio 213", x: 320, y: 180, w: 42, h: 72 },
+        { id: "214", name: "Spazio 214", x: 368, y: 180, w: 42, h: 72 },
+        { id: "223", name: "Sistemi 223", x: 416, y: 180, w: 48, h: 72 }
       ]
     };
 
@@ -447,7 +474,7 @@
         const json = await res.json();
         orarioDb = json.docenti;
       } catch (e) {
-        console.warn("Impossibile caricare il database dell'orario:", e);
+        console.warn("Database orario.json non disponibile.");
       }
     }
 
@@ -456,6 +483,7 @@
       window.speechSynthesis.cancel();
 
       const utterance = new SpeechSynthesisUtterance(text);
+      activeUtterance = utterance;
       utterance.lang = 'it-IT';
       utterance.rate = 1.0;
 
@@ -464,10 +492,16 @@
       if (itVoice) utterance.voice = itVoice;
 
       utterance.onstart = () => { isSpeaking = true; };
-      utterance.onend = () => { isSpeaking = false; };
-      utterance.onerror = () => { isSpeaking = false; };
+      utterance.onend = () => { isSpeaking = false; activeUtterance = null; };
+      utterance.onerror = () => { isSpeaking = false; activeUtterance = null; };
 
       window.speechSynthesis.speak(utterance);
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.getVoices();
+      };
     }
 
     function locateAndHighlight(roomStr) {
@@ -482,24 +516,30 @@
       }
     }
 
-    function normalizeText(str) {
-      return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+    function normalizeForSearch(str) {
+      return (str || '')
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9\s]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
     }
 
     function parseNaturalQuery(text) {
-      const q = normalizeText(text);
+      const q = normalizeForSearch(text);
 
-      // 1. Docente: ordinamento per lunghezza decrescente (Curto non cattura Curtolo)
+      // 1. Docente: ordinamento per lunghezza decrescente con delimitatori esatti di parola
       const profKeys = Object.keys(orarioDb || {}).sort((a, b) => b.length - a.length);
 
       let docente = profKeys.find(p => {
-        const cleanP = normalizeText(p);
-        const regex = new RegExp(`(^|[^a-z0-9à-ÿ])${cleanP}([^a-z0-9à-ÿ]|$)`, 'i');
+        const cleanP = normalizeForSearch(p);
+        const regex = new RegExp(`(^|\\s)${cleanP}(\\s|$)`, 'i');
         return regex.test(q);
       });
 
       if (!docente) {
-        docente = profKeys.find(p => q.includes(normalizeText(p)));
+        docente = profKeys.find(p => q.includes(normalizeForSearch(p)));
       }
 
       if (!docente) return { error: "DOCENTE_NOT_FOUND" };
@@ -518,26 +558,27 @@
 
       if (targetDay === "domenica") return { error: "SUNDAY", docente };
 
-      // 3. Ora
+      // 3. Ora: estrazione ordinale o numerica esplicita
       let targetHour = null;
       const hourWords = { "prima": "1", "seconda": "2", "terza": "3", "quarta": "4", "quinta": "5" };
       for (const [w, h] of Object.entries(hourWords)) {
-        if (q.includes(w)) { targetHour = h; break; }
+        if (new RegExp(`\\b${w}\\b`).test(q)) { targetHour = h; break; }
       }
 
       if (!targetHour) {
-        const match = q.match(/\b([1-5])\s*(?:ª|°|a|ora)?\b/);
+        const match = q.match(/\b([1-5])\s*(?:ª|°|a|ora|ore)?\b/);
         if (match) targetHour = match[1];
       }
 
-      if (!targetHour || q.includes("adesso") || q.includes("ora")) {
+      // Se NON è stata indicata un'ora precisa, si calcola l'ora scolastica attuale
+      if (!targetHour) {
         const totalMinutes = now.getHours() * 60 + now.getMinutes();
-        if (totalMinutes >= 480 && totalMinutes < 535) targetHour = "1";
-        else if (totalMinutes >= 535 && totalMinutes < 590) targetHour = "2";
-        else if (totalMinutes >= 590 && totalMinutes < 660) targetHour = "3";
-        else if (totalMinutes >= 660 && totalMinutes < 720) targetHour = "4";
-        else if (totalMinutes >= 720 && totalMinutes < 795) targetHour = "5";
-        else targetHour = "1";
+        if (totalMinutes >= 480 && totalMinutes < 535) targetHour = "1";       // 8:00 - 8:55
+        else if (totalMinutes >= 535 && totalMinutes < 590) targetHour = "2";  // 8:55 - 9:50
+        else if (totalMinutes >= 590 && totalMinutes < 660) targetHour = "3";  // 9:50 - 11:00
+        else if (totalMinutes >= 660 && totalMinutes < 720) targetHour = "4";  // 11:00 - 12:00
+        else if (totalMinutes >= 720 && totalMinutes < 795) targetHour = "5";  // 12:00 - 13:15
+        else targetHour = "1"; // Default prima ora
       }
 
       return { docente, targetDay, targetHour };
@@ -553,7 +594,7 @@
 
       if (res.error === "DOCENTE_NOT_FOUND") {
         cardTitle.textContent = "Docente non trovato";
-        cardDesc.textContent = "Verifica la correttezza del cognome inserito.";
+        cardDesc.textContent = "Verifica il cognome inserito.";
         cardBadge.style.display = "none";
         speak("Non ho trovato questo docente. Prova a specificare solo il cognome.");
         return;
@@ -589,6 +630,21 @@
         let msg = `Il professor ${docente} ${targetDay} alla ${targetHour}ª ora si trova in ${slot.aula} con la classe ${slot.classe} per ${slot.materia}.`;
         if (slot.copresenza) msg += ` Insieme al docente ${slot.copresenza}.`;
         speak(msg);
+      }
+    }
+
+    function updateMouthAnimation(now) {
+      if (now === lastJawUpdate) return;
+      lastJawUpdate = now;
+
+      if (isSpeaking) {
+        const t = now * 0.015;
+        const rawWave = Math.sin(t) * 0.5 + Math.sin(t * 1.8) * 0.3 + Math.sin(t * 0.4) * 0.2;
+        const targetJaw = Math.max(0, Math.min(0.75, rawWave * 1.2));
+        currentJaw += (targetJaw - currentJaw) * 0.35;
+      } else {
+        currentJaw += (0 - currentJaw) * 0.25;
+        if (currentJaw < 0.005) currentJaw = 0;
       }
     }
 
@@ -628,14 +684,7 @@
           if (jawIdx !== undefined) {
             morphMeshes.push({ mesh: node, jawIdx, funnelIdx });
             node.onBeforeRender = () => {
-              if (isSpeaking) {
-                const t = performance.now() * 0.015;
-                const rawWave = Math.sin(t) * 0.5 + Math.sin(t * 1.8) * 0.3 + Math.sin(t * 0.4) * 0.2;
-                const targetJaw = Math.max(0, Math.min(0.75, rawWave * 1.2));
-                currentJaw += (targetJaw - currentJaw) * 0.35;
-              } else {
-                currentJaw += (0 - currentJaw) * 0.25;
-              }
+              updateMouthAnimation(performance.now());
               node.morphTargetInfluences[jawIdx] = currentJaw;
               if (funnelIdx !== undefined) node.morphTargetInfluences[funnelIdx] = currentJaw * 0.3;
             };
@@ -694,4 +743,3 @@
   </script>
 </body>
 </html>
-EOF
