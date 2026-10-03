@@ -1,3 +1,4 @@
+cat << 'EOF' > index.html
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -97,7 +98,7 @@
       backdrop-filter: blur(6px);
     }
 
-    /* Pannello Mappa e Dettagli */
+    /* Pannello Mappa e Scheda Informativa */
     #map-panel {
       flex: 0.9;
       min-height: 0;
@@ -116,6 +117,8 @@
       border-radius: 10px;
       padding: 10px 14px;
       backdrop-filter: blur(10px);
+      max-height: 180px;
+      overflow-y: auto;
     }
 
     #info-card h3 {
@@ -124,7 +127,7 @@
       color: var(--accent);
     }
 
-    #info-card p {
+    #info-card p, #info-card div {
       margin: 2px 0;
       font-size: 12.5px;
       color: #cbd5e1;
@@ -285,7 +288,7 @@
       50% { transform: scale(1.08); }
     }
 
-    /* Layout Responsive Smartphone */
+    /* Layout Responsive Mobile */
     @media (max-width: 900px) {
       #main-container {
         flex-direction: column;
@@ -339,7 +342,7 @@
     <div id="map-panel">
       <div class="card" id="info-card">
         <h3 id="card-title">In attesa di richiesta...</h3>
-        <p id="card-desc">Es: «Curtolo martedì 2» o «De Min adesso»</p>
+        <div id="card-desc">Chiedi ad esempio: «Curtolo lunedì» o «De Min adesso»</div>
         <div id="card-badge" style="display:none;" class="badge"></div>
       </div>
 
@@ -361,7 +364,7 @@
   </div>
 
   <div id="ui-bar">
-    <input type="text" id="query-input" placeholder="Docente, giorno, ora..." disabled />
+    <input type="text" id="query-input" placeholder="Docente o giorno (es. Curtolo lunedì)..." disabled />
     <button class="action-btn" id="search-btn" disabled>Cerca</button>
     <button class="action-btn" id="mic-btn" disabled title="Voce">🎙️</button>
   </div>
@@ -384,12 +387,12 @@
     let isSpeaking = false;
     let currentJaw = 0;
     let lastJawUpdate = 0;
-    let activeUtterance = null; // Previene il Garbage Collection prematuro su Android
+    let activeUtterance = null;
+    let activeHighlightRooms = []; // Mantiene le stanze evidenziate attive tra i cambi piano
     const morphMeshes = [];
     const DAYS = ["domenica", "lunedi", "martedi", "mercoledi", "giovedi", "venerdi", "sabato"];
     let currentFloor = "2";
 
-    // Planimetrie complete ITIS Negrelli
     const floorLayouts = {
       "0": [
         { id: "014", name: "Aula 014", x: 40, y: 45, w: 68, h: 72 },
@@ -434,19 +437,22 @@
       ]
     };
 
-    function renderMap(floor, highlightId = null) {
+    function renderMap(floor, highlightList = null) {
       currentFloor = floor;
       floorButtons.forEach(btn => {
         btn.classList.toggle('active', btn.dataset.floor === floor);
       });
 
+      if (highlightList !== null) {
+        activeHighlightRooms = Array.isArray(highlightList) ? highlightList : [highlightList];
+      }
+
       mapRoomsGroup.innerHTML = '';
       const rooms = floorLayouts[floor] || [];
 
       rooms.forEach(r => {
-        const isTarget = highlightId && (
-          r.id === highlightId || 
-          r.name.toLowerCase().includes(highlightId.toLowerCase())
+        const isTarget = activeHighlightRooms.some(target => 
+          r.id === target || r.name.toLowerCase().includes(target.toLowerCase())
         );
 
         const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
@@ -504,18 +510,6 @@
       };
     }
 
-    function locateAndHighlight(roomStr) {
-      if (!roomStr) return;
-      const numMatch = roomStr.match(/\b(\d{3})\b/);
-      if (numMatch) {
-        const num = numMatch[1];
-        const floor = num[0];
-        if (['0', '1', '2'].includes(floor)) {
-          renderMap(floor, num);
-        }
-      }
-    }
-
     function normalizeForSearch(str) {
       return (str || '')
         .toLowerCase()
@@ -526,10 +520,49 @@
         .trim();
     }
 
+    // Confronta due ore per accorparle se identiche
+    function areSlotsEqual(a, b) {
+      if (!a || !b) return false;
+      if (a.tipo !== b.tipo) return false;
+      if (a.tipo === "disposizione") {
+        return (a.aula || "") === (b.aula || "");
+      }
+      return a.materia === b.materia &&
+             a.classe === b.classe &&
+             a.aula === b.aula &&
+             a.copresenza === b.copresenza;
+    }
+
+    // Formattazione naturale dell'intervallo ore
+    function formatHourSpan(startH, endH) {
+      const ords = { 1: "prima", 2: "seconda", 3: "terza", 4: "quarta", 5: "quinta" };
+      if (startH === endH) {
+        return `in ${ords[startH]} ora`;
+      }
+      if (endH - startH === 1) {
+        return `in ${ords[startH]} e ${ords[endH]} ora`;
+      }
+      return `dalla ${ords[startH]} alla ${ords[endH]} ora`;
+    }
+
+    function describeGroup(g) {
+      const timeSpan = formatHourSpan(g.startHour, g.endHour);
+      const s = g.slot;
+      if (s.tipo === "disposizione") {
+        return `${timeSpan} è a disposizione${s.aula ? ' in ' + s.aula : ''}`;
+      } else {
+        let desc = `${timeSpan} ha ${s.materia}`;
+        if (s.classe) desc += ` con la ${s.classe}`;
+        if (s.aula) desc += ` in ${s.aula}`;
+        if (s.copresenza) desc += ` insieme a ${s.copresenza}`;
+        return desc;
+      }
+    }
+
     function parseNaturalQuery(text) {
       const q = normalizeForSearch(text);
 
-      // 1. Docente: ordinamento per lunghezza decrescente con delimitatori esatti di parola
+      // 1. Docente (ordinamento per lunghezza decrescente)
       const profKeys = Object.keys(orarioDb || {}).sort((a, b) => b.length - a.length);
 
       let docente = profKeys.find(p => {
@@ -558,30 +591,43 @@
 
       if (targetDay === "domenica") return { error: "SUNDAY", docente };
 
-      // 3. Ora: estrazione ordinale o numerica esplicita
+      // 3. Verifica richiesta ora esplicita o in tempo reale
       let targetHour = null;
+      let isRealTime = false;
+
       const hourWords = { "prima": "1", "seconda": "2", "terza": "3", "quarta": "4", "quinta": "5" };
       for (const [w, h] of Object.entries(hourWords)) {
         if (new RegExp(`\\b${w}\\b`).test(q)) { targetHour = h; break; }
       }
 
       if (!targetHour) {
-        const match = q.match(/\b([1-5])\s*(?:ª|°|a|ora|ore)?\b/);
-        if (match) targetHour = match[1];
+        const matchExplicit = q.match(/(?:alla|alle|ora|ore)?\s*\b([1-5])\s*(?:ª|°|a|ora|ore)\b/) || q.match(/\b(?:ora|ore)\s*([1-5])\b/);
+        if (matchExplicit) {
+          targetHour = matchExplicit[1];
+        } else {
+          // Se compare una cifra 1-5 isolata non legata a classi (es. "Curtolo lunedì 2")
+          const matchDigit = q.match(/\b([1-5])\b/);
+          if (matchDigit && !q.match(/\b[1-5]\s*[a-z]{2,3}\b/)) {
+            targetHour = matchDigit[1];
+          }
+        }
       }
 
-      // Se NON è stata indicata un'ora precisa, si calcola l'ora scolastica attuale
-      if (!targetHour) {
+      if (q.includes("adesso") || q.includes("in questo momento") || q.includes("ora attuale") || q.includes("attualmente")) {
+        isRealTime = true;
         const totalMinutes = now.getHours() * 60 + now.getMinutes();
-        if (totalMinutes >= 480 && totalMinutes < 535) targetHour = "1";       // 8:00 - 8:55
-        else if (totalMinutes >= 535 && totalMinutes < 590) targetHour = "2";  // 8:55 - 9:50
-        else if (totalMinutes >= 590 && totalMinutes < 660) targetHour = "3";  // 9:50 - 11:00
-        else if (totalMinutes >= 660 && totalMinutes < 720) targetHour = "4";  // 11:00 - 12:00
-        else if (totalMinutes >= 720 && totalMinutes < 795) targetHour = "5";  // 12:00 - 13:15
-        else targetHour = "1"; // Default prima ora
+        if (totalMinutes >= 480 && totalMinutes < 535) targetHour = "1";
+        else if (totalMinutes >= 535 && totalMinutes < 590) targetHour = "2";
+        else if (totalMinutes >= 590 && totalMinutes < 660) targetHour = "3";
+        else if (totalMinutes >= 660 && totalMinutes < 720) targetHour = "4";
+        else if (totalMinutes >= 720 && totalMinutes < 795) targetHour = "5";
+        else targetHour = "1";
       }
 
-      return { docente, targetDay, targetHour };
+      // Se non è stata richiesta un'ora specifica né l'orario in tempo reale, restituisce la giornata intera
+      const isFullDay = !targetHour && !isRealTime;
+
+      return { docente, targetDay, targetHour, isFullDay };
     }
 
     function handleQuery(text) {
@@ -594,7 +640,7 @@
 
       if (res.error === "DOCENTE_NOT_FOUND") {
         cardTitle.textContent = "Docente non trovato";
-        cardDesc.textContent = "Verifica il cognome inserito.";
+        cardDesc.textContent = "Verifica la correttezza del cognome inserito.";
         cardBadge.style.display = "none";
         speak("Non ho trovato questo docente. Prova a specificare solo il cognome.");
         return;
@@ -609,23 +655,107 @@
         return;
       }
 
-      const { docente, targetDay, targetHour } = res;
-      const slot = orarioDb[docente]?.[targetDay]?.[targetHour];
+      const { docente, targetDay, targetHour, isFullDay } = res;
+      const daySchedule = orarioDb[docente]?.[targetDay] || {};
 
       cardTitle.textContent = `Prof. ${docente}`;
       cardBadge.style.display = "inline-block";
+
+      // CASO A: GIORNATA INTERA (Riepilogo completo con accorpamento ore consecutive)
+      if (isFullDay) {
+        cardBadge.textContent = `${targetDay.toUpperCase()} • GIORNATA INTERA`;
+
+        // Raggruppa le ore consecutive identiche
+        const groups = [];
+        let cur = null;
+
+        for (let h = 1; h <= 5; h++) {
+          const s = daySchedule[String(h)];
+          if (!s) {
+            if (cur) { groups.push(cur); cur = null; }
+            continue;
+          }
+          if (cur && areSlotsEqual(cur.slot, s) && cur.endHour === h - 1) {
+            cur.endHour = h;
+          } else {
+            if (cur) groups.push(cur);
+            cur = { startHour: h, endHour: h, slot: s };
+          }
+        }
+        if (cur) groups.push(cur);
+
+        if (groups.length === 0) {
+          cardDesc.textContent = `Nessuna lezione prevista per la giornata di ${targetDay}.`;
+          speak(`Il professor ${docente} ${targetDay} non ha lezioni in orario.`);
+          renderMap(currentFloor, []);
+          return;
+        }
+
+        // Scheda descrittiva HTML compatta
+        let htmlDesc = `<div style="display:flex; flex-direction:column; gap:4px;">`;
+        const roomNumbers = [];
+
+        groups.forEach(g => {
+          const timeSpanStr = g.startHour === g.endHour ? `${g.startHour}ª ora` : `${g.startHour}ª-${g.endHour}ª ora`;
+          const s = g.slot;
+
+          if (s.aula) {
+            const m = s.aula.match(/\b(\d{3})\b/);
+            if (m && !roomNumbers.includes(m[1])) roomNumbers.push(m[1]);
+          }
+
+          if (s.tipo === "disposizione") {
+            htmlDesc += `<div><strong>${timeSpanStr}:</strong> Disposizione ${s.aula ? '(' + s.aula + ')' : ''}</div>`;
+          } else {
+            htmlDesc += `<div><strong>${timeSpanStr}:</strong> <strong>${s.aula || 'N.D.'}</strong> • ${s.classe} <small style="color:var(--text-muted)">(${s.materia})</small></div>`;
+          }
+        });
+        htmlDesc += `</div>`;
+        cardDesc.innerHTML = htmlDesc;
+
+        // Evidenzia le aule sulla mappa (seleziona il piano della prima aula trovata)
+        if (roomNumbers.length > 0) {
+          const firstFloor = roomNumbers[0][0];
+          renderMap(['0', '1', '2'].includes(firstFloor) ? firstFloor : currentFloor, roomNumbers);
+        } else {
+          renderMap(currentFloor, []);
+        }
+
+        // Generazione del messaggio vocale fluido
+        let spokenMsg = `${targetDay} il professor ${docente} `;
+        if (groups.length === 1) {
+          spokenMsg += `${describeGroup(groups[0])}.`;
+        } else if (groups.length === 2) {
+          spokenMsg += `${describeGroup(groups[0])}, e ${describeGroup(groups[1])}.`;
+        } else {
+          spokenMsg += groups.slice(0, -1).map(describeGroup).join(", ") + `, e ${describeGroup(groups[groups.length - 1])}.`;
+        }
+
+        speak(spokenMsg);
+        return;
+      }
+
+      // CASO B: ORA SINGOLA SPECIFICA
       cardBadge.textContent = `${targetDay.toUpperCase()} • ${targetHour}ª ORA`;
+      const slot = daySchedule[targetHour];
 
       if (!slot) {
         cardDesc.textContent = "Nessuna lezione prevista (Ora buca o non in servizio).";
         speak(`Il professor ${docente} ${targetDay} alla ${targetHour}ª ora non ha lezione.`);
+        renderMap(currentFloor, []);
       } else if (slot.tipo === "disposizione") {
         cardDesc.textContent = `A disposizione ${slot.aula ? 'in ' + slot.aula : 'nell\'istituto'}.`;
         speak(`Il professor ${docente} ${targetDay} alla ${targetHour}ª ora è a disposizione.`);
-        if (slot.aula) locateAndHighlight(slot.aula);
+        if (slot.aula) {
+          const m = slot.aula.match(/\b(\d{3})\b/);
+          if (m && ['0', '1', '2'].includes(m[1][0])) renderMap(m[1][0], [m[1]]);
+        }
       } else {
         cardDesc.innerHTML = `<strong>${slot.aula}</strong> • Classe <strong>${slot.classe}</strong><br><small style="color: #94a3b8;">${slot.materia}</small>`;
-        locateAndHighlight(slot.aula);
+        if (slot.aula) {
+          const m = slot.aula.match(/\b(\d{3})\b/);
+          if (m && ['0', '1', '2'].includes(m[1][0])) renderMap(m[1][0], [m[1]]);
+        }
 
         let msg = `Il professor ${docente} ${targetDay} alla ${targetHour}ª ora si trova in ${slot.aula} con la classe ${slot.classe} per ${slot.materia}.`;
         if (slot.copresenza) msg += ` Insieme al docente ${slot.copresenza}.`;
@@ -651,7 +781,7 @@
     async function init() {
       renderMap("2");
       floorButtons.forEach(btn => {
-        btn.addEventListener('click', () => renderMap(btn.dataset.floor));
+        btn.addEventListener('click', () => renderMap(btn.dataset.floor, activeHighlightRooms));
       });
 
       await loadSchedule();
@@ -743,3 +873,4 @@
   </script>
 </body>
 </html>
+EOF
