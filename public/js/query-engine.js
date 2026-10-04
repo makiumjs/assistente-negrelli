@@ -1,0 +1,660 @@
+// Motore di interrogazione dell'orario ITIS Negrelli: nessuna dipendenza dal DOM.
+// Testabile offline tramite Node.js.
+// parseQuery(text, idx, ctx) -> intento strutturato
+// answer(parsed, idx, ctx)   -> { title, badge, lines[], note, speech, rooms[] }
+
+const JS_DAYS = ["domenica", "lunedi", "martedi", "mercoledi", "giovedi", "venerdi", "sabato"];
+const ORD_F = { prima: 1, seconda: 2, terza: 3, quarta: 4, quinta: 5, sesta: 6, settima: 7, ottava: 8 };
+const ORD_WORDS = Object.fromEntries(Object.entries(ORD_F).map(([w, n]) => [n, w]));
+const LESSON_MIN = 55;
+
+export function normalize(str) {
+  return (str || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+export function titleCase(s) {
+  return (s || "")
+    .toLowerCase()
+    .replace(/(^|[\s'./-])([a-zà-ÿ])/g, (m, p, c) => p + c.toUpperCase());
+}
+
+const DAY_LABEL = {
+  lunedi: "lunedì",
+  martedi: "martedì",
+  mercoledi: "mercoledì",
+  giovedi: "giovedì",
+  venerdi: "venerdì",
+  sabato: "sabato",
+  domenica: "domenica",
+};
+const dl = (d) => DAY_LABEL[d] || d;
+const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
+export function formatDocenteName(nome) {
+  if (!nome) return "";
+  if (nome.startsWith("_")) {
+    const clean = nome.replace(/^_\s*/, "").trim();
+    return `Cattedra ${clean.toUpperCase()}`;
+  }
+  return titleCase(nome);
+}
+
+export function spokenDocenteName(nome) {
+  if (!nome) return "";
+  if (nome.startsWith("_")) {
+    const clean = nome.replace(/^_\s*/, "").trim().toLowerCase();
+    const expanded = clean
+      .replace(/\binfo\s*(\d)/gi, "Informatica $1")
+      .replace(/\bele\s*(\d)/gi, "Elettronica $1")
+      .replace(/\bmecc\s*(\d)/gi, "Meccanica $1")
+      .replace(/\bchim\s*(\d)/gi, "Chimica $1");
+    return `la cattedra di ${titleCase(expanded)}`;
+  }
+  return `il professor ${titleCase(nome)}`;
+}
+
+// ------------------------------------------------------------------ indice
+export function buildIndex(db) {
+  // Tutti i docenti sono indicizzati, inclusi quelli non ancora arrivati (_info 5, _ele 2, ecc.)
+  const docenti = Object.entries(db.docenti).map(([id, d]) => {
+    const isPlaceholder = Boolean(d.senza_nome || d.nome.startsWith("_"));
+    const clean = normalize(d.nome);
+    const words = clean.split(" ").filter((t) => /^[a-z]{3,}$/.test(t));
+    const compact = clean.replace(/\s+/g, "");
+    const tokens = [...new Set([...words, compact])];
+    return {
+      id,
+      nome: d.nome,
+      isPlaceholder,
+      tokens,
+    };
+  });
+
+  const classKeys = Object.keys(db.classi).map((id) => ({
+    id,
+    key: id.toLowerCase(),
+  }));
+
+  const aule = Object.keys(db.aule).map((nome) => {
+    const norm = normalize(nome);
+    const numMatch = nome.match(/\b\d{3}\b/);
+    return {
+      nome,
+      key: norm,
+      num: numMatch ? numMatch[0] : null,
+      isLab: /lab|laboratorio/i.test(nome),
+      isPalestra: /palestra/i.test(nome),
+    };
+  });
+
+  const starts = db.meta.ore.map((o) => {
+    const [h, m] = o.inizio.split(":").map(Number);
+    return { ora: o.ora, inizio: o.inizio, min: h * 60 + m };
+  });
+
+  return { db, docenti, classKeys, aule, starts };
+}
+
+// ------------------------------------------------------------------ entità
+function findClasses(q, idx) {
+  const exists = (cand) => idx.classKeys.some((c) => c.key.startsWith(cand));
+  let s = q;
+
+  // "quarta ita" -> "4ita", "prima bta" -> "1bta"
+  s = s.replace(/\b(prima|seconda|terza|quarta|quinta)\s+([a-z]{2,5})\b/g, (m, o, l) =>
+    exists(ORD_F[o] + l) ? ORD_F[o] + l : m
+  );
+  // "4 ita" -> "4ita", "1 bta" -> "1bta"
+  s = s.replace(/\b([1-5])\s+([a-z]{2,5})\b/g, (m, d, l) => (exists(d + l) ? d + l : m));
+
+  const ids = [];
+  const used = [];
+  for (const tok of s.match(/\b[1-5][a-z]{2,5}\b/g) || []) {
+    const exact = idx.classKeys.filter((c) => c.key === tok);
+    const hits = exact.length ? exact : idx.classKeys.filter((c) => c.key.startsWith(tok));
+    if (hits.length) {
+      used.push(tok);
+      hits.forEach((h) => !ids.includes(h.id) && ids.push(h.id));
+    }
+  }
+
+  let rest = s;
+  used.forEach((t) => (rest = rest.replace(new RegExp(`\\b${t}\\b`, "g"), " ")));
+  return { ids, rest: rest.replace(/\s+/g, " ").trim() };
+}
+
+function scoreDocenti(q, idx) {
+  const norm = normalize(q);
+  const rawWords = norm.split(" ").filter((w) => w.length >= 3);
+  const joined = norm.replace(/\b(info|ele|chim|mecc)\s+(\d)\b/gi, "$1$2");
+  const words = [...new Set([...rawWords, ...joined.split(" ").filter((w) => w.length >= 3)])];
+  const stopWords = new Set(["cosa", "prof", "docente", "cattedra", "orario", "della", "dello", "nelle", "delle"]);
+
+  const scored = idx.docenti
+    .map((d) => {
+      let score = 0;
+      for (const w of words) {
+        if (stopWords.has(w)) continue;
+        for (const t of d.tokens) {
+          if (t === w) {
+            score += 10;
+          } else if (w.length >= 4 && (t.startsWith(w) || (w.length >= 5 && w.startsWith(t)))) {
+            score += 5;
+          }
+        }
+      }
+      return { d, score };
+    })
+    .filter((x) => x.score > 0);
+
+  if (!scored.length) return [];
+  const top = Math.max(...scored.map((x) => x.score));
+  return scored.filter((x) => x.score === top).map((x) => x.d);
+}
+
+function findRooms(q, idx) {
+  // 1. Cerca per numero aula a tre cifre (es. "201", "019", "116")
+  const numMatch = q.match(/\b(\d{3})\b/);
+  if (numMatch) {
+    const hit = idx.aule.filter((a) => a.num === numMatch[1]);
+    if (hit.length) return hit;
+  }
+
+  // 2. Cerca match esatto sulla chiave normalizzata
+  const exact = idx.aule.filter((a) => new RegExp(`(^|\\s)${a.key}(\\s|$)`).test(q));
+  if (exact.length) return exact;
+
+  // 3. Cerca per parole chiave significative dell'aula (es. "palestra", "rizzarda", "linux")
+  const words = new Set(q.split(" "));
+  const hits = idx.aule.filter((a) => {
+    const kWords = a.key.split(" ").filter((w) => w.length >= 4 && w !== "aula" && w !== "laboratorio");
+    return kWords.some((kw) => words.has(kw));
+  });
+  if (hits.length) return hits;
+
+  return [];
+}
+
+function findDay(q, now) {
+  for (const d of ["lunedi", "martedi", "mercoledi", "giovedi", "venerdi", "sabato", "domenica"]) {
+    if (new RegExp(`\\b${d}\\b`).test(q)) return d;
+  }
+  const n = now.getDay();
+  if (/\bdopodomani\b/.test(q)) return JS_DAYS[(n + 2) % 7];
+  if (/\bdomani\b/.test(q)) return JS_DAYS[(n + 1) % 7];
+  if (/\bieri\b/.test(q)) return JS_DAYS[(n + 6) % 7];
+  return JS_DAYS[n];
+}
+
+function findHour(q) {
+  const ord = Object.keys(ORD_F).join("|");
+  let m =
+    q.match(new RegExp(`\\b(${ord})\\s+(?:ora|lezione)\\b`)) ||
+    q.match(new RegExp(`\\b(?:alla|nella|all|nell)\\s+(${ord})\\b`));
+  if (m) return ORD_F[m[1]];
+
+  m =
+    q.match(/\b(?:ora|ore)\s*([1-8])\b/) ||
+    q.match(/\balla\s*([1-8])(?:ª|°|a)?\b/) ||
+    q.match(/\b([1-8])\s*(?:ª|°|a)?\s*ora\b/);
+  if (m) return Number(m[1]);
+
+  return null;
+}
+
+function currentLesson(now, idx) {
+  const t = now.getHours() * 60 + now.getMinutes();
+  const hit = idx.starts.find((s) => t >= s.min && t < s.min + LESSON_MIN);
+  return hit ? hit.ora : null;
+}
+
+// ------------------------------------------------------------------ parsing
+export function parseQuery(text, idx, ctx = {}) {
+  const now = ctx.now || new Date();
+  const q0 = normalize(text);
+  const { ids: classi, rest } = findClasses(q0, idx);
+  const q = rest;
+
+  const day = findDay(q, now);
+  const realtime = /\b(adesso|attualmente|in questo momento|in questo istante|ora attuale)\b/.test(q);
+  let hour = findHour(q);
+  if (realtime) hour = currentLesson(now, idx);
+
+  const base = { day, hour, realtime, raw: text };
+  const mentionsRoomWord = /\b(aula|aule|laboratorio|laboratori|lab|palestra|stanza|stanze)\b/.test(q);
+  const wantsFree = /\b(liber[aeio]|vuot[aeio]|disponibil[ei])\b/.test(q);
+  const onlyLabs = /\b(laboratori|laboratorio|lab)\b/.test(q);
+  const rooms = findRooms(q, idx);
+
+  if (wantsFree && (mentionsRoomWord || rooms.length)) {
+    return { ...base, intent: "aule_libere", rooms, onlyLabs };
+  }
+
+  const docs = scoreDocenti(q, idx);
+  if (docs.length > 1) return { ...base, intent: "ambiguo", candidati: docs };
+  if (docs.length === 1) {
+    const me = ctx.me ? scoreDocenti(normalize(ctx.me), idx) : [];
+    return { ...base, intent: "docente", docente: docs[0], isSelf: me.length === 1 && me[0].id === docs[0].id };
+  }
+  if (classi.length) return { ...base, intent: "classe", classi };
+  if (rooms.length) return { ...base, intent: "aula", rooms };
+
+  const me = ctx.me ? scoreDocenti(normalize(ctx.me), idx) : [];
+  if (me.length === 1) return { ...base, intent: "docente", docente: me[0], isSelf: true };
+  return { ...base, intent: "non_trovato" };
+}
+
+// ------------------------------------------------------------------ risposte
+function groupHours(daySched, sameKey) {
+  const groups = [];
+  let cur = null;
+  for (let h = 1; h <= 8; h++) {
+    const s = daySched[String(h)];
+    if (!s) {
+      if (cur) groups.push(cur);
+      cur = null;
+      continue;
+    }
+    if (cur && cur.end === h - 1 && sameKey(cur.slot) === sameKey(s)) cur.end = h;
+    else {
+      if (cur) groups.push(cur);
+      cur = { start: h, end: h, slot: s };
+    }
+  }
+  if (cur) groups.push(cur);
+  return groups;
+}
+
+const span = (g) => (g.start === g.end ? `${g.start}ª ora` : `${g.start}ª-${g.end}ª ora`);
+const spokenSpan = (g) =>
+  g.start === g.end
+    ? `in ${ORD_WORDS[g.start]} ora`
+    : g.end - g.start === 1
+    ? `in ${ORD_WORDS[g.start]} e ${ORD_WORDS[g.end]} ora`
+    : `dalla ${ORD_WORDS[g.start]} alla ${ORD_WORDS[g.end]} ora`;
+
+const joinSpeech = (parts) =>
+  parts.length === 1 ? parts[0] : parts.slice(0, -1).join(", ") + ", e " + parts[parts.length - 1];
+
+const startOf = (idx, h) => idx.starts.find((s) => s.ora === h)?.inizio || "";
+
+function extractRoomsFromText(text) {
+  if (!text) return [];
+  const m = text.match(/\b\d{3}\b/g);
+  return m ? [...new Set(m)] : [];
+}
+
+function closedDay(p, title) {
+  return {
+    title,
+    badge: "DOMENICA",
+    lines: [],
+    note: "Di domenica l'istituto è chiuso.",
+    speech: "Di domenica l'istituto è chiuso.",
+    rooms: [],
+  };
+}
+
+function hourBadge(p, idx) {
+  const st = startOf(idx, p.hour);
+  return `${dl(p.day).toUpperCase()} • ${p.hour}ª ORA${st ? " (" + st + ")" : ""}`;
+}
+
+function noHourNow(p) {
+  return {
+    title: "Nessuna lezione in corso",
+    badge: "ADESSO",
+    lines: [],
+    note: "In questo momento non c'è lezione (intervallo o fuori orario).",
+    speech: "In questo momento non c'è lezione: è intervallo o fuori orario.",
+    rooms: [],
+  };
+}
+
+function answerDocente(p, idx) {
+  const d = idx.db.docenti[p.docente.id];
+  const isPlaceholder = Boolean(d.senza_nome || d.nome.startsWith("_"));
+  const nomeDisplay = formatDocenteName(d.nome);
+  const title = isPlaceholder
+    ? `${nomeDisplay} (Docente in arrivo)`
+    : p.isSelf
+    ? `Prof. ${titleCase(d.nome)} (Tu)`
+    : `Prof. ${titleCase(d.nome)}`;
+
+  if (p.day === "domenica") return closedDay(p, title);
+  if (p.realtime && p.hour === null) return { ...noHourNow(p), title };
+
+  const sched = d.orario[p.day] || {};
+  const dayCap = cap(dl(p.day));
+  const subj = p.isSelf ? "" : spokenDocenteName(d.nome);
+
+  const describe = (s) => {
+    if (s.tipo === "disposizione") {
+      const dove = s.aula ? ` in ${titleCase(s.aula)}` : "";
+      return {
+        main: `Disposizione${dove}`,
+        sub: "",
+        say: p.isSelf ? `sarai a disposizione${dove}` : `è a disposizione${dove}`,
+        aula: s.aula || null,
+      };
+    }
+    const extra = [...(s.altre_classi || [])];
+    const cls = [s.classe, ...extra].filter(Boolean).join(" + ");
+    const con = s.copresenza?.length ? s.copresenza.map(formatDocenteName).join(", ") : "";
+    const conSay = s.copresenza?.length ? s.copresenza.map(spokenDocenteName).join(", ") : "";
+    const mat = s.materia ? titleCase(s.materia) : "materia non indicata";
+    const aula = s.aula ? titleCase(s.aula) : "aula non indicata";
+    const verb = s.tipo === "compresenza" ? "è in compresenza" : "ha lezione";
+    return {
+      main: `${aula} • ${cls}`,
+      sub: `${mat}${con ? " · con " + con : ""}`,
+      say: `${p.isSelf ? "avrai lezione" : verb} di ${mat} con la ${cls}, in ${aula}${conSay ? ", insieme a " + conSay : ""}`
+        .replace(/\binsieme a il\b/gi, "insieme al")
+        .replace(/\binsieme a la\b/gi, "insieme alla"),
+      aula: s.aula || null,
+    };
+  };
+
+  if (p.hour === null) {
+    const groups = groupHours(
+      sched,
+      (s) => JSON.stringify([s.tipo, s.classe, s.materia, s.aula, s.copresenza, s.altre_classi])
+    );
+    if (!groups.length) {
+      return {
+        title,
+        badge: `${dl(p.day).toUpperCase()} • GIORNATA`,
+        lines: [],
+        note: isPlaceholder ? "Nessuna lezione in orario (cattedra provvisoria)." : "Nessuna lezione in orario.",
+        speech: p.isSelf ? `${dayCap} non hai lezioni in orario.` : `${dayCap} ${subj} non ha lezioni in orario.`,
+        rooms: [],
+      };
+    }
+    const descs = groups.map((g) => ({ g, ...describe(g.slot) }));
+    const roomsCollected = descs.map((x) => x.aula).filter(Boolean);
+    return {
+      title,
+      badge: `${dl(p.day).toUpperCase()} • GIORNATA INTERA`,
+      lines: descs.map((x) => ({ when: span(x.g), main: x.main, sub: x.sub })),
+      speech: `${dayCap} ${subj} ${joinSpeech(descs.map((x) => `${spokenSpan(x.g)} ${x.say}`))}.`.replace(/\s+/g, " "),
+      rooms: roomsCollected,
+    };
+  }
+
+  const s = sched[String(p.hour)];
+  const when = `${ORD_WORDS[p.hour] || p.hour} ora`;
+  if (!s) {
+    return {
+      title,
+      badge: hourBadge(p, idx),
+      lines: [],
+      note: "Nessuna lezione in quest'ora.",
+      speech: p.isSelf ? `${dayCap} in ${when} non hai lezioni.` : `${dayCap} in ${when} ${subj} non ha lezioni.`,
+      rooms: [],
+    };
+  }
+  const x = describe(s);
+  return {
+    title,
+    badge: hourBadge(p, idx),
+    lines: [{ when: `${p.hour}ª ora`, main: x.main, sub: x.sub }],
+    speech: `${dayCap} in ${when} ${subj} ${x.say}.`.replace(/\s+/g, " "),
+    rooms: x.aula ? [x.aula] : [],
+  };
+}
+
+function answerClasse(p, idx) {
+  const out = [];
+  for (const cid of p.classi) {
+    const sched = idx.db.classi[cid]?.[p.day] || {};
+    const describe = (s) => {
+      const doc = s.docenti?.length ? s.docenti.map(formatDocenteName).join(" e ") : "";
+      const docSay = s.docenti?.length ? s.docenti.map(spokenDocenteName).join(" e ") : "";
+      const mat = s.materia ? titleCase(s.materia) : "";
+      const where = s.aula ? `in ${titleCase(s.aula)}` : "in aula";
+      return {
+        main: `${mat}${doc ? " • " + doc : ""}`,
+        sub: s.aula ? titleCase(s.aula) : "Aula ordinaria",
+        say: `ha ${mat}${docSay ? " con " + docSay : ""}, ${where}`,
+        aula: s.aula || null,
+      };
+    };
+
+    if (p.day === "domenica") {
+      out.push(closedDay(p, `Classe ${cid}`));
+      continue;
+    }
+    if (p.realtime && p.hour === null) {
+      out.push({ ...noHourNow(p), title: `Classe ${cid}` });
+      continue;
+    }
+    const dayCap = cap(dl(p.day));
+
+    if (p.hour === null) {
+      const groups = groupHours(sched, (s) => JSON.stringify([s.materia, s.docenti, s.aula]));
+      if (!groups.length) {
+        out.push({
+          title: `Classe ${cid}`,
+          badge: `${dl(p.day).toUpperCase()} • GIORNATA`,
+          lines: [],
+          note: "Nessuna lezione in orario.",
+          speech: `${dayCap} la ${cid} non ha lezioni in orario.`,
+          rooms: [],
+        });
+        continue;
+      }
+      const descs = groups.map((g) => ({ g, ...describe(g.slot) }));
+      out.push({
+        title: `Classe ${cid}`,
+        badge: `${dl(p.day).toUpperCase()} • GIORNATA INTERA`,
+        lines: descs.map((x) => ({ when: span(x.g), main: x.main, sub: x.sub })),
+        speech: `${dayCap} la ${cid} ${joinSpeech(descs.map((x) => `${spokenSpan(x.g)} ${x.say}`))}.`,
+        rooms: descs.map((x) => x.aula).filter(Boolean),
+      });
+      continue;
+    }
+
+    const s = sched[String(p.hour)];
+    const when = `${ORD_WORDS[p.hour] || p.hour} ora`;
+    if (!s) {
+      out.push({
+        title: `Classe ${cid}`,
+        badge: hourBadge(p, idx),
+        lines: [],
+        note: "Nessuna lezione in quest'ora.",
+        speech: `${dayCap} in ${when} la ${cid} non ha lezione.`,
+        rooms: [],
+      });
+      continue;
+    }
+    const x = describe(s);
+    out.push({
+      title: `Classe ${cid}`,
+      badge: hourBadge(p, idx),
+      lines: [{ when: `${p.hour}ª ora`, main: x.main, sub: x.sub }],
+      speech: `${dayCap} in ${when} la ${cid} ${x.say}.`,
+      rooms: x.aula ? [x.aula] : [],
+    });
+  }
+  return mergeAnswers(out);
+}
+
+function mergeAnswers(list) {
+  if (list.length === 1) return list[0];
+  const allRooms = [...new Set(list.flatMap((a) => a.rooms || []))];
+  return {
+    title: list.map((a) => a.title).join(" / "),
+    badge: list[0].badge,
+    lines: list.flatMap((a) =>
+      a.lines.length
+        ? [{ when: a.title, main: "", sub: "", heading: true }, ...a.lines]
+        : [{ when: a.title, main: a.note || "", sub: "" }]
+    ),
+    speech: list.map((a) => a.speech).join(" "),
+    rooms: allRooms,
+  };
+}
+
+function answerAuleLibere(p, idx) {
+  const title = p.onlyLabs ? "Laboratori liberi" : "Aule libere";
+  if (p.day === "domenica") return closedDay(p, title);
+  if (p.realtime && p.hour === null) return { ...noHourNow(p), title };
+
+  const libereGiorno = idx.db.aule_libere[p.day] || {};
+  const filter = (list) => {
+    let res = list;
+    if (p.rooms?.length) res = res.filter((a) => p.rooms.some((r) => r.nome === a));
+    if (p.onlyLabs) res = res.filter((a) => /lab|laboratorio/i.test(a));
+    return res;
+  };
+
+  const dayCap = cap(dl(p.day));
+
+  if (p.hour === null) {
+    const lines = Object.keys(libereGiorno).map((h) => ({
+      when: `${h}ª ora`,
+      main: filter(libereGiorno[h] || []).map(titleCase).join(", ") || "nessuna",
+      sub: "",
+    }));
+    return {
+      title,
+      badge: `${dl(p.day).toUpperCase()} • TUTTE LE ORE`,
+      lines,
+      note: "Disponibilità calcolata su tutte le aule e laboratori dell'istituto.",
+      speech: `Per quale ora? Ti mostro le disponibilità di ${dl(p.day)} per ogni ora.`,
+      rooms: [],
+    };
+  }
+
+  const free = filter(libereGiorno[String(p.hour)] || []);
+  const when = `${ORD_WORDS[p.hour] || p.hour} ora`;
+
+  if (p.rooms?.length) {
+    const lines = p.rooms.map((r) => ({
+      when: titleCase(r.nome),
+      main: free.includes(r.nome) ? "Libera" : "Occupata",
+      sub: "",
+    }));
+    return {
+      title: "Disponibilità aula",
+      badge: hourBadge(p, idx),
+      lines,
+      note: "Disponibilità verificata sull'orario d'istituto.",
+      speech:
+        `${dayCap} in ${when}: ` +
+        p.rooms.map((r) => `${titleCase(r.nome)} è ${free.includes(r.nome) ? "libera" : "occupata"}`).join(", ") +
+        ".",
+      rooms: free,
+    };
+  }
+
+  return {
+    title,
+    badge: hourBadge(p, idx),
+    lines: free.map((a) => ({ when: "Libera", main: titleCase(a), sub: "" })),
+    note: free.length ? "" : "Tutti gli spazi richiesti risultano occupati.",
+    speech: free.length
+      ? `${dayCap} in ${when} sono disponibili: ${joinSpeech(free.map(titleCase))}.`
+      : `${dayCap} in ${when} tutti gli spazi risultano occupati.`,
+    rooms: free,
+  };
+}
+
+function answerAula(p, idx) {
+  const out = [];
+  for (const r of p.rooms) {
+    const title = titleCase(r.nome);
+    if (p.day === "domenica") {
+      out.push(closedDay(p, title));
+      continue;
+    }
+    if (p.realtime && p.hour === null) {
+      out.push({ ...noHourNow(p), title });
+      continue;
+    }
+
+    const occ = idx.db.aule[r.nome]?.[p.day] || {};
+    const dayCap = cap(dl(p.day));
+    const desc = (o) =>
+      `${o.classe}${o.materia ? " (" + titleCase(o.materia) + ")" : ""}${
+        o.docenti?.length ? " con " + o.docenti.map(titleCase).join(" e ") : ""
+      }`;
+
+    if (p.hour === null) {
+      const lines = Object.keys(occ)
+        .sort((a, b) => a - b)
+        .map((h) => ({ when: `${h}ª ora`, main: desc(occ[h]), sub: "" }));
+      out.push({
+        title,
+        badge: `${dl(p.day).toUpperCase()} • GIORNATA`,
+        lines,
+        note: lines.length ? "" : "Non occupata in questa giornata.",
+        speech: lines.length
+          ? `${dayCap} ${title} è occupata in ${lines.length} ore.`
+          : `${dayCap} ${title} è libera per l'intera giornata.`,
+        rooms: [r.nome],
+      });
+      continue;
+    }
+
+    const o = occ[String(p.hour)];
+    const when = `${ORD_WORDS[p.hour] || p.hour} ora`;
+    out.push(
+      o
+        ? {
+            title,
+            badge: hourBadge(p, idx),
+            lines: [{ when: "Occupata", main: desc(o), sub: "" }],
+            speech: `${dayCap} in ${when} ${title} è occupata dalla ${desc(o)}.`,
+            rooms: [r.nome],
+          }
+        : {
+            title,
+            badge: hourBadge(p, idx),
+            lines: [{ when: "Libera", main: "", sub: "" }],
+            speech: `${dayCap} in ${when} ${title} è libera.`,
+            rooms: [r.nome],
+          }
+    );
+  }
+  return mergeAnswers(out);
+}
+
+export function answer(p, idx) {
+  switch (p.intent) {
+    case "docente":
+      return answerDocente(p, idx);
+    case "classe":
+      return answerClasse(p, idx);
+    case "aule_libere":
+      return answerAuleLibere(p, idx);
+    case "aula":
+      return answerAula(p, idx);
+    case "ambiguo": {
+      const names = p.candidati.slice(0, 4).map((d) => titleCase(d.nome));
+      return {
+        title: "Quale docente?",
+        badge: "AMBIGUO",
+        lines: names.map((n) => ({ when: "", main: n, sub: "" })),
+        note: "Ripeti la richiesta specificando il nome e cognome completo.",
+        speech: `Ho trovato più docenti: ${joinSpeech(names)}. Specifica meglio.`,
+        rooms: [],
+      };
+    }
+    default:
+      return {
+        title: "Non ho capito",
+        badge: "",
+        lines: [],
+        note: "Prova: «Dove si trova la 4ITA alla terza ora?», «Cosa ha Curtolo domani?», «Quali laboratori sono liberi mercoledì alla seconda ora?»",
+        speech: "Non ho capito. Puoi chiedere di un docente, di una classe, o delle aule libere.",
+        rooms: [],
+      };
+  }
+}

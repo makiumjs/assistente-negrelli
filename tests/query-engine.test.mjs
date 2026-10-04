@@ -1,0 +1,97 @@
+import { readFileSync } from "node:fs";
+import assert from "node:assert/strict";
+import { buildIndex, parseQuery, answer } from "../public/js/query-engine.js";
+
+const db = JSON.parse(readFileSync(new URL("../public/data/orario_completo.json", import.meta.url)));
+const idx = buildIndex(db);
+const now = new Date("2026-10-07T10:00:00"); // mercoledì 7 ottobre 2026 ore 10:00
+const ask = (t, me = "") => {
+  const p = parseQuery(t, idx, { now, me });
+  return { p, a: answer(p, idx) };
+};
+
+console.log("=== 1. Test Query Classe ===");
+let r = ask("Dove si trova la 4ITA alla terza ora?");
+assert.equal(r.p.intent, "classe");
+assert.deepEqual(r.p.classi, ["4ITA"]);
+assert.equal(r.p.hour, 3);
+console.log("✓ 4ITA 3ª ora:", r.a.speech);
+
+for (const v of [
+  "4 ita giovedì alla terza ora",
+  "quarta ITA giovedi 3 ora",
+  "[4 ITA] giovedì ora 3",
+  "4ita giovedì alla 3",
+]) {
+  r = ask(v);
+  assert.deepEqual(r.p.classi, ["4ITA"], v);
+  assert.equal(r.p.hour, 3, v);
+  assert.equal(r.p.day, "giovedi", v);
+}
+console.log("✓ Variazioni sintattiche 4ITA superate");
+
+r = ask("dove è la 4ee lunedì");
+assert.deepEqual(r.p.classi, ["4EE"]);
+console.log("✓ 4EE lunedì:", r.a.speech);
+
+console.log("\n=== 2. Test Query Docente ===");
+r = ask("Cosa ha Curtolo domani?");
+assert.equal(r.p.intent, "docente");
+assert.equal(r.p.docente.nome, "Curtolo");
+assert.equal(r.p.day, "giovedi");
+console.log("✓ Curtolo domani:", r.a.speech);
+
+r = ask("cosa ho oggi", "Cassarino");
+assert.ok(r.p.isSelf);
+assert.equal(r.p.intent, "docente");
+console.log("✓ Cassarino self oggi:", r.a.speech);
+
+r = ask("cosa ha info 5 giovedì");
+assert.equal(r.p.intent, "docente");
+assert.equal(r.p.docente.nome, "_info 5");
+assert.equal(r.p.day, "giovedi");
+console.log("✓ Placeholder _info 5:", r.a.speech);
+
+r = ask("orario cattedra ele 2 lunedì");
+assert.equal(r.p.intent, "docente");
+assert.equal(r.p.docente.nome, "_ele 2");
+assert.equal(r.p.day, "lunedi");
+console.log("✓ Placeholder _ele 2:", r.a.speech);
+
+console.log("\n=== 3. Test Query Aule Libere ===");
+r = ask("Quali laboratori sono liberi mercoledì alla 2ª ora?");
+assert.equal(r.p.intent, "aule_libere");
+assert.equal(r.p.hour, 2);
+assert.equal(r.p.day, "mercoledi");
+console.log("✓ Laboratori liberi:", r.a.speech);
+
+r = ask("quali aule sono libere lunedì");
+assert.equal(r.p.intent, "aule_libere");
+assert.equal(r.p.hour, null);
+console.log("✓ Aule libere intera giornata:", r.a.speech);
+
+console.log("\n=== 4. Test Singola Aula / Spazio ===");
+r = ask("chi c'è in palestra martedì alla seconda ora");
+assert.equal(r.p.intent, "aula");
+assert.equal(r.p.hour, 2);
+console.log("✓ Palestra martedì:", r.a.speech);
+
+r = ask("chi c'è in aula 201 lunedì alla prima ora");
+assert.equal(r.p.intent, "aula");
+assert.equal(r.p.hour, 1);
+console.log("✓ Aula 201 lunedì:", r.a.speech);
+
+console.log("\n=== 5. Test Casi Limite ed Edge Cases ===");
+r = ask("cosa ha Curtolo domenica");
+assert.equal(r.a.badge, "DOMENICA");
+console.log("✓ Domenica chiusa:", r.a.speech);
+
+r = ask("dov'è bortol"); // Match ambiguo: Bortolamiol e Bortolas
+assert.equal(r.p.intent, "ambiguo");
+console.log("✓ Ambiguità rilevata:", r.a.speech);
+
+r = ask("quanto fa due più due");
+assert.equal(r.p.intent, "non_trovato");
+console.log("✓ Non trovato:", r.a.speech);
+
+console.log("\n TUTTI I TEST SONO PASSATI CON SUCCESSO! ");
