@@ -2,13 +2,12 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content" />
-  <title>Assistente Orario ITIS Negrelli Feltre</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assistente Orario ITIS Negrelli</title>
   <style>
     :root {
-      --bg-dark: #0b0d13;
-      --card-bg: rgba(22, 27, 39, 0.92);
-      --card-border: rgba(56, 68, 100, 0.6);
+      --bg: #090b10;
+      --card-bg: rgba(18, 24, 38, 0.85);
       --primary: #2563eb;
       --primary-hover: #1d4ed8;
       --accent: #38bdf8;
@@ -16,146 +15,145 @@
       --text-muted: #94a3b8;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
-    html, body {
+    body {
       margin: 0;
       padding: 0;
-      width: 100%;
-      height: 100%;
       height: 100dvh;
-      background: var(--bg-dark);
+      width: 100vw;
+      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       color: var(--text);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      overflow: hidden;
       display: flex;
       flex-direction: column;
-      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
     }
 
     #main-container {
       flex: 1;
-      min-height: 0;
       display: flex;
       width: 100%;
+      height: calc(100dvh - 72px);
       position: relative;
     }
 
-    /* Pannello Avatar */
+    /* Pannello Avatar 3D (Sinistra / Alto) */
     #avatar-panel {
-      flex: 1.15;
+      flex: 1.1;
       position: relative;
-      overflow: hidden;
+      background: #000;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #000;
+      overflow: hidden;
     }
 
     .blurred-background {
       position: absolute;
-      inset: -15px;
-      background-image: url('./public/img/sfondo.jpg');
-      background-size: cover;
-      background-position: center;
-      filter: blur(6px) brightness(0.68) saturate(1.1);
-      transform: scale(1.05);
+      top: -10%; left: -10%;
+      width: 120%; height: 120%;
+      background: url('./public/img/sfondo.jpg') center/cover no-repeat;
+      filter: blur(12px) brightness(0.45);
       z-index: 1;
     }
 
     .vignette-overlay {
       position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at center, transparent 30%, rgba(11, 13, 19, 0.85) 100%);
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(circle at center, transparent 40%, rgba(9, 11, 16, 0.8) 100%);
       z-index: 2;
-      pointer-events: none;
     }
 
     #avatar-view {
-      position: absolute;
-      inset: 0;
+      width: 100%;
+      height: 100%;
+      position: relative;
       z-index: 3;
-    }
-
-    #avatar-view canvas {
-      background: transparent !important;
     }
 
     #status-overlay {
       position: absolute;
-      top: 50%;
+      bottom: 20px;
       left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 14px;
-      color: var(--text-muted);
-      z-index: 4;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      color: var(--accent);
+      z-index: 10;
       pointer-events: none;
-      background: rgba(15, 23, 42, 0.85);
-      padding: 10px 20px;
-      border-radius: 8px;
-      border: 1px solid var(--card-border);
-      backdrop-filter: blur(6px);
+      backdrop-filter: blur(8px);
     }
 
-    /* Pannello Dati e Mappa */
+    /* Pannello Destra: Profilo & Scheda Risposta */
     #map-panel {
-      flex: 0.85;
-      min-height: 0;
-      background: var(--bg-dark);
-      border-left: 1px solid rgba(255, 255, 255, 0.08);
+      flex: 0.9;
       display: flex;
       flex-direction: column;
-      padding: 10px 14px;
-      gap: 8px;
-      z-index: 10;
+      background: #0d111a;
+      border-left: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 16px 20px;
+      gap: 14px;
+      overflow-y: auto;
     }
 
+    /* Profilo Utente / Docente */
     #user-profile-bar {
       display: flex;
       align-items: center;
-      gap: 6px;
-      background: rgba(18, 22, 34, 0.8);
-      padding: 6px 10px;
+      gap: 10px;
+      background: #141a29;
+      border: 1px solid #242e44;
+      padding: 10px 14px;
       border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 13px;
+      color: var(--text-muted);
+      flex-shrink: 0;
     }
 
     #user-profile-bar label {
-      font-size: 13px;
-      color: var(--text-muted);
       font-weight: 600;
+      color: #cbd5e1;
       white-space: nowrap;
     }
 
-    #my-surname-input {
-      flex: 1;
-      background: #090b10;
-      border: 1px solid #2e384f;
+    #user-profile-bar input {
+      background: #090c14;
+      border: 1px solid #334155;
       color: #fff;
-      font-size: 15px;
       padding: 6px 10px;
-      border-radius: 5px;
+      border-radius: 6px;
+      font-size: 13px;
+      flex: 1;
       outline: none;
     }
 
-    #my-surname-input:focus {
-      border-color: var(--primary);
+    #user-profile-bar input:focus {
+      border-color: var(--accent);
     }
 
+    /* Card Risposta */
     .card {
       background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 12px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px 18px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
       backdrop-filter: blur(10px);
       flex: 1;
-      min-height: 0;
+      display: flex;
+      flex-direction: column;
       overflow-y: auto;
     }
 
     #info-card h3 {
-      margin: 0 0 4px 0;
-      font-size: 18px;
+      margin: 0 0 6px 0;
+      font-size: 20px;
       color: var(--accent);
       line-height: 1.3;
     }
@@ -170,31 +168,59 @@
       font-size: 13px;
       color: #94a3b8;
       line-height: 1.4;
-      margin-top: 6px;
+      margin-top: 10px;
     }
 
     .badge {
       display: inline-block;
-      padding: 3px 8px;
-      border-radius: 4px;
-      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
       font-weight: 700;
       letter-spacing: 0.3px;
       background: var(--primary);
       color: white;
-      margin-top: 4px;
-      margin-right: 4px;
+      margin-top: 6px;
+      margin-right: 6px;
     }
 
+    /* Badge di Posizione Smart con Ombra Pulsante */
     .badge.location {
-      background: #0d9488;
+      background: linear-gradient(135deg, #1d4ed8, #2563eb);
+      color: #ffffff;
+      border: 1px solid #60a5fa;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 7px 16px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      margin-top: 8px;
+      box-shadow: 0 0 14px rgba(59, 130, 246, 0.7);
+      animation: location-pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes location-pulse {
+      0%, 100% {
+        box-shadow: 0 0 10px rgba(59, 130, 246, 0.5), 0 0 18px rgba(59, 130, 246, 0.3);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 22px rgba(96, 165, 250, 0.95), 0 0 35px rgba(96, 165, 250, 0.6);
+        transform: scale(1.03);
+      }
+    }
+
+    #result-lines {
+      margin-top: 10px;
+      flex: 1;
+      overflow-y: auto;
     }
 
     .row {
       display: grid;
-      grid-template-columns: 84px 1fr;
-      gap: 10px;
-      padding: 7px 0;
+      grid-template-columns: 110px 1fr;
+      gap: 12px;
+      padding: 9px 0;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
     }
 
@@ -202,7 +228,7 @@
       display: block;
       font-weight: 700;
       color: var(--accent);
-      padding-top: 10px;
+      padding-top: 12px;
     }
 
     .row .when {
@@ -222,99 +248,21 @@
       font-size: 13px;
       color: var(--text-muted);
       line-height: 1.35;
-    }
-
-    /* Selettore Piano & Vista Mappa */
-    .floor-selector {
-      display: flex;
-      gap: 6px;
-    }
-
-    .floor-btn {
-      flex: 1;
-      min-height: 38px;
-      background: #1c2230;
-      border: 1px solid #2f384f;
-      color: var(--text-muted);
-      padding: 6px 8px;
-      border-radius: 6px;
-      font-size: 12px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.2s ease;
-    }
-
-    .floor-btn.active {
-      background: var(--primary);
-      color: #ffffff;
-      border-color: #60a5fa;
-      box-shadow: 0 0 8px rgba(37, 99, 235, 0.35);
-    }
-
-    #map-viewport {
-      height: 140px;
-      min-height: 120px;
-      background: #0f121a;
-      border: 1px solid #242c3f;
-      border-radius: 8px;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-
-    svg {
-      width: 98%;
-      height: 98%;
-    }
-
-    .room {
-      fill: #192030;
-      stroke: #334155;
-      stroke-width: 1.5;
-      rx: 5;
-      transition: fill 0.3s, stroke 0.3s, filter 0.3s;
-    }
-
-    .room-label {
-      fill: #94a3b8;
-      font-size: 8.5px;
-      font-weight: 600;
-      text-anchor: middle;
-      pointer-events: none;
-    }
-
-    .room.highlight {
-      fill: #1d4ed8;
-      stroke: #60a5fa;
-      stroke-width: 2.5;
-      animation: pulse-glow 2s infinite ease-in-out;
-    }
-
-    .room.highlight + .room-label {
-      fill: #ffffff;
-      font-weight: 700;
-      font-size: 9.5px;
-    }
-
-    @keyframes pulse-glow {
-      0%, 100% { filter: drop-shadow(0 0 5px rgba(96, 165, 250, 0.5)); }
-      50% { filter: drop-shadow(0 0 14px rgba(96, 165, 250, 0.85)); }
+      margin-top: 2px;
     }
 
     /* Barra Input Fisso in Basso */
     #ui-bar {
       flex-shrink: 0;
       width: 100%;
+      height: 72px;
       background: #11141c;
-      padding: 10px 14px;
+      padding: 10px 16px;
       padding-bottom: max(10px, env(safe-area-inset-bottom));
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       z-index: 50;
       box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.4);
@@ -322,8 +270,8 @@
 
     input[type="text"]#query-input {
       flex: 1;
-      max-width: 480px;
-      padding: 11px 14px;
+      max-width: 560px;
+      padding: 12px 16px;
       border-radius: 8px;
       border: 1px solid #334155;
       background: #0a0c10;
@@ -340,8 +288,8 @@
       background: var(--primary);
       color: white;
       border: none;
-      padding: 11px 16px;
-      font-size: 14px;
+      padding: 12px 20px;
+      font-size: 15px;
       border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
@@ -356,7 +304,7 @@
     #mic-btn {
       background: #1e293b;
       border: 1px solid #334155;
-      font-size: 16px;
+      font-size: 18px;
       padding: 11px 14px;
       min-width: 44px;
       min-height: 44px;
@@ -377,13 +325,13 @@
 
     @media (max-width: 900px) {
       #main-container { flex-direction: column; overflow: hidden; }
-      #avatar-panel { flex: none; height: 42dvh; min-height: 42dvh; width: 100%; }
+      #avatar-panel { flex: none; height: 38dvh; min-height: 38dvh; width: 100%; }
       #map-panel {
         flex: 1; min-height: 0; width: 100%; border-left: none;
         border-top: 1px solid rgba(255, 255, 255, 0.08);
-        padding: 8px 12px; gap: 6px;
+        padding: 12px; gap: 10px;
       }
-      #map-viewport { height: 110px; min-height: 100px; flex: none; }
+      .row { grid-template-columns: 95px 1fr; }
     }
   </style>
 
@@ -419,24 +367,9 @@
           <span id="card-badge" style="display:none;" class="badge"></span>
           <span id="card-location-badge" style="display:none;" class="badge location"></span>
         </div>
-        <div id="card-desc">Chiedi: «Dove si trova la 4ITA alla terza ora?», «Cosa ha Curtolo domani?» o «Quali laboratori sono liberi mercoledì alla seconda ora?»</div>
+        <div id="card-desc">Chiedi: «Dove si trova la 4ITA alla terza ora?», «Cosa ha Curtolo domani?» o «Quando è il collegio docenti?»</div>
         <div id="result-lines"></div>
         <div id="card-note"></div>
-      </div>
-
-      <div class="floor-selector">
-        <button class="floor-btn" data-floor="0">Piano Terra</button>
-        <button class="floor-btn" data-floor="1">1° Piano</button>
-        <button class="floor-btn active" data-floor="2">2° Piano</button>
-      </div>
-
-      <div id="map-viewport">
-        <svg id="svg-map" viewBox="0 0 500 320" aria-label="Mappa dei piani ITIS Negrelli">
-          <g id="map-corridors">
-            <rect x="35" y="130" width="430" height="40" fill="#131722" stroke="#252d40" stroke-dasharray="4" rx="4" />
-          </g>
-          <g id="map-rooms"></g>
-        </svg>
       </div>
     </div>
   </div>
@@ -457,14 +390,12 @@
     const mySurnameInput = document.getElementById('my-surname-input');
     const searchBtn = document.getElementById('search-btn');
     const micBtn = document.getElementById('mic-btn');
-    const mapRoomsGroup = document.getElementById('map-rooms');
     const cardTitle = document.getElementById('card-title');
     const cardDesc = document.getElementById('card-desc');
     const cardBadge = document.getElementById('card-badge');
     const cardLocationBadge = document.getElementById('card-location-badge');
     const cardNote = document.getElementById('card-note');
     const resultLines = document.getElementById('result-lines');
-    const floorButtons = document.querySelectorAll('.floor-btn');
 
     let orarioIdx = null;
     let isSpeaking = false;
@@ -472,9 +403,7 @@
     let currentJaw = 0;
     let lastJawUpdate = 0;
     let activeUtterance = null;
-    let activeHighlightRooms = [];
     const morphMeshes = [];
-    let currentFloor = "2";
 
     let myTeacherName = localStorage.getItem('negrelli_my_surname') || "";
     mySurnameInput.value = myTeacherName;
@@ -484,87 +413,6 @@
       localStorage.setItem('negrelli_my_surname', myTeacherName);
       if (myTeacherName && orarioIdx) handleQuery("cosa ho oggi");
     });
-
-    const floorLayouts = {
-      "0": [
-        { id: "014", name: "Aula 014", x: 40, y: 45, w: 68, h: 72 },
-        { id: "015", name: "Aula 015", x: 114, y: 45, w: 68, h: 72 },
-        { id: "016", name: "Aula 016", x: 188, y: 45, w: 68, h: 72 },
-        { id: "017", name: "Aula 017", x: 262, y: 45, w: 68, h: 72 },
-        { id: "018", name: "Lab. Linux 018", x: 336, y: 45, w: 124, h: 72 },
-        { id: "019", name: "Aula 019", x: 40, y: 180, w: 75, h: 72 },
-        { id: "020", name: "Lab. Multim. 020", x: 122, y: 180, w: 135, h: 72 },
-        { id: "022", name: "Aula 022", x: 264, y: 180, w: 196, h: 72 }
-      ],
-      "1": [
-        { id: "110", name: "Aula 110", x: 40, y: 45, w: 56, h: 72 },
-        { id: "111", name: "Aula 111", x: 101, y: 45, w: 56, h: 72 },
-        { id: "112", name: "Aula 112", x: 162, y: 45, w: 56, h: 72 },
-        { id: "113", name: "Aula 113", x: 223, y: 45, w: 56, h: 72 },
-        { id: "114", name: "Aula 114", x: 284, y: 45, w: 56, h: 72 },
-        { id: "115", name: "Aula 115", x: 345, y: 45, w: 56, h: 72 },
-        { id: "116", name: "Aula 116", x: 406, y: 45, w: 56, h: 72 },
-        { id: "117", name: "CAD 117", x: 40, y: 180, w: 64, h: 72 },
-        { id: "118", name: "Costr. 118", x: 110, y: 180, w: 68, h: 72 },
-        { id: "129", name: "Disegno 129", x: 184, y: 180, w: 68, h: 72 },
-        { id: "130", name: "Spazio 130", x: 258, y: 180, w: 48, h: 72 },
-        { id: "131", name: "Spazio 131", x: 312, y: 180, w: 48, h: 72 },
-        { id: "134", name: "Aula 134", x: 366, y: 180, w: 46, h: 72 },
-        { id: "135", name: "Fisica 135", x: 418, y: 180, w: 46, h: 72 }
-      ],
-      "2": [
-        { id: "201", name: "Aula 201", x: 40, y: 45, w: 56, h: 72 },
-        { id: "202", name: "Aula 202", x: 102, y: 45, w: 56, h: 72 },
-        { id: "203", name: "Aula 203", x: 164, y: 45, w: 56, h: 72 },
-        { id: "204", name: "Aula 204", x: 226, y: 45, w: 56, h: 72 },
-        { id: "205", name: "Aula 205", x: 288, y: 45, w: 56, h: 72 },
-        { id: "209", name: "Aula 209", x: 350, y: 45, w: 54, h: 72 },
-        { id: "224", name: "Aula 224", x: 410, y: 45, w: 52, h: 72 },
-        { id: "206", name: "Info 206", x: 40, y: 180, w: 85, h: 72 },
-        { id: "208", name: "Elettronica 208", x: 132, y: 180, w: 105, h: 72 },
-        { id: "210", name: "Lingue 210", x: 244, y: 180, w: 70, h: 72 },
-        { id: "213", name: "Spazio 213", x: 320, y: 180, w: 42, h: 72 },
-        { id: "214", name: "Spazio 214", x: 368, y: 180, w: 42, h: 72 },
-        { id: "223", name: "Sistemi 223", x: 416, y: 180, w: 48, h: 72 }
-      ]
-    };
-
-    function renderMap(floor, highlightList = null) {
-      currentFloor = floor;
-      floorButtons.forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.floor === floor);
-      });
-
-      if (highlightList !== null) {
-        activeHighlightRooms = Array.isArray(highlightList) ? highlightList : [highlightList];
-      }
-
-      mapRoomsGroup.replaceChildren();
-      const rooms = floorLayouts[floor] || [];
-
-      rooms.forEach(r => {
-        const isTarget = activeHighlightRooms.some(target => {
-          const tClean = String(target).toLowerCase();
-          return r.id === tClean || r.name.toLowerCase().includes(tClean);
-        });
-
-        const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        rect.setAttribute("x", r.x);
-        rect.setAttribute("y", r.y);
-        rect.setAttribute("width", r.w);
-        rect.setAttribute("height", r.h);
-        rect.setAttribute("class", `room ${isTarget ? 'highlight' : ''}`);
-
-        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        text.setAttribute("x", r.x + r.w / 2);
-        text.setAttribute("y", r.y + r.h / 2 + 3.5);
-        text.setAttribute("class", "room-label");
-        text.textContent = r.name;
-
-        mapRoomsGroup.appendChild(rect);
-        mapRoomsGroup.appendChild(text);
-      });
-    }
 
     async function loadSchedule() {
       try {
@@ -600,44 +448,57 @@
         5: "quinta", 6: "sesta", 7: "settima", 8: "ottava"
       };
       return text
-        .replace(/\[\vert{}\]/g, "")
-        .replace(/\bLab\.?\s+/gi, "Laboratorio ")
-        .replace(/\bTecn\.?\s+/gi, "Tecnologie ")
-        .replace(/\bProg\.?\s+/gi, "Progettazione ")
-        .replace(/\bSist\.?\s+/gi, "Sistemi ")
-        .replace(/\bInf\.?\s+/gi, "Informatiche ")
-        .replace(/\bCostr\.?\s+/gi, "Costruzioni ")
-        .replace(/\bElett\.?\s+/gi, "Elettroniche ")
-        .replace(/\bSta\b/gi, "Scienze applicate")
-        .replace(/\bIrc\b/gi, "I R C")
-        .replace(/\b([1-8])\s*(?:ª|°|a)?\s*ora\b/gi, (m, d) => `${ORD[d] || d} ora`)
-        .replace(/\b([1-8])([A-Z]{2,5})\b/g, (m, d, l) => `${ORD[d] || d} ${l.split("").join(" ")}`)
-        .replace(/_([a-z]+)\s*(\d)/gi, "Cattedra $1 $2")
-        .replace(/\binsieme a il\b/gi, "insieme al")
-        .replace(/\binsieme a la\b/gi, "insieme alla")
+        .replace(/\b([1-8])ª\s*ora\b/gi, (m, n) => `in ${ORD[n] || n} ora`)
+        .replace(/\b([1-8])ª\b/gi, (m, n) => ORD[n] || n)
+        .replace(/\b1ITA\b/gi, "prima I.T.A.")
+        .replace(/\b2ITA\b/gi, "seconda I.T.A.")
+        .replace(/\b3ITA\b/gi, "terza I.T.A.")
+        .replace(/\b4ITA\b/gi, "quarta I.T.A.")
+        .replace(/\b5ITA\b/gi, "quinta I.T.A.")
+        .replace(/\b1ITE\b/gi, "prima I.T.E.")
+        .replace(/\b1BTA\b/gi, "prima B.T.A.")
+        .replace(/\b1BTB\b/gi, "prima B.T.B.")
+        .replace(/\b2CAT\b/gi, "seconda C.A.T.")
+        .replace(/\b4EE\b/gi, "quarta E.E.")
+        .replace(/\bLab\b/gi, "Laboratorio")
+        .replace(/\bdisposizione\b/gi, "a disposizione")
         .replace(/\s+/g, " ")
         .trim();
     }
 
-    function speak(text) {
+    function speak(speechText) {
+      if (!speechText) return;
       if (!('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
-      currentJaw = 0;
 
-      const cleanVoiceText = sanitizeForSpeech(text);
-      const utterance = new SpeechSynthesisUtterance(cleanVoiceText);
-      activeUtterance = utterance;
+      if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+        window.speechSynthesis.cancel();
+      }
+
+      const cleanText = sanitizeForSpeech(speechText);
+      const utterance = new SpeechSynthesisUtterance(cleanText);
       utterance.lang = 'it-IT';
-      utterance.rate = 1.0;
+      utterance.rate = 1.02;
+      utterance.pitch = 1.0;
 
       const voices = window.speechSynthesis.getVoices();
-      const itVoice = voices.find(v => v.lang && (v.lang.startsWith('it') || v.lang.startsWith('IT')));
+      const itVoice = voices.find(v => v.lang.includes('it') && (v.name.includes('Elsa') || v.name.includes('Alice') || v.name.includes('Federica') || v.name.includes('Google') || v.name.includes('Natural')));
       if (itVoice) utterance.voice = itVoice;
 
-      utterance.onstart = () => { isSpeaking = true; };
-      utterance.onend = () => { isSpeaking = false; activeUtterance = null; currentJaw = 0; };
-      utterance.onerror = () => { isSpeaking = false; activeUtterance = null; currentJaw = 0; };
+      utterance.onstart = () => {
+        isSpeaking = true;
+      };
 
+      utterance.onend = () => {
+        isSpeaking = false;
+        currentJaw = 0;
+      };
+
+      utterance.onerror = () => {
+        isSpeaking = false;
+        currentJaw = 0;
+      };
+
+      activeUtterance = utterance;
       window.speechSynthesis.speak(utterance);
     }
 
@@ -647,7 +508,7 @@
       };
     }
 
-    // Rendering sicuro (textContent, replacement sicuro senza innerHTML)
+    // Rendering sicuro del contenuto e del Badge di Posizione Smart
     function renderAnswer(a) {
       cardTitle.textContent = a.title || "";
       cardBadge.style.display = a.badge ? "inline-block" : "none";
@@ -655,34 +516,41 @@
       cardDesc.style.display = (a.lines && a.lines.length) ? "none" : "block";
       cardNote.textContent = a.note || "";
 
-      // Aggiornamento badge location e gestione mappa interattiva
+      // Determinazione Smart di Piano e Aula con ombra pulsante
+      const roomNames = a.rooms || [];
       const roomNumbers = [];
       let isPalestra = false;
       let isRizzarda = false;
+      let primaryRoomName = "";
 
-      (a.rooms || []).forEach(rName => {
+      roomNames.forEach(rName => {
         if (/palestra/i.test(rName)) isPalestra = true;
         if (/rizzarda/i.test(rName)) isRizzarda = true;
         const numMatch = rName.match(/\b\d{3}\b/);
         if (numMatch && !roomNumbers.includes(numMatch[0])) roomNumbers.push(numMatch[0]);
+        if (!primaryRoomName && rName) primaryRoomName = rName;
       });
 
-      if (isPalestra) {
+      if (roomNumbers.length > 0) {
+        const firstNum = roomNumbers[0];
+        const floorChar = firstNum[0];
+        let floorText = "PIANO TERRA";
+        if (floorChar === '1') floorText = "1° PIANO";
+        else if (floorChar === '2') floorText = "2° PIANO";
+
         cardLocationBadge.style.display = "inline-block";
-        cardLocationBadge.textContent = "PALESTRA";
+        cardLocationBadge.textContent = `📍 ${floorText} • AULA ${firstNum}`;
+      } else if (isPalestra) {
+        cardLocationBadge.style.display = "inline-block";
+        cardLocationBadge.textContent = "📍 PIANO TERRA • PALESTRA";
       } else if (isRizzarda) {
         cardLocationBadge.style.display = "inline-block";
-        cardLocationBadge.textContent = "SEDE RIZZARDA";
+        cardLocationBadge.textContent = "📍 SEDE RIZZARDA";
+      } else if (primaryRoomName) {
+        cardLocationBadge.style.display = "inline-block";
+        cardLocationBadge.textContent = `📍 ${primaryRoomName.toUpperCase()}`;
       } else {
         cardLocationBadge.style.display = "none";
-      }
-
-      if (roomNumbers.length > 0) {
-        const floorTarget = roomNumbers[0][0];
-        const nextFloor = ['0', '1', '2'].includes(floorTarget) ? floorTarget : currentFloor;
-        renderMap(nextFloor, roomNumbers);
-      } else {
-        renderMap(currentFloor, []);
       }
 
       resultLines.replaceChildren(...(a.lines || []).map(l => {
@@ -740,11 +608,6 @@
     }
 
     async function init() {
-      renderMap("2");
-      floorButtons.forEach(btn => {
-        btn.addEventListener('click', () => renderMap(btn.dataset.floor, activeHighlightRooms));
-      });
-
       await loadSchedule();
 
       // Avatar 3D protetto con blocco try...catch...finally per massima resilienza
