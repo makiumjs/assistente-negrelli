@@ -98,19 +98,70 @@ def norm_aula(raw):
 
 
 def clean_name(raw):
-    name = re.sub(r"^(?:Pagina\s+\d+|[0-9]+)\s*", "", raw or "", flags=re.I).strip()
+    name = re.sub(r"^(?:Istituto Superiore Feltre - Negrelli|Pagina\s+\d+)\s*", "", raw or "", flags=re.I).strip()
     name = re.sub(r"^_\s+", "_", name)
     return name
 
 
 # ---------------------------------------------------------------- estrazione
-def extract_tables_from_pdf(pdf_path):
+def extract_grid_tables(pdf_path):
+    """
+    Estrae le tabelle da ciascuna pagina calcolando giorno e ora
+    dalle coordinate spaziali (bounding box) di ciascuna cella,
+    supportando correttamente celle accorpate su blocchi di piu ore (es. ore doppie).
+    Yields: (page_idx, header_raw, {giorno: {ora: cell_text}})
+    """
     with pdfplumber.open(pdf_path) as pdf:
         for page_idx, page in enumerate(pdf.pages):
             clean = page.dedupe_chars(tolerance=1)
-            text = clean.extract_text() or ""
-            tables = clean.extract_tables(TABLE_SETTINGS)
-            yield page_idx, text, tables
+            tables = clean.find_tables(TABLE_SETTINGS)
+            for t in tables:
+                if not t.rows or not t.rows[0].cells or not t.rows[0].cells[0]:
+                    continue
+                h_cell = t.rows[0].cells[0]
+                h_txt = clean.crop(h_cell).extract_text() or ""
+                lines = [l.strip() for l in h_txt.split("\n") if "orario dal" in l.lower()]
+                if not lines:
+                    continue
+                header_raw = lines[0]
+
+                is_bottom = t.bbox[1] > 410
+                h_start = 461.67 if is_bottom else 66.89
+                h_step = 67.08
+
+                unique_cells = set()
+                for r in t.rows:
+                    for c in r.cells:
+                        if c:
+                            unique_cells.add(c)
+
+                grid = {g: {} for g in GIORNI}
+                for cell in sorted(unique_cells, key=lambda c: (c[1], c[0])):
+                    x0, y0, x1, y1 = cell
+                    if x0 < 50:
+                        continue  # colonna numeri ore
+                    if y0 < h_start - 10:
+                        continue  # riga di intestazione
+                    col_idx = int(round((x0 - 56.51) / 84.88))
+                    if not (0 <= col_idx < len(GIORNI)):
+                        continue
+                    giorno = GIORNI[col_idx]
+                    ora_start = int(round((y0 - h_start) / h_step)) + 1
+                    ora_end = int(round((y1 - h_start) / h_step))
+                    ora_start = max(1, min(5, ora_start))
+                    ora_end = max(1, min(5, ora_end))
+                    if ora_start > ora_end:
+                        continue
+
+                    cell_text = clean.crop(cell).extract_text() or ""
+                    cell_text = cell_text.strip()
+                    if not cell_text:
+                        continue
+
+                    for o in range(ora_start, ora_end + 1):
+                        grid[giorno][o] = cell_text
+
+                yield page_idx, header_raw, grid
 
 
 def parse_classi(report):
@@ -118,58 +169,43 @@ def parse_classi(report):
     out = {}
     periodo = None
 
-    for page_idx, text, tables in extract_tables_from_pdf(PDF_CLASSI):
+    for page_idx, header_raw, grid in extract_grid_tables(PDF_CLASSI):
         if periodo is None:
-            m = re.search(r"orario\s+dal\s+(\d{1,2}\s+[a-z]+\s+\d{4})", text, re.I)
+            m = re.search(r"orario\s+dal\s+(\d{1,2}\s+[a-z]+\s+\d{4})", header_raw, re.I)
             if m:
                 periodo = f"dal {m.group(1)}"
 
-        for tb in tables:
-            if not tb or not tb[0] or not tb[0][0]:
-                report["classi_tabelle_ignorate"].append(f"Pagina {page_idx}: tabella vuota o senza header")
-                continue
+        raw_name = re.split(r"orario dal", header_raw, flags=re.I)[0].strip()
+        raw_name = re.sub(r"^(?:Istituto Superiore Feltre - Negrelli|Pagina\s+\d+)\s*", "", raw_name, flags=re.I).strip()
+        classe = norm_classe(raw_name)
+        if not classe:
+            report["classi_tabelle_ignorate"].append(f"Pagina {page_idx}: nome classe nullo da '{header_raw}'")
+            continue
 
-            header_raw = tb[0][0].split("\n")[0]
-            if "orario dal" not in header_raw.lower():
-                report["classi_tabelle_ignorate"].append(f"Pagina {page_idx}: {header_raw}")
-                continue
+        sched = out.setdefault(classe, {g: {} for g in GIORNI})
 
-            raw_name = re.split(r"orario dal", header_raw, flags=re.I)[0].strip()
-            classe = norm_classe(raw_name)
-            if not classe:
-                report["classi_tabelle_ignorate"].append(f"Pagina {page_idx}: nome classe nullo da '{header_raw}'")
-                continue
+        for giorno, ore in grid.items():
+            for ora, cell_text in ore.items():
+                lines = [l.strip() for l in cell_text.split("\n") if l.strip()]
+                if not lines:
+                    continue
 
-            sched = out.setdefault(classe, {g: {} for g in GIORNI})
+                materia = lines[0]
+                aula = ""
+                articolazione = ""
 
-            for r_idx in range(1, len(tb)):
-                row = tb[r_idx]
-                ora = r_idx
-                for c_idx in range(1, min(7, len(row))):
-                    cell_text = row[c_idx]
-                    if not cell_text:
-                        continue
-                    giorno = GIORNI[c_idx - 1]
-                    lines = [l.strip() for l in cell_text.split("\n") if l.strip()]
-                    if not lines:
-                        continue
+                for l in lines[1:]:
+                    if RE_AULA.search(l):
+                        aula = l
+                    else:
+                        articolazione = l
 
-                    materia = lines[0]
-                    aula = ""
-                    articolazione = ""
-
-                    for l in lines[1:]:
-                        if RE_AULA.search(l):
-                            aula = l
-                        else:
-                            articolazione = l
-
-                    sched[giorno][ora] = {
-                        "materia": materia,
-                        "aula": norm_aula(aula) or None,
-                        "articolazione": articolazione,
-                        "docenti": [],
-                    }
+                sched[giorno][ora] = {
+                    "materia": materia,
+                    "aula": norm_aula(aula) or None,
+                    "articolazione": articolazione,
+                    "docenti": [],
+                }
 
     return out, periodo
 
@@ -179,74 +215,59 @@ def parse_docenti(report):
     out = {}
     periodo = None
 
-    for page_idx, text, tables in extract_tables_from_pdf(PDF_DOCENTI):
+    for page_idx, header_raw, grid in extract_grid_tables(PDF_DOCENTI):
         if periodo is None:
-            m = re.search(r"orario\s+dal\s+(\d{1,2}\s+[a-z]+\s+\d{4})", text, re.I)
+            m = re.search(r"orario\s+dal\s+(\d{1,2}\s+[a-z]+\s+\d{4})", header_raw, re.I)
             if m:
                 periodo = f"dal {m.group(1)}"
 
-        for tb in tables:
-            if not tb or not tb[0] or not tb[0][0]:
-                report["docenti_tabelle_ignorate"].append(f"Pagina {page_idx}: tabella vuota o senza header")
-                continue
+        raw_name = re.split(r"orario dal", header_raw, flags=re.I)[0].strip()
+        raw_name = re.sub(r"^(?:Istituto Superiore Feltre - Negrelli|Pagina\s+\d+)\s*", "", raw_name, flags=re.I).strip()
+        raw_name = re.sub(r"^_\s+", "_", raw_name)
+        nome = clean_name(raw_name)
+        if not nome:
+            report["docenti_tabelle_ignorate"].append(f"Pagina {page_idx}: nome docente nullo da '{header_raw}'")
+            continue
 
-            header_raw = tb[0][0].split("\n")[0]
-            if "orario dal" not in header_raw.lower():
-                report["docenti_tabelle_ignorate"].append(f"Pagina {page_idx}: {header_raw}")
-                continue
+        sched = out.setdefault(nome, {g: {} for g in GIORNI})
 
-            raw_name = re.split(r"orario dal", header_raw, flags=re.I)[0].strip()
-            nome = clean_name(raw_name)
-            if not nome:
-                report["docenti_tabelle_ignorate"].append(f"Pagina {page_idx}: nome docente nullo da '{header_raw}'")
-                continue
-
-            sched = out.setdefault(nome, {g: {} for g in GIORNI})
-
-            for r_idx in range(1, len(tb)):
-                row = tb[r_idx]
-                ora = r_idx
-                for c_idx in range(1, min(7, len(row))):
-                    cell_text = row[c_idx]
-                    if not cell_text:
-                        continue
-                    giorno = GIORNI[c_idx - 1]
-
-                    if "DISPOSIZIONE" in cell_text.upper():
-                        aula = ""
-                        for l in cell_text.split("\n"):
-                            if RE_AULA.search(l):
-                                aula = l.strip()
-                        sched[giorno][ora] = {
-                            "tipo": "disposizione",
-                            "aula": norm_aula(aula) or None,
-                        }
-                        continue
-
-                    lines = [l.strip() for l in cell_text.split("\n") if l.strip()]
-                    if not lines:
-                        continue
-
-                    materia = lines[0]
+        for giorno, ore in grid.items():
+            for ora, cell_text in ore.items():
+                if "DISPOSIZIONE" in cell_text.upper():
                     aula = ""
-                    classi_found = []
-                    copresenza = ""
-
-                    for l in lines[1:]:
+                    for l in cell_text.split("\n"):
                         if RE_AULA.search(l):
-                            aula = l
-                        elif re.search(r"\b[1-5]\s*[a-z]{2,4}\b", l, re.I) or "[" in l:
-                            classi_found = parse_classi_list(l)
-                        else:
-                            copresenza = l
-
+                            aula = l.strip()
                     sched[giorno][ora] = {
-                        "tipo": "lezione",
-                        "materia": materia,
-                        "classi": classi_found,
+                        "tipo": "disposizione",
                         "aula": norm_aula(aula) or None,
-                        "copresenza": clean_name(copresenza) if copresenza else None,
                     }
+                    continue
+
+                lines = [l.strip() for l in cell_text.split("\n") if l.strip()]
+                if not lines:
+                    continue
+
+                materia = lines[0]
+                aula = ""
+                classi_found = []
+                copresenza = ""
+
+                for l in lines[1:]:
+                    if RE_AULA.search(l):
+                        aula = l
+                    elif re.search(r"\b[1-5]\s*[a-z]{2,4}\b", l, re.I) or "[" in l:
+                        classi_found = parse_classi_list(l)
+                    else:
+                        copresenza = l
+
+                sched[giorno][ora] = {
+                    "tipo": "lezione",
+                    "materia": materia,
+                    "classi": classi_found,
+                    "aula": norm_aula(aula) or None,
+                    "copresenza": clean_name(copresenza) if copresenza else None,
+                }
 
     return out, periodo
 

@@ -46,6 +46,15 @@ assert.ok(r.p.isSelf);
 assert.equal(r.p.intent, "docente");
 console.log("✓ Cassarino self oggi:", r.a.speech);
 
+r = ask("cosa ha Cassarino lunedì");
+assert.equal(r.p.intent, "docente");
+assert.equal(r.p.docente.nome, "Cassarino");
+assert.ok(r.a.speech.includes("terza e quarta ora"));
+assert.ok(r.a.speech.includes("3ITA"));
+assert.ok(r.a.speech.includes("quinta ora"));
+assert.ok(r.a.speech.includes("disposizione"));
+console.log("✓ Cassarino lunedì (3ª-4ª ora 3ITA + 5ª disp):", r.a.speech);
+
 r = ask("cosa ha info 5 giovedì");
 assert.equal(r.p.intent, "docente");
 assert.equal(r.p.docente.nome, "_info 5");
