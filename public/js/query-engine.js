@@ -98,7 +98,14 @@ export function buildIndex(db) {
     return { ora: o.ora, inizio: o.inizio, min: h * 60 + m };
   });
 
-  return { db, docenti, classKeys, aule, starts };
+  const attivita = db.attivita || {
+    attivita_istituto: [],
+    attivita_classe_sintesi: [],
+    consigli_classe_dettaglio: [],
+    colloqui_generali: [],
+  };
+
+  return { db, docenti, classKeys, aule, starts, attivita };
 }
 
 // ------------------------------------------------------------------ entità
@@ -227,6 +234,29 @@ export function parseQuery(text, idx, ctx = {}) {
   if (realtime) hour = currentLesson(now, idx);
 
   const base = { day, hour, realtime, raw: text };
+
+  // Controllo per le Attività (Collegi docenti, Consigli di classe, Scrutini, Colloqui, ecc.)
+  const isAttivita = /\b(attivita|impegni|collegio|collegi|consiglio|consigli|cdc|scrutini|scrutinio|colloqui|colloquio|glo|pdp|pei|dipartimenti|dipartimento|esami|idoneita|debito|debiti)\b/.test(q0);
+
+  if (isAttivita) {
+    const isCollegio = /\b(collegio|collegi)\b/.test(q0);
+    const isColloqui = /\b(colloqui|colloquio)\b/.test(q0);
+    const isScrutini = /\b(scrutini|scrutinio)\b/.test(q0);
+    const isConsigli = /\b(consiglio|consigli|cdc)\b/.test(q0);
+    const isDipartimenti = /\b(dipartimenti|dipartimento)\b/.test(q0);
+    const monthMatch = q0.match(/\b(settembre|ottobre|novembre|dicembre|gennaio|febbraio|marzo|aprile|maggio|giugno)\b/);
+    const mese = monthMatch ? monthMatch[1] : null;
+
+    let subType = "generale";
+    if (isCollegio) subType = "collegio";
+    else if (isColloqui) subType = "colloqui";
+    else if (isScrutini) subType = "scrutini";
+    else if (isConsigli) subType = "consigli_classe";
+    else if (isDipartimenti) subType = "dipartimenti";
+
+    return { ...base, intent: "attivita", subType, classi, mese, queryText: q0 };
+  }
+
   const mentionsRoomWord = /\b(aula|aule|laboratorio|laboratori|lab|palestra|stanza|stanze)\b/.test(q);
   const wantsFree = /\b(liber[aeio]|vuot[aeio]|disponibil[ei])\b/.test(q);
   const onlyLabs = /\b(laboratori|laboratorio|lab)\b/.test(q);
@@ -626,6 +656,146 @@ function answerAula(p, idx) {
   return mergeAnswers(out);
 }
 
+function answerAttivita(p, idx) {
+  const att = idx.attivita || {};
+  const istituto = att.attivita_istituto || [];
+  const sintesi = att.attivita_classe_sintesi || [];
+  const consigli = att.consigli_classe_dettaglio || [];
+  const colloqui = att.colloqui_generali || [];
+
+  // 1. Consigli di classe o Scrutini per una classe specifica
+  if (p.classi?.length && (p.subType === "consigli_classe" || p.subType === "scrutini" || p.subType === "generale")) {
+    const clsId = p.classi[0].toUpperCase();
+    let matches = consigli.filter((item) =>
+      (item.classi && item.classi.includes(clsId)) ||
+      (item.classe_raw && item.classe_raw.toUpperCase() === clsId)
+    );
+    if (p.subType === "scrutini") {
+      matches = matches.filter((item) => /scrutini/i.test(item.periodo) || /scrutini/i.test(item.giorno));
+    }
+
+    if (matches.length > 0) {
+      const isScrutiniOnly = p.subType === "scrutini";
+      const title = isScrutiniOnly ? `Scrutini Classe ${clsId}` : `Consigli di Classe ${clsId}`;
+      const lines = matches.map((m) => ({
+        when: m.giorno || m.periodo,
+        main: `Ore ${m.ora} • ${m.aula || "Lab. Multimediale"}`,
+        sub: m.periodo ? `${m.periodo}` : "",
+      }));
+
+      const spokenDates = matches.slice(0, 4).map((m) => `${m.giorno || m.periodo} alle ${m.ora}`).join(", ");
+      return {
+        title,
+        badge: "CALENDARIO ATTIVITÀ",
+        lines,
+        note: `Calendario dal Piano Annuale delle Attività 2026/27 per la classe ${clsId}.`,
+        speech: `I consigli di classe in programma per la ${clsId} sono: ${spokenDates}${matches.length > 4 ? " e altri successivi." : "."}`,
+        rooms: matches.map((m) => m.aula).filter(Boolean),
+      };
+    }
+  }
+
+  // 2. Scrutini Generali (senza classe o sintesi)
+  if (p.subType === "scrutini") {
+    const scrutiniSintesi = sintesi.filter((s) => /scrutini/i.test(s.attivita));
+    const lines = scrutiniSintesi.map((s) => ({
+      when: `${cap(s.mese)} (${s.data})`,
+      main: s.attivita,
+      sub: "",
+    }));
+    return {
+      title: "Calendario Scrutini",
+      badge: "PIANO ATTIVITÀ",
+      lines: lines.length ? lines : [{ when: "Gennaio / Giugno", main: "Scrutini I e II periodo", sub: "" }],
+      note: "Sintesi sessioni di scrutinio dal Piano Annuale delle Attività.",
+      speech: "Le sessioni di scrutinio sono previste a gennaio per il primo periodo e a giugno per il secondo periodo.",
+      rooms: [],
+    };
+  }
+
+  // 3. Collegio Docenti
+  if (p.subType === "collegio" || /\bcollegio\b/i.test(p.queryText || "")) {
+    const collegi = istituto.filter((i) => /collegio docenti/i.test(i.attivita));
+    const lines = collegi.map((c) => ({
+      when: `${cap(c.mese)} ${c.data}`,
+      main: c.attivita,
+      sub: c.orario ? `Orario: ${c.orario}${c.durata ? " (" + c.durata + ")" : ""}` : "",
+    }));
+    return {
+      title: "Collegio Docenti",
+      badge: "ATTIVITÀ COLLEGIALI",
+      lines,
+      note: "Date e orari delle sedute del Collegio Docenti a.s. 2026/27.",
+      speech: `Sono previste ${collegi.length} sedute del Collegio Docenti durante l'anno scolastico, tra cui il primo il 1° settembre e le delibere nei mesi di settembre, ottobre, dicembre, maggio e giugno.`,
+      rooms: [],
+    };
+  }
+
+  // 4. Colloqui Generali
+  if (p.subType === "colloqui" || /\bcolloqui\b/i.test(p.queryText || "")) {
+    let filtered = colloqui;
+    if (p.classi?.length) {
+      const clsId = p.classi[0].toUpperCase();
+      if (/NEG|ITA|ITE|BTA|BTB|MMA|MMC|MME|CAT|EEC|BSA|BSB|CS|CMS|MS/i.test(clsId)) {
+        filtered = colloqui.filter((c) => c.sede.toLowerCase() === "negrelli");
+      } else if (/AFM|RIM|BRIM/i.test(clsId)) {
+        filtered = colloqui.filter((c) => c.sede.toLowerCase() === "colotti");
+      } else if (/ASS|SSAS|IAMI/i.test(clsId)) {
+        filtered = colloqui.filter((c) => c.sede.toLowerCase() === "rizzarda");
+      }
+    }
+    const lines = filtered.map((c) => ({
+      when: `${c.periodo} • ${c.giorno} ${c.data}`,
+      main: `Sede: ${c.sede} (${c.classi})`,
+      sub: "",
+    }));
+    return {
+      title: "Colloqui Generali con i Genitori",
+      badge: "COLLOQUI",
+      lines,
+      note: "Date dei colloqui generali per il I e II periodo.",
+      speech: "I colloqui generali si terranno a dicembre 2026 per il primo periodo e ad aprile 2027 per il secondo periodo.",
+      rooms: [],
+    };
+  }
+
+  // 5. Mese specifico
+  if (p.mese) {
+    const meseNorm = p.mese.toLowerCase();
+    const listIst = istituto.filter((i) => i.mese.toLowerCase() === meseNorm);
+    const listSin = sintesi.filter((s) => s.mese.toLowerCase() === meseNorm);
+    const lines = [
+      ...listIst.map((i) => ({ when: i.data, main: i.attivita, sub: i.orario ? `Orario: ${i.orario}` : "" })),
+      ...listSin.map((s) => ({ when: s.data, main: s.attivita, sub: "Sintesi collegiale" })),
+    ];
+    return {
+      title: `Attività di ${cap(p.mese)}`,
+      badge: "PIANO ATTIVITÀ",
+      lines: lines.length ? lines : [{ when: cap(p.mese), main: "Nessuna attività istituzionale registrata", sub: "" }],
+      note: `Impegni collegiali previsti per il mese di ${cap(p.mese)}.`,
+      speech: lines.length
+        ? `Nel mese di ${p.mese} sono previste ${lines.length} attività collegiali.`
+        : `Nel mese di ${p.mese} non ci sono attività istituzionali previste nel piano.`,
+      rooms: [],
+    };
+  }
+
+  // 6. Panoramica generale attività
+  const lines = istituto.slice(0, 8).map((i) => ({
+    when: `${cap(i.mese)} ${i.data}`,
+    main: i.attivita,
+    sub: i.orario ? `Orario: ${i.orario}` : "",
+  }));
+  return {
+    title: "Piano Annuale delle Attività 2026/27",
+    badge: "PANORAMICA",
+    lines,
+    note: "Principali appuntamenti e impegni collegiali del personale docente.",
+    speech: "Ecco i principali impegni del Piano Annuale delle Attività dell'istituto.",
+    rooms: [],
+  };
+}
+
 export function answer(p, idx) {
   switch (p.intent) {
     case "docente":
@@ -636,6 +806,8 @@ export function answer(p, idx) {
       return answerAuleLibere(p, idx);
     case "aula":
       return answerAula(p, idx);
+    case "attivita":
+      return answerAttivita(p, idx);
     case "ambiguo": {
       const names = p.candidati.slice(0, 4).map((d) => titleCase(d.nome));
       return {
