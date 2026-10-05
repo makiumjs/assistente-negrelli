@@ -1,0 +1,3560 @@
+{
+  "attivita_istituto": [
+    {
+      "mese": "Settembre",
+      "data": "1 martedì",
+      "attivita": "Collegio Docenti",
+      "orario": "15:00-17:00",
+      "durata": "2h"
+    },
+    {
+      "mese": "Settembre",
+      "data": "10 mercoledì",
+      "attivita": "Inizio delle lezioni",
+      "orario": null,
+      "durata": null
+    },
+    {
+      "mese": "Settembre",
+      "data": "24 giovedì",
+      "attivita": "Collegio docenti: delibera PAA",
+      "orario": "14.00-17.00",
+      "durata": "3h"
+    },
+    {
+      "mese": "Ottobre",
+      "data": "2 venerdì",
+      "attivita": "Collegio Docenti sui nuovi Istituti Tecnici. Riunioni per dipartimenti: ed. civica, L.G. orientamento",
+      "orario": "14.30-15.30\n15:30 – 17:30",
+      "durata": "1h\n2h"
+    },
+    {
+      "mese": "Ottobre",
+      "data": "12 lunedì",
+      "attivita": "Inizio ora ricevimento settimanale",
+      "orario": null,
+      "durata": null
+    },
+    {
+      "mese": "Ottobre",
+      "data": "17 sabato",
+      "attivita": "Termine di presentazione Progetti, Attività, costituzione\ndi Commissioni e Gruppi di lavoro da inserire nel POF\nannuale",
+      "orario": null,
+      "durata": null
+    },
+    {
+      "mese": "Ottobre",
+      "data": "24 sabato",
+      "attivita": "Termine di presentazione Progettazione disciplinare\nannuale docenti",
+      "orario": null,
+      "durata": null
+    },
+    {
+      "mese": "Ottobre",
+      "data": "28 mercoledì",
+      "attivita": "Collegio docenti",
+      "orario": "14:30- 16:30",
+      "durata": "2 h"
+    },
+    {
+      "mese": "Ottobre",
+      "data": "31 sabato",
+      "attivita": "Termine approvazione PEI",
+      "orario": null,
+      "durata": null
+    },
+    {
+      "mese": "Novembre",
+      "data": "25 mercoledì",
+      "attivita": "Termine stesura PDP",
+      "orario": null,
+      "durata": null
+    },
+    {
+      "mese": "Dicembre",
+      "data": "10 giovedì",
+      "attivita": "Collegio Docenti:\naggiornamento PTOF,\napprovazione POF annuale",
+      "orario": "14:30- 16:30",
+      "durata": "2h"
+    },
+    {
+      "mese": "Dicembre",
+      "data": "23 martedì",
+      "attivita": "Fine primo periodo di valutazione",
+      "orario": null,
+      "durata": null
+    },
+    {
+      "mese": "Febbraio",
+      "data": "12 venerdì",
+      "attivita": "Riunione per Dipartimenti\ngruppi di lavoro per verifica\nUDA",
+      "orario": "14.30-16.30",
+      "durata": "2h"
+    },
+    {
+      "mese": "Febbraio",
+      "data": "17 mercoledì",
+      "attivita": "Collegio Docenti",
+      "orario": "14:30- 16:30",
+      "durata": "2h"
+    },
+    {
+      "mese": "Aprile",
+      "data": "29 giovedì",
+      "attivita": "Dipartimenti-Libri testo",
+      "orario": "14.30-16.30",
+      "durata": "2h"
+    },
+    {
+      "mese": "Maggio",
+      "data": "8 sabato",
+      "attivita": "Ultimo giorno ora ricevimento settimanale",
+      "orario": null,
+      "durata": null
+    },
+    {
+      "mese": "Maggio",
+      "data": "15 sabato",
+      "attivita": "Termine ordinatorio pubblicazione Documento 15 Maggio\nClassi quinte",
+      "orario": null,
+      "durata": null
+    },
+    {
+      "mese": "Maggio",
+      "data": "21 venerdì",
+      "attivita": "Collegio Docenti:\ndelibera adozione libri di testo",
+      "orario": "14:30- 16:30",
+      "durata": "2h"
+    },
+    {
+      "mese": "Giugno",
+      "data": "8 martedì",
+      "attivita": "Termine delle lezioni e fine 2° periodo di valutazione",
+      "orario": null,
+      "durata": null
+    },
+    {
+      "mese": "Giugno",
+      "data": "da definire",
+      "attivita": "Collegio Docenti\nColloqui docenti anno di prova",
+      "orario": "da definire",
+      "durata": "2h"
+    }
+  ],
+  "attivita_classe_sintesi": [
+    {
+      "mese": "settembre",
+      "data": "da giovedì 3 a lunedì 7",
+      "attivita": "Esami integrativi, esami di idoneità, scrutini"
+    },
+    {
+      "mese": "ottobre",
+      "data": "5,6,7,8,9,12",
+      "attivita": "Cdc Negrelli-Forcellini"
+    },
+    {
+      "mese": "ottobre",
+      "data": "13,14",
+      "attivita": "Cdc Rizzarda"
+    },
+    {
+      "mese": "ottobre",
+      "data": "15,16",
+      "attivita": "Cdc Colotti"
+    },
+    {
+      "mese": "ottobre",
+      "data": "da venerdì 23 a venerdì 30",
+      "attivita": "GLO"
+    },
+    {
+      "mese": "novembre",
+      "data": "9,10",
+      "attivita": "Cdc Colotti: delibera PDP (i docenti predispongono preventivamente la bozza online) e PEI; a seguire cdc con genitori/alunni"
+    },
+    {
+      "mese": "novembre",
+      "data": "11,12",
+      "attivita": "Cdc Rizzarda: delibera PDP (i docenti predispongono preventivamente la bozza online) e PEI; a seguire cdc con genitori/alunni"
+    },
+    {
+      "mese": "novembre",
+      "data": "13,16,17,18,19,20,23",
+      "attivita": "Cdc Negrelli-Forcellini: delibera PDP (i docenti predispongono preventivamente la bozza online) e PEI; a seguire cdc con genitori/alunni"
+    },
+    {
+      "mese": "gennaio",
+      "data": "7,8",
+      "attivita": "Cdc scrutini Rizzarda; monitoraggio PDP PEI"
+    },
+    {
+      "mese": "gennaio",
+      "data": "11,12",
+      "attivita": "Cdc scrutini Colotti; monitoraggio PDP PEI"
+    },
+    {
+      "mese": "gennaio",
+      "data": "13,14,15,18,19",
+      "attivita": "Cdc scrutini Negrelli-Forcellini; monitoraggio PDP PEI"
+    },
+    {
+      "mese": "febbraio",
+      "data": "dal 1 al 27",
+      "attivita": "Esame verifica superamento debito formativo I periodo"
+    },
+    {
+      "mese": "febbraio",
+      "data": "da lunedì 1 a venerdì 5",
+      "attivita": "GLO"
+    },
+    {
+      "mese": "marzo",
+      "data": "1,2",
+      "attivita": "Cdc con genitori/alunni Rizzarda; monitoraggio PDP PEI"
+    },
+    {
+      "mese": "marzo",
+      "data": "3,4",
+      "attivita": "Cdc con genitori/alunni Colotti, monitoraggio PDP PEI"
+    },
+    {
+      "mese": "marzo",
+      "data": "5,8,9,10,11,12,15",
+      "attivita": "Cdc con genitori/alunni Negrelli-Forcellini; monitoraggio PDP PEI"
+    },
+    {
+      "mese": "maggio",
+      "data": "3,4,5,6,7,10,11",
+      "attivita": "Cdc Negrelli-Forcellini verifica PEI PDP e Documento cdc per le quinte; con genitori/alunni (libri testo)"
+    },
+    {
+      "mese": "maggio",
+      "data": "11,17",
+      "attivita": "Cdc Rizzarda verifica PEI PDP e Documento cdc per le quinte; con genitori/alunni (libri testo)"
+    },
+    {
+      "mese": "maggio",
+      "data": "12,13",
+      "attivita": "Cdc Colotti verifica PEI PDP e Documento cdc per le quinte; con genitori/alunni (libri testo)"
+    },
+    {
+      "mese": "maggio",
+      "data": "da lunedì 24 a venerdì 28",
+      "attivita": "GLO"
+    },
+    {
+      "mese": "giugno",
+      "data": "8",
+      "attivita": "FINE DELLE LEZIONI"
+    },
+    {
+      "mese": "giugno",
+      "data": "8 pomeriggio",
+      "attivita": "Scrutini classi quinte (Colotti, Rizzarda) e Serale"
+    },
+    {
+      "mese": "giugno",
+      "data": "9 mattina",
+      "attivita": "Scrutini classi quinte (Negrelli)"
+    },
+    {
+      "mese": "giugno",
+      "data": "9 pomeriggio",
+      "attivita": "Scrutini classi (da 1^ a 4^) Rizzarda"
+    },
+    {
+      "mese": "giugno",
+      "data": "10,11,12",
+      "attivita": "Scrutini classi (da 1^ a 4^) Negrelli-Forcellini"
+    },
+    {
+      "mese": "giugno",
+      "data": "12",
+      "attivita": "Scrutini classi (da 1^ a 4^) Colotti"
+    },
+    {
+      "mese": "giugno",
+      "data": "Lunedì 14",
+      "attivita": "insediamento Commissione Esame Stato"
+    },
+    {
+      "mese": "giugno",
+      "data": "mercoledì 16",
+      "attivita": "Prima Prova scritta di Italiano"
+    },
+    {
+      "mese": "giugno",
+      "data": "giovedì 17",
+      "attivita": "Seconda prova scritta"
+    }
+  ],
+  "consigli_classe_dettaglio": [
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Giovedì 15 ottobre 2026",
+      "ora": "14.30",
+      "classe_raw": "1A",
+      "classi": [
+        "1A"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Giovedì 15 ottobre 2026",
+      "ora": "15:15",
+      "classe_raw": "2A",
+      "classi": [
+        "2A"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Giovedì 15 ottobre 2026",
+      "ora": "16:00",
+      "classe_raw": "1B",
+      "classi": [
+        "1B"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Giovedì 15 ottobre 2026",
+      "ora": "16:45",
+      "classe_raw": "2B",
+      "classi": [
+        "2B"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Venerdì 16 ottobre 2026",
+      "ora": "14.30",
+      "classe_raw": "3AAFM",
+      "classi": [
+        "3AAFM"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Venerdì 16 ottobre 2026",
+      "ora": "15:15",
+      "classe_raw": "3BRIM",
+      "classi": [
+        "3BRIM"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Venerdì 16 ottobre 2026",
+      "ora": "16:00",
+      "classe_raw": "4AFM-RIM",
+      "classi": [
+        "4AFM",
+        "4RIM"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Venerdì 16 ottobre 2026",
+      "ora": "16:45",
+      "classe_raw": "5AFM-RIM",
+      "classi": [
+        "5AFM",
+        "5RIM"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Lunedì 9 novembre 2026",
+      "ora": "14:30",
+      "classe_raw": "1A",
+      "classi": [
+        "1A"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Lunedì 9 novembre 2026",
+      "ora": "15;30",
+      "classe_raw": "2A",
+      "classi": [
+        "2A"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Lunedì 9 novembre 2026",
+      "ora": "16:30",
+      "classe_raw": "1B",
+      "classi": [
+        "1B"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Lunedì 9 novembre 2026",
+      "ora": "17:30",
+      "classe_raw": "2B",
+      "classi": [
+        "2B"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Martedì 10 novembre 2026",
+      "ora": "14:30",
+      "classe_raw": "3AAFM",
+      "classi": [
+        "3AAFM"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Martedì 10 novembre 2026",
+      "ora": "15;30",
+      "classe_raw": "3BRIM",
+      "classi": [
+        "3BRIM"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Martedì 10 novembre 2026",
+      "ora": "16:30",
+      "classe_raw": "4AFM-RIM",
+      "classi": [
+        "4AFM",
+        "4RIM"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Martedì 10 novembre 2026",
+      "ora": "17:30",
+      "classe_raw": "5AFM-RIM",
+      "classi": [
+        "5AFM",
+        "5RIM"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Lunedì 11 gennaio 2027",
+      "ora": "14:30",
+      "classe_raw": "3AAFM",
+      "classi": [
+        "3AAFM"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Lunedì 11 gennaio 2027",
+      "ora": "15;30",
+      "classe_raw": "4AFM-RIM",
+      "classi": [
+        "4AFM",
+        "4RIM"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Lunedì 11 gennaio 2027",
+      "ora": "16:30",
+      "classe_raw": "5AFM-RIM",
+      "classi": [
+        "5AFM",
+        "5RIM"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Lunedì 11 gennaio 2027",
+      "ora": "17:30",
+      "classe_raw": "3BRIM",
+      "classi": [
+        "3BRIM"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Martedì 12 gennaio",
+      "ora": "14:30",
+      "classe_raw": "1B",
+      "classi": [
+        "1B"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Martedì 12 gennaio",
+      "ora": "15;30",
+      "classe_raw": "2B",
+      "classi": [
+        "2B"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Martedì 12 gennaio",
+      "ora": "16:30",
+      "classe_raw": "1A",
+      "classi": [
+        "1A"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Ottobre 2026",
+      "giorno": "Martedì 12 gennaio",
+      "ora": "17:30",
+      "classe_raw": "2A",
+      "classi": [
+        "2A"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Mercoledì 3 marzo 2027",
+      "ora": "14:30",
+      "classe_raw": "1A",
+      "classi": [
+        "1A"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Mercoledì 3 marzo 2027",
+      "ora": "15;30",
+      "classe_raw": "2A",
+      "classi": [
+        "2A"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Mercoledì 3 marzo 2027",
+      "ora": "16:30",
+      "classe_raw": "1B",
+      "classi": [
+        "1B"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Mercoledì 3 marzo 2027",
+      "ora": "17:30",
+      "classe_raw": "2B",
+      "classi": [
+        "2B"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Giovedì 4 marzo 2027",
+      "ora": "14:30",
+      "classe_raw": "3AAFM",
+      "classi": [
+        "3AAFM"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Giovedì 4 marzo 2027",
+      "ora": "15;30",
+      "classe_raw": "3BRIM",
+      "classi": [
+        "3BRIM"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Giovedì 4 marzo 2027",
+      "ora": "16:30",
+      "classe_raw": "4AFM-RIM",
+      "classi": [
+        "4AFM",
+        "4RIM"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Giovedì 4 marzo 2027",
+      "ora": "17:30",
+      "classe_raw": "5AFM-RIM",
+      "classi": [
+        "5AFM",
+        "5RIM"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Mercoledì 12 maggio 2027",
+      "ora": "14:30",
+      "classe_raw": "3AAFM",
+      "classi": [
+        "3AAFM"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Mercoledì 12 maggio 2027",
+      "ora": "15;30",
+      "classe_raw": "4AFM-RIM",
+      "classi": [
+        "4AFM",
+        "4RIM"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Mercoledì 12 maggio 2027",
+      "ora": "16:30",
+      "classe_raw": "5AFM-RIM",
+      "classi": [
+        "5AFM",
+        "5RIM"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Mercoledì 12 maggio 2027",
+      "ora": "17:30",
+      "classe_raw": "3BRIM",
+      "classi": [
+        "3BRIM"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Giovedì 13 maggio 2027",
+      "ora": "14:30",
+      "classe_raw": "1B",
+      "classi": [
+        "1B"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Giovedì 13 maggio 2027",
+      "ora": "15;30",
+      "classe_raw": "2B",
+      "classi": [
+        "2B"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Giovedì 13 maggio 2027",
+      "ora": "16:30",
+      "classe_raw": "1A",
+      "classi": [
+        "1A"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Giovedì 13 maggio 2027",
+      "ora": "17:30",
+      "classe_raw": "2A",
+      "classi": [
+        "2A"
+      ],
+      "aula": "Lim"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Martedì 8 giugno 2027",
+      "ora": "14:00",
+      "classe_raw": "5AFM-BRIM",
+      "classi": [
+        "5AFM",
+        "5BRIM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Sabato 12 giugno 2027",
+      "ora": "12:00",
+      "classe_raw": "1A",
+      "classi": [
+        "1A"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Sabato 12 giugno 2027",
+      "ora": "14:00",
+      "classe_raw": "2A",
+      "classi": [
+        "2A"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Sabato 12 giugno 2027",
+      "ora": "15:00",
+      "classe_raw": "1B",
+      "classi": [
+        "1B"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Sabato 12 giugno 2027",
+      "ora": "16:00",
+      "classe_raw": "2B",
+      "classi": [
+        "2B"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Sabato 12 giugno 2027",
+      "ora": "17:00",
+      "classe_raw": "3AAFM",
+      "classi": [
+        "3AAFM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Sabato 12 giugno 2027",
+      "ora": "18:00",
+      "classe_raw": "3BRIM",
+      "classi": [
+        "3BRIM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Sabato 12 giugno 2027",
+      "ora": "19:00",
+      "classe_raw": "4AFM-RIM",
+      "classi": [
+        "4AFM",
+        "4RIM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Lunedì 5 ottobre 2026",
+      "ora": "14.00",
+      "classe_raw": "1MMA",
+      "classi": [
+        "1MMA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Lunedì 5 ottobre 2026",
+      "ora": "14:45",
+      "classe_raw": "1MMC",
+      "classi": [
+        "1MMC"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Lunedì 5 ottobre 2026",
+      "ora": "15:30",
+      "classe_raw": "2MMA",
+      "classi": [
+        "2MMA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Lunedì 5 ottobre 2026",
+      "ora": "16:15",
+      "classe_raw": "2MME",
+      "classi": [
+        "2MME"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Lunedì 5 ottobre 2026",
+      "ora": "17:00",
+      "classe_raw": "1BTA",
+      "classi": [
+        "1BTA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Lunedì 5 ottobre 2026",
+      "ora": "17:45",
+      "classe_raw": "1BTB",
+      "classi": [
+        "1BTB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Lunedì 5 ottobre 2026",
+      "ora": "18:30",
+      "classe_raw": "2CAT",
+      "classi": [
+        "2CAT"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Martedì 6 ottobre 2026",
+      "ora": "14.00",
+      "classe_raw": "2BSA",
+      "classi": [
+        "2BSA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Martedì 6 ottobre 2026",
+      "ora": "14:45",
+      "classe_raw": "2BSB",
+      "classi": [
+        "2BSB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Martedì 6 ottobre 2026",
+      "ora": "15:30",
+      "classe_raw": "1ITA",
+      "classi": [
+        "1ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Martedì 6 ottobre 2026",
+      "ora": "16:15",
+      "classe_raw": "2ITA",
+      "classi": [
+        "2ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Martedì 6 ottobre 2026",
+      "ora": "17:00",
+      "classe_raw": "1ITE",
+      "classi": [
+        "1ITE"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Martedì 6 ottobre 2026",
+      "ora": "17:45",
+      "classe_raw": "2ITB",
+      "classi": [
+        "2ITB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Mercoledì 7 ottobre 2026",
+      "ora": "14.00",
+      "classe_raw": "3MM",
+      "classi": [
+        "3MM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Mercoledì 7 ottobre 2026",
+      "ora": "14:45",
+      "classe_raw": "4MM",
+      "classi": [
+        "4MM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Mercoledì 7 ottobre 2026",
+      "ora": "15:30",
+      "classe_raw": "5MM",
+      "classi": [
+        "5MM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Mercoledì 7 ottobre 2026",
+      "ora": "16:15",
+      "classe_raw": "3BSA",
+      "classi": [
+        "3BSA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Mercoledì 7 ottobre 2026",
+      "ora": "17:00",
+      "classe_raw": "4BS-AM",
+      "classi": [
+        "4BS",
+        "4AM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Mercoledì 7 ottobre 2026",
+      "ora": "17:45",
+      "classe_raw": "5BS-AM",
+      "classi": [
+        "5BS",
+        "5AM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Giovedì 8 ottobre 2026",
+      "ora": "14.00",
+      "classe_raw": "4ITB",
+      "classi": [
+        "4ITB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Giovedì 8 ottobre 2026",
+      "ora": "14:45",
+      "classe_raw": "5ITB",
+      "classi": [
+        "5ITB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Giovedì 8 ottobre 2026",
+      "ora": "15:30",
+      "classe_raw": "3ITE",
+      "classi": [
+        "3ITE"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Giovedì 8 ottobre 2026",
+      "ora": "16:15",
+      "classe_raw": "4EEC",
+      "classi": [
+        "4EEC"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Giovedì 8 ottobre 2026",
+      "ora": "17:00",
+      "classe_raw": "5EEC",
+      "classi": [
+        "5EEC"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Giovedì 8 ottobre 2026",
+      "ora": "17:45",
+      "classe_raw": "3CAT",
+      "classi": [
+        "3CAT"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Venerdì 9 ottobre 2026",
+      "ora": "14.00",
+      "classe_raw": "3BSB-AM",
+      "classi": [
+        "3BSB",
+        "3AM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Venerdì 9 ottobre 2026",
+      "ora": "14:45",
+      "classe_raw": "3ITA",
+      "classi": [
+        "3ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Venerdì 9 ottobre 2026",
+      "ora": "15:30",
+      "classe_raw": "4ITA",
+      "classi": [
+        "4ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Venerdì 9 ottobre 2026",
+      "ora": "16:15",
+      "classe_raw": "5ITA",
+      "classi": [
+        "5ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Lunedì 12 ottobre 2026",
+      "ora": "15:00",
+      "classe_raw": "3-4 CS",
+      "classi": [
+        "3CS",
+        "4CS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Lunedì 12 ottobre 2026",
+      "ora": "15:45",
+      "classe_raw": "5CMS",
+      "classi": [
+        "5CMS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Negrelli",
+      "periodo": "Ottobre 2026",
+      "giorno": "Lunedì 12 ottobre 2026",
+      "ora": "16:30",
+      "classe_raw": "3-4 MS",
+      "classi": [
+        "3MS",
+        "4MS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Venerdì 13 novembre 2026",
+      "ora": "14.00",
+      "classe_raw": "1BTA",
+      "classi": [
+        "1BTA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Venerdì 13 novembre 2026",
+      "ora": "15:00",
+      "classe_raw": "2BTA",
+      "classi": [
+        "2BTA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Venerdì 13 novembre 2026",
+      "ora": "16:00",
+      "classe_raw": "1BTB",
+      "classi": [
+        "1BTB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Venerdì 13 novembre 2026",
+      "ora": "17:00",
+      "classe_raw": "2BTB",
+      "classi": [
+        "2BTB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Venerdì 13 novembre 2026",
+      "ora": "18:00",
+      "classe_raw": "3BSB-AM",
+      "classi": [
+        "3BSB",
+        "3AM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Lunedì 16 novembre 2026",
+      "ora": "14.00",
+      "classe_raw": "2CAT",
+      "classi": [
+        "2CAT"
+      ],
+      "aula": ""
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Lunedì 16 novembre 2026",
+      "ora": "15:00",
+      "classe_raw": "1ITA",
+      "classi": [
+        "1ITA"
+      ],
+      "aula": ""
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Lunedì 16 novembre 2026",
+      "ora": "16:00",
+      "classe_raw": "2ITA",
+      "classi": [
+        "2ITA"
+      ],
+      "aula": ""
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Lunedì 16 novembre 2026",
+      "ora": "17:00",
+      "classe_raw": "1ITE",
+      "classi": [
+        "1ITE"
+      ],
+      "aula": ""
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Lunedì 16 novembre 2026",
+      "ora": "18:00",
+      "classe_raw": "2ITB",
+      "classi": [
+        "2ITB"
+      ],
+      "aula": ""
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Martedì 17 novembre 2026",
+      "ora": "14.00",
+      "classe_raw": "1MMA",
+      "classi": [
+        "1MMA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Martedì 17 novembre 2026",
+      "ora": "15:00",
+      "classe_raw": "1MMC",
+      "classi": [
+        "1MMC"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Martedì 17 novembre 2026",
+      "ora": "16:00",
+      "classe_raw": "2MMA",
+      "classi": [
+        "2MMA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Martedì 17 novembre 2026",
+      "ora": "17:00",
+      "classe_raw": "2MME",
+      "classi": [
+        "2MME"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Martedì 17 novembre 2026",
+      "ora": "18:00",
+      "classe_raw": "3MM",
+      "classi": [
+        "3MM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Mercoledì 18 novembre\n2026",
+      "ora": "14.00",
+      "classe_raw": "4MM",
+      "classi": [
+        "4MM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Mercoledì 18 novembre\n2026",
+      "ora": "15:00",
+      "classe_raw": "5MM",
+      "classi": [
+        "5MM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Mercoledì 18 novembre\n2026",
+      "ora": "16:00",
+      "classe_raw": "3BSA",
+      "classi": [
+        "3BSA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Mercoledì 18 novembre\n2026",
+      "ora": "17:00",
+      "classe_raw": "4BS-AM",
+      "classi": [
+        "4BS",
+        "4AM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Mercoledì 18 novembre\n2026",
+      "ora": "18:00",
+      "classe_raw": "5BS-AM",
+      "classi": [
+        "5BS",
+        "5AM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Giovedì 19 novembre 2026",
+      "ora": "14.00",
+      "classe_raw": "3CAT",
+      "classi": [
+        "3CAT"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Giovedì 19 novembre 2026",
+      "ora": "15:00",
+      "classe_raw": "3ITA",
+      "classi": [
+        "3ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Giovedì 19 novembre 2026",
+      "ora": "16:00",
+      "classe_raw": "4ITA",
+      "classi": [
+        "4ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Giovedì 19 novembre 2026",
+      "ora": "17:00",
+      "classe_raw": "5ITA",
+      "classi": [
+        "5ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Venerdì 20 novembre 2026",
+      "ora": "14.00",
+      "classe_raw": "3ITE",
+      "classi": [
+        "3ITE"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Venerdì 20 novembre 2026",
+      "ora": "15:00",
+      "classe_raw": "4ITB",
+      "classi": [
+        "4ITB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Venerdì 20 novembre 2026",
+      "ora": "16:00",
+      "classe_raw": "5ITB",
+      "classi": [
+        "5ITB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Venerdì 20 novembre 2026",
+      "ora": "17:00",
+      "classe_raw": "4EEC",
+      "classi": [
+        "4EEC"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Venerdì 20 novembre 2026",
+      "ora": "18:00",
+      "classe_raw": "5EEC",
+      "classi": [
+        "5EEC"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Lunedì 23 novembre 2026",
+      "ora": "15.00",
+      "classe_raw": "3-4 CS",
+      "classi": [
+        "3CS",
+        "4CS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Lunedì 23 novembre 2026",
+      "ora": "16:00",
+      "classe_raw": "5CMS",
+      "classi": [
+        "5CMS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Lunedì 23 novembre 2026",
+      "ora": "17:00",
+      "classe_raw": "3-4 MS",
+      "classi": [
+        "3MS",
+        "4MS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Mercoledì 13 gennaio 2027",
+      "ora": "14.00",
+      "classe_raw": "1BTA",
+      "classi": [
+        "1BTA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Mercoledì 13 gennaio 2027",
+      "ora": "14:45",
+      "classe_raw": "1BTB",
+      "classi": [
+        "1BTB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Mercoledì 13 gennaio 2027",
+      "ora": "15:30",
+      "classe_raw": "2BTA",
+      "classi": [
+        "2BTA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Mercoledì 13 gennaio 2027",
+      "ora": "16:15",
+      "classe_raw": "2BTB",
+      "classi": [
+        "2BTB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Mercoledì 13 gennaio 2027",
+      "ora": "17:00",
+      "classe_raw": "1MMA",
+      "classi": [
+        "1MMA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Mercoledì 13 gennaio 2027",
+      "ora": "17:45",
+      "classe_raw": "1MMC",
+      "classi": [
+        "1MMC"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Mercoledì 13 gennaio 2027",
+      "ora": "18:30",
+      "classe_raw": "2MMA",
+      "classi": [
+        "2MMA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Giovedì 14 gennaio 2027",
+      "ora": "14.00",
+      "classe_raw": "2MME",
+      "classi": [
+        "2MME"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Giovedì 14 gennaio 2027",
+      "ora": "14:45",
+      "classe_raw": "1ITA",
+      "classi": [
+        "1ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Giovedì 14 gennaio 2027",
+      "ora": "15:30",
+      "classe_raw": "1ITE",
+      "classi": [
+        "1ITE"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Giovedì 14 gennaio 2027",
+      "ora": "16:15",
+      "classe_raw": "2ITA",
+      "classi": [
+        "2ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Giovedì 14 gennaio 2027",
+      "ora": "17:00",
+      "classe_raw": "2ITB",
+      "classi": [
+        "2ITB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Giovedì 14 gennaio 2027",
+      "ora": "17:45",
+      "classe_raw": "2CAT",
+      "classi": [
+        "2CAT"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Venerdì 15 gennaio 2027",
+      "ora": "14.00",
+      "classe_raw": "3BSB -AM",
+      "classi": [
+        "3BSBAM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Venerdì 15 gennaio 2027",
+      "ora": "14:45",
+      "classe_raw": "3BSA",
+      "classi": [
+        "3BSA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Venerdì 15 gennaio 2027",
+      "ora": "15:30",
+      "classe_raw": "4BS-AM",
+      "classi": [
+        "4BS",
+        "4AM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Venerdì 15 gennaio 2027",
+      "ora": "16:15",
+      "classe_raw": "5BS-AM",
+      "classi": [
+        "5BS",
+        "5AM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Venerdì 15 gennaio 2027",
+      "ora": "17:00",
+      "classe_raw": "3ITE",
+      "classi": [
+        "3ITE"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Venerdì 15 gennaio 2027",
+      "ora": "17:45",
+      "classe_raw": "4ITB",
+      "classi": [
+        "4ITB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Lunedì 18 gennaio 2027",
+      "ora": "14.00",
+      "classe_raw": "4EEC",
+      "classi": [
+        "4EEC"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Lunedì 18 gennaio 2027",
+      "ora": "14:45",
+      "classe_raw": "5EEC",
+      "classi": [
+        "5EEC"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Lunedì 18 gennaio 2027",
+      "ora": "15:30",
+      "classe_raw": "5ITB",
+      "classi": [
+        "5ITB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Lunedì 18 gennaio 2027",
+      "ora": "16:15",
+      "classe_raw": "5ITA",
+      "classi": [
+        "5ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Lunedì 18 gennaio 2027",
+      "ora": "17:00",
+      "classe_raw": "4ITA",
+      "classi": [
+        "4ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Lunedì 18 gennaio 2027",
+      "ora": "17:45",
+      "classe_raw": "3ITA",
+      "classi": [
+        "3ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Martedì 19 gennaio 2027",
+      "ora": "14.00",
+      "classe_raw": "3-4 CS",
+      "classi": [
+        "3CS",
+        "4CS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Martedì 19 gennaio 2027",
+      "ora": "14:45",
+      "classe_raw": "5CMS",
+      "classi": [
+        "5CMS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Martedì 19 gennaio 2027",
+      "ora": "15:30",
+      "classe_raw": "3-4 MS",
+      "classi": [
+        "3MS",
+        "4MS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Martedì 19 gennaio 2027",
+      "ora": "16:15",
+      "classe_raw": "3CAT",
+      "classi": [
+        "3CAT"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Martedì 19 gennaio 2027",
+      "ora": "17:00",
+      "classe_raw": "3MM",
+      "classi": [
+        "3MM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Martedì 19 gennaio 2027",
+      "ora": "17:45",
+      "classe_raw": "4MM",
+      "classi": [
+        "4MM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Gennaio 2027: Scrutini Primo periodo",
+      "giorno": "Martedì 19 gennaio 2027",
+      "ora": "18:30",
+      "classe_raw": "5MM",
+      "classi": [
+        "5MM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Venerdì 5 marzo 2027",
+      "ora": "14.00",
+      "classe_raw": "1BTA",
+      "classi": [
+        "1BTA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Venerdì 5 marzo 2027",
+      "ora": "15:00",
+      "classe_raw": "2BTA",
+      "classi": [
+        "2BTA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Venerdì 5 marzo 2027",
+      "ora": "16:00",
+      "classe_raw": "1BTB",
+      "classi": [
+        "1BTB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Venerdì 5 marzo 2027",
+      "ora": "17:00",
+      "classe_raw": "2BTB",
+      "classi": [
+        "2BTB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Venerdì 5 marzo 2027",
+      "ora": "18:00",
+      "classe_raw": "2CAT",
+      "classi": [
+        "2CAT"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Lunedì 8 marzo 2027",
+      "ora": "14.00",
+      "classe_raw": "1MMA",
+      "classi": [
+        "1MMA"
+      ],
+      "aula": ""
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Lunedì 8 marzo 2027",
+      "ora": "15:00",
+      "classe_raw": "2MMA",
+      "classi": [
+        "2MMA"
+      ],
+      "aula": ""
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Lunedì 8 marzo 2027",
+      "ora": "16:00",
+      "classe_raw": "1MMC",
+      "classi": [
+        "1MMC"
+      ],
+      "aula": ""
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Lunedì 8 marzo 2027",
+      "ora": "17:00",
+      "classe_raw": "1ITE",
+      "classi": [
+        "1ITE"
+      ],
+      "aula": ""
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Lunedì 8 marzo 2027",
+      "ora": "18:00",
+      "classe_raw": "2MME",
+      "classi": [
+        "2MME"
+      ],
+      "aula": ""
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Martedì 9 marzo 2027",
+      "ora": "14.00",
+      "classe_raw": "1ITA",
+      "classi": [
+        "1ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Martedì 9 marzo 2027",
+      "ora": "15:00",
+      "classe_raw": "2ITA",
+      "classi": [
+        "2ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Martedì 9 marzo 2027",
+      "ora": "16:00",
+      "classe_raw": "2ITB",
+      "classi": [
+        "2ITB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Martedì 9 marzo 2027",
+      "ora": "17:00",
+      "classe_raw": "3BSA",
+      "classi": [
+        "3BSA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Martedì 9 marzo 2027",
+      "ora": "18:00",
+      "classe_raw": "3BSB-AM",
+      "classi": [
+        "3BSB",
+        "3AM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Mercoledì 10 marzo 2027",
+      "ora": "14.00",
+      "classe_raw": "4BS-AM",
+      "classi": [
+        "4BS",
+        "4AM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Mercoledì 10 marzo 2027",
+      "ora": "15:00",
+      "classe_raw": "5BS-AM",
+      "classi": [
+        "5BS",
+        "5AM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Mercoledì 10 marzo 2027",
+      "ora": "16:00",
+      "classe_raw": "3MM",
+      "classi": [
+        "3MM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Mercoledì 10 marzo 2027",
+      "ora": "17:00",
+      "classe_raw": "4MM",
+      "classi": [
+        "4MM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Mercoledì 10 marzo 2027",
+      "ora": "18:00",
+      "classe_raw": "5MM",
+      "classi": [
+        "5MM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Giovedì 11 marzo 2027",
+      "ora": "14.00",
+      "classe_raw": "3ITE",
+      "classi": [
+        "3ITE"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Giovedì 11 marzo 2027",
+      "ora": "15:00",
+      "classe_raw": "4ITB",
+      "classi": [
+        "4ITB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Giovedì 11 marzo 2027",
+      "ora": "16:00",
+      "classe_raw": "3CAT",
+      "classi": [
+        "3CAT"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Giovedì 11 marzo 2027",
+      "ora": "17:00",
+      "classe_raw": "4EEC",
+      "classi": [
+        "4EEC"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Giovedì 11 marzo 2027",
+      "ora": "18:00",
+      "classe_raw": "5EEC",
+      "classi": [
+        "5EEC"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Venerdì 12 marzo 2027",
+      "ora": "14.00",
+      "classe_raw": "5ITB",
+      "classi": [
+        "5ITB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Venerdì 12 marzo 2027",
+      "ora": "15:00",
+      "classe_raw": "3ITA",
+      "classi": [
+        "3ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Venerdì 12 marzo 2027",
+      "ora": "16:00",
+      "classe_raw": "4ITA",
+      "classi": [
+        "4ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Venerdì 12 marzo 2027",
+      "ora": "17:00",
+      "classe_raw": "5ITA",
+      "classi": [
+        "5ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Lunedì 15 marzo 2027",
+      "ora": "15.00",
+      "classe_raw": "3-4 CS",
+      "classi": [
+        "3CS",
+        "4CS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Lunedì 15 marzo 2027",
+      "ora": "16:00",
+      "classe_raw": "5CMS",
+      "classi": [
+        "5CMS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Lunedì 15 marzo 2027",
+      "ora": "17:00",
+      "classe_raw": "3-4 MS",
+      "classi": [
+        "3MS",
+        "4MS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Lunedì 3 maggio 2027",
+      "ora": "14.00",
+      "classe_raw": "1BTA",
+      "classi": [
+        "1BTA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Lunedì 3 maggio 2027",
+      "ora": "15:00",
+      "classe_raw": "2BTA",
+      "classi": [
+        "2BTA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Lunedì 3 maggio 2027",
+      "ora": "16:00",
+      "classe_raw": "1BTB",
+      "classi": [
+        "1BTB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Lunedì 3 maggio 2027",
+      "ora": "17:00",
+      "classe_raw": "2BTB",
+      "classi": [
+        "2BTB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Lunedì 3 maggio 2027",
+      "ora": "18:00",
+      "classe_raw": "2CAT",
+      "classi": [
+        "2CAT"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Martedì 4 maggio 2027",
+      "ora": "14.00",
+      "classe_raw": "1MMA",
+      "classi": [
+        "1MMA"
+      ],
+      "aula": ""
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Martedì 4 maggio 2027",
+      "ora": "15:00",
+      "classe_raw": "2MMA",
+      "classi": [
+        "2MMA"
+      ],
+      "aula": ""
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Martedì 4 maggio 2027",
+      "ora": "16:00",
+      "classe_raw": "1MMC",
+      "classi": [
+        "1MMC"
+      ],
+      "aula": ""
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Martedì 4 maggio 2027",
+      "ora": "17:00",
+      "classe_raw": "1ITE",
+      "classi": [
+        "1ITE"
+      ],
+      "aula": ""
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Martedì 4 maggio 2027",
+      "ora": "18:00",
+      "classe_raw": "2MME",
+      "classi": [
+        "2MME"
+      ],
+      "aula": ""
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Mercoledì 5 maggio 2027",
+      "ora": "14.00",
+      "classe_raw": "1ITA",
+      "classi": [
+        "1ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Mercoledì 5 maggio 2027",
+      "ora": "15:00",
+      "classe_raw": "2ITA",
+      "classi": [
+        "2ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Mercoledì 5 maggio 2027",
+      "ora": "16:00",
+      "classe_raw": "2ITB",
+      "classi": [
+        "2ITB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Mercoledì 5 maggio 2027",
+      "ora": "17:00",
+      "classe_raw": "3BSA",
+      "classi": [
+        "3BSA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Mercoledì 5 maggio 2027",
+      "ora": "18:00",
+      "classe_raw": "3BSB-AM",
+      "classi": [
+        "3BSB",
+        "3AM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Giovedì 6 maggio 2027",
+      "ora": "14.00",
+      "classe_raw": "4BS-AM",
+      "classi": [
+        "4BS",
+        "4AM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Giovedì 6 maggio 2027",
+      "ora": "15:00",
+      "classe_raw": "5BS-AM",
+      "classi": [
+        "5BS",
+        "5AM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Giovedì 6 maggio 2027",
+      "ora": "16:00",
+      "classe_raw": "3MM",
+      "classi": [
+        "3MM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Giovedì 6 maggio 2027",
+      "ora": "17:00",
+      "classe_raw": "4MM",
+      "classi": [
+        "4MM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Giovedì 6 maggio 2027",
+      "ora": "18:00",
+      "classe_raw": "5MM",
+      "classi": [
+        "5MM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Venerdì 7 maggio 2027",
+      "ora": "14.00",
+      "classe_raw": "3ITE",
+      "classi": [
+        "3ITE"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Venerdì 7 maggio 2027",
+      "ora": "15:00",
+      "classe_raw": "4EEC",
+      "classi": [
+        "4EEC"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Venerdì 7 maggio 2027",
+      "ora": "16:00",
+      "classe_raw": "5EEC",
+      "classi": [
+        "5EEC"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Venerdì 7 maggio 2027",
+      "ora": "17:00",
+      "classe_raw": "4ITB",
+      "classi": [
+        "4ITB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Venerdì 7 maggio 2027",
+      "ora": "18:00",
+      "classe_raw": "5ITB",
+      "classi": [
+        "5ITB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Lunedì 10 maggio 2027",
+      "ora": "14.00",
+      "classe_raw": "3CAT",
+      "classi": [
+        "3CAT"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Lunedì 10 maggio 2027",
+      "ora": "15:00",
+      "classe_raw": "3ITA",
+      "classi": [
+        "3ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Lunedì 10 maggio 2027",
+      "ora": "16:00",
+      "classe_raw": "4ITA",
+      "classi": [
+        "4ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Lunedì 10 maggio 2027",
+      "ora": "17:00",
+      "classe_raw": "5ITA",
+      "classi": [
+        "5ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Martedì 11 maggio 2027",
+      "ora": "16.15",
+      "classe_raw": "5CMS",
+      "classi": [
+        "5CMS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Martedì 11 maggio 2027",
+      "ora": "17:15",
+      "classe_raw": "3-4 CS",
+      "classi": [
+        "3CS",
+        "4CS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Maggio 2027",
+      "giorno": "Martedì 11 maggio 2027",
+      "ora": "17:45",
+      "classe_raw": "3-4 MS",
+      "classi": [
+        "3MS",
+        "4MS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Martedì 8 giugno 2027",
+      "ora": "17:00",
+      "classe_raw": "5CMS",
+      "classi": [
+        "5CMS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Martedì 8 giugno 2027",
+      "ora": "18:00",
+      "classe_raw": "3-4CS",
+      "classi": [
+        "3CS",
+        "4CS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Martedì 8 giugno 2027",
+      "ora": "19:00",
+      "classe_raw": "3-4MS",
+      "classi": [
+        "3MS",
+        "4MS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Mercoledì 9 giugno 2027",
+      "ora": "8:00",
+      "classe_raw": "5MM",
+      "classi": [
+        "5MM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Mercoledì 9 giugno 2027",
+      "ora": "9:00",
+      "classe_raw": "5ITA",
+      "classi": [
+        "5ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Mercoledì 9 giugno 2027",
+      "ora": "10:00",
+      "classe_raw": "5ITB",
+      "classi": [
+        "5ITB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Mercoledì 9 giugno 2027",
+      "ora": "11:00",
+      "classe_raw": "5EEC",
+      "classi": [
+        "5EEC"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Mercoledì 9 giugno 2027",
+      "ora": "12:00",
+      "classe_raw": "5BS-AM",
+      "classi": [
+        "5BS",
+        "5AM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Giovedì 10 giugno 2027",
+      "ora": "8:00",
+      "classe_raw": "1ITA",
+      "classi": [
+        "1ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Giovedì 10 giugno 2027",
+      "ora": "9:00",
+      "classe_raw": "1ITE",
+      "classi": [
+        "1ITE"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Giovedì 10 giugno 2027",
+      "ora": "10:00",
+      "classe_raw": "2ITA",
+      "classi": [
+        "2ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Giovedì 10 giugno 2027",
+      "ora": "11:00",
+      "classe_raw": "2ITB",
+      "classi": [
+        "2ITB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Giovedì 10 giugno 2027",
+      "ora": "12:00",
+      "classe_raw": "2CAT",
+      "classi": [
+        "2CAT"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Giovedì 10 giugno 2027",
+      "ora": "14:00",
+      "classe_raw": "1BTA",
+      "classi": [
+        "1BTA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Giovedì 10 giugno 2027",
+      "ora": "15:00",
+      "classe_raw": "1BTB",
+      "classi": [
+        "1BTB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Giovedì 10 giugno 2027",
+      "ora": "16:00",
+      "classe_raw": "2BSA",
+      "classi": [
+        "2BSA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Giovedì 10 giugno 2027",
+      "ora": "17:00",
+      "classe_raw": "2BSB",
+      "classi": [
+        "2BSB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Giovedì 10 giugno 2027",
+      "ora": "18:00",
+      "classe_raw": "3BSB-AM",
+      "classi": [
+        "3BSB",
+        "3AM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Venerdì 11 giugno 2027",
+      "ora": "8:00",
+      "classe_raw": "1MMA",
+      "classi": [
+        "1MMA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Venerdì 11 giugno 2027",
+      "ora": "9:00",
+      "classe_raw": "1MMC",
+      "classi": [
+        "1MMC"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Venerdì 11 giugno 2027",
+      "ora": "10:00",
+      "classe_raw": "2MMA",
+      "classi": [
+        "2MMA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Venerdì 11 giugno 2027",
+      "ora": "11:00",
+      "classe_raw": "2MME",
+      "classi": [
+        "2MME"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Venerdì 11 giugno 2027",
+      "ora": "12:00",
+      "classe_raw": "3CAT",
+      "classi": [
+        "3CAT"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Venerdì 11 giugno 2027",
+      "ora": "14:00",
+      "classe_raw": "4EEC",
+      "classi": [
+        "4EEC"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Venerdì 11 giugno 2027",
+      "ora": "15:00",
+      "classe_raw": "3BSA",
+      "classi": [
+        "3BSA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Venerdì 11 giugno 2027",
+      "ora": "16:00",
+      "classe_raw": "4BSA-AM",
+      "classi": [
+        "4BSA",
+        "4AM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Venerdì 11 giugno 2027",
+      "ora": "17:00",
+      "classe_raw": "3MM",
+      "classi": [
+        "3MM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Venerdì 11 giugno 2027",
+      "ora": "18:00",
+      "classe_raw": "4MM",
+      "classi": [
+        "4MM"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Sabato 12 giugno 2027",
+      "ora": "8:00",
+      "classe_raw": "3ITA",
+      "classi": [
+        "3ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Sabato 12 giugno 2027",
+      "ora": "9:00",
+      "classe_raw": "4ITA",
+      "classi": [
+        "4ITA"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Sabato 12 giugno 2027",
+      "ora": "10:00",
+      "classe_raw": "3ITE",
+      "classi": [
+        "3ITE"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Giugno 2027: Scrutini secondo periodo",
+      "giorno": "Sabato 12 giugno 2027",
+      "ora": "11:00",
+      "classe_raw": "4ITB",
+      "classi": [
+        "4ITB"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Martedì 13 ottobre 2026",
+      "ora": "14.30",
+      "classe_raw": "1IASS",
+      "classi": [
+        "1IASS"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Martedì 13 ottobre 2026",
+      "ora": "15:15",
+      "classe_raw": "2IAMI",
+      "classi": [
+        "2IAMI"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Martedì 13 ottobre 2026",
+      "ora": "16:00",
+      "classe_raw": "4IAMI",
+      "classi": [
+        "4IAMI"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Martedì 13 ottobre 2026",
+      "ora": "16:45",
+      "classe_raw": "5IAMI",
+      "classi": [
+        "5IAMI"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Mercoledì 14 ottobre 2026",
+      "ora": "14.30",
+      "classe_raw": "2SSAS",
+      "classi": [
+        "2SSAS"
+      ],
+      "aula": "LIM1"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Mercoledì 14 ottobre 2026",
+      "ora": "15:15",
+      "classe_raw": "3IASS",
+      "classi": [
+        "3IASS"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Mercoledì 14 ottobre 2026",
+      "ora": "16:00",
+      "classe_raw": "4SSAS",
+      "classi": [
+        "4SSAS"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Mercoledì 14 ottobre 2026",
+      "ora": "16:45",
+      "classe_raw": "5SSAS",
+      "classi": [
+        "5SSAS"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Mercoledì 11 novembre\n2026",
+      "ora": "14:30",
+      "classe_raw": "1IASS",
+      "classi": [
+        "1IASS"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Mercoledì 11 novembre\n2026",
+      "ora": "15:30",
+      "classe_raw": "2IAMI",
+      "classi": [
+        "2IAMI"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Mercoledì 11 novembre\n2026",
+      "ora": "16:30",
+      "classe_raw": "4IAMI",
+      "classi": [
+        "4IAMI"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Mercoledì 11 novembre\n2026",
+      "ora": "17:30",
+      "classe_raw": "5IAMI",
+      "classi": [
+        "5IAMI"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Giovedì 12 novembre 2026",
+      "ora": "14:30",
+      "classe_raw": "2SSAS",
+      "classi": [
+        "2SSAS"
+      ],
+      "aula": "LIM1"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Giovedì 12 novembre 2026",
+      "ora": "15:30",
+      "classe_raw": "3IASS",
+      "classi": [
+        "3IASS"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Giovedì 12 novembre 2026",
+      "ora": "16:30",
+      "classe_raw": "4SSAS",
+      "classi": [
+        "4SSAS"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Giovedì 12 novembre 2026",
+      "ora": "17:30",
+      "classe_raw": "5SSAS",
+      "classi": [
+        "5SSAS"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Giovedì 7 gennaio 2027",
+      "ora": "14:30",
+      "classe_raw": "2IAMI",
+      "classi": [
+        "2IAMI"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Giovedì 7 gennaio 2027",
+      "ora": "15:30",
+      "classe_raw": "3IASS",
+      "classi": [
+        "3IASS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Giovedì 7 gennaio 2027",
+      "ora": "16:30",
+      "classe_raw": "4IAMI",
+      "classi": [
+        "4IAMI"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Giovedì 7 gennaio 2027",
+      "ora": "17:30",
+      "classe_raw": "5IAMI",
+      "classi": [
+        "5IAMI"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Venerdì 8 gennaio 2027",
+      "ora": "14:30",
+      "classe_raw": "1IASS",
+      "classi": [
+        "1IASS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Venerdì 8 gennaio 2027",
+      "ora": "15:30",
+      "classe_raw": "2SSAS",
+      "classi": [
+        "2SSAS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Venerdì 8 gennaio 2027",
+      "ora": "16:30",
+      "classe_raw": "4SSAS",
+      "classi": [
+        "4SSAS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Ottobre 2026",
+      "giorno": "Venerdì 8 gennaio 2027",
+      "ora": "17:30",
+      "classe_raw": "5SSAS",
+      "classi": [
+        "5SSAS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Lunedì 1 marzo 2027",
+      "ora": "14:30",
+      "classe_raw": "2SSAS",
+      "classi": [
+        "2SSAS"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Lunedì 1 marzo 2027",
+      "ora": "15:30",
+      "classe_raw": "3IASS",
+      "classi": [
+        "3IASS"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Lunedì 1 marzo 2027",
+      "ora": "16:30",
+      "classe_raw": "4SSAS",
+      "classi": [
+        "4SSAS"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Lunedì 1 marzo 2027",
+      "ora": "17:30",
+      "classe_raw": "5SSAS",
+      "classi": [
+        "5SSAS"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Martedì 2 marzo 2027",
+      "ora": "14:30",
+      "classe_raw": "1IASS",
+      "classi": [
+        "1IASS"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Martedì 2 marzo 2027",
+      "ora": "15:30",
+      "classe_raw": "2IAMI",
+      "classi": [
+        "2IAMI"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Martedì 2 marzo 2027",
+      "ora": "16:30",
+      "classe_raw": "4IAMI",
+      "classi": [
+        "4IAMI"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Martedì 2 marzo 2027",
+      "ora": "17:30",
+      "classe_raw": "5IAMI",
+      "classi": [
+        "5IAMI"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Martedì 11maggio 2027",
+      "ora": "14:00",
+      "classe_raw": "5IAMI",
+      "classi": [
+        "5IAMI"
+      ],
+      "aula": "LIM1"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Martedì 11maggio 2027",
+      "ora": "15:00",
+      "classe_raw": "5SSAS",
+      "classi": [
+        "5SSAS"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Lunedì 17 maggio 2027",
+      "ora": "14:00",
+      "classe_raw": "1IASS",
+      "classi": [
+        "1IASS"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Lunedì 17 maggio 2027",
+      "ora": "15:00",
+      "classe_raw": "2IAMI",
+      "classi": [
+        "2IAMI"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Lunedì 17 maggio 2027",
+      "ora": "16:00",
+      "classe_raw": "2SSAS",
+      "classi": [
+        "2SSAS"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Lunedì 17 maggio 2027",
+      "ora": "17:00",
+      "classe_raw": "3IASS",
+      "classi": [
+        "3IASS"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Lunedì 17 maggio 2027",
+      "ora": "18:00",
+      "classe_raw": "4SSAS",
+      "classi": [
+        "4SSAS"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Lunedì 17 maggio 2027",
+      "ora": "18:45",
+      "classe_raw": "4IAMI",
+      "classi": [
+        "4IAMI"
+      ],
+      "aula": "LIM 1"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Martedì 8 giugno 2027",
+      "ora": "15:00",
+      "classe_raw": "5^ IAMI",
+      "classi": [
+        "5IAMI"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Martedì 8 giugno 2027",
+      "ora": "16:00",
+      "classe_raw": "5^ SSAS",
+      "classi": [
+        "5SSAS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Mercoledì 9 giugno 2027",
+      "ora": "14:00",
+      "classe_raw": "1IASS",
+      "classi": [
+        "1IASS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Mercoledì 9 giugno 2027",
+      "ora": "15:00",
+      "classe_raw": "2IAMI",
+      "classi": [
+        "2IAMI"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Mercoledì 9 giugno 2027",
+      "ora": "16:00",
+      "classe_raw": "3IASS",
+      "classi": [
+        "3IASS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Mercoledì 9 giugno 2027",
+      "ora": "17:00",
+      "classe_raw": "4IAMI",
+      "classi": [
+        "4IAMI"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Mercoledì 9 giugno 2027",
+      "ora": "18:00",
+      "classe_raw": "2SSAS",
+      "classi": [
+        "2SSAS"
+      ],
+      "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Marzo 2027",
+      "giorno": "Mercoledì 9 giugno 2027",
+      "ora": "19:00",
+      "classe_raw": "4SSAS",
+      "classi": [
+        "4SSAS"
+      ],
+      "aula": "Lab. Multimediale"
+    }
+  ],
+  "colloqui_generali": [
+    {
+      "periodo": "I periodo",
+      "giorno": "Martedì",
+      "data": "01.12.26",
+      "sede": "Colotti",
+      "classi": "tutte"
+    },
+    {
+      "periodo": "I periodo",
+      "giorno": "Mercoledì",
+      "data": "02.12.26",
+      "sede": "Rizzarda",
+      "classi": "tutte"
+    },
+    {
+      "periodo": "I periodo",
+      "giorno": "Giovedì",
+      "data": "03.12.26",
+      "sede": "Negrelli",
+      "classi": "biennio"
+    },
+    {
+      "periodo": "I periodo",
+      "giorno": "Venerdì",
+      "data": "04.12.26",
+      "sede": "Negrelli",
+      "classi": "triennio"
+    },
+    {
+      "periodo": "II periodo",
+      "giorno": "Lunedì",
+      "data": "05.04.27",
+      "sede": "Colotti",
+      "classi": "tutte"
+    },
+    {
+      "periodo": "II periodo",
+      "giorno": "Martedì",
+      "data": "06.04.27",
+      "sede": "Negrelli",
+      "classi": "triennio"
+    },
+    {
+      "periodo": "II periodo",
+      "giorno": "Mercoledì",
+      "data": "07.04.27",
+      "sede": "Negrelli",
+      "classi": "biennio"
+    },
+    {
+      "periodo": "II periodo",
+      "giorno": "Giovedì",
+      "data": "08.04.27",
+      "sede": "Rizzarda",
+      "classi": "tutte"
+    }
+  ]
+}
