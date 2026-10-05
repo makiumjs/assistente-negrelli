@@ -12,6 +12,7 @@ import unicodedata
 from collections import defaultdict
 
 import pdfplumber
+from parse_attivita import parse_attivita_pdf
 
 def find_pdf_path(filename):
     candidates = [
@@ -518,6 +519,14 @@ def run():
     aule = costruisci_aule(classi, docenti)
     libere = aule_libere(aule)
 
+    print("Lettura Piano Attività PDF...")
+    try:
+        attivita = parse_attivita_pdf()
+        print(f"  ✓ Attività caricate: {len(attivita.get('consigli_classe_dettaglio', []))} consigli di classe, {len(attivita.get('attivita_istituto', []))} attività istituto.")
+    except Exception as e:
+        print(f"  ⚠ Avviso: impossibile caricare il Piano Attività ({e})")
+        attivita = {}
+
     dataset = {
         "meta": {
             "istituto": "ITIS Negrelli Feltre",
@@ -537,6 +546,7 @@ def run():
         "classi": dict(sorted(classi.items())),
         "aule": aule,
         "aule_libere": libere,
+        "attivita": attivita,
     }
 
     os.makedirs(os.path.dirname(OUT_JSON), exist_ok=True)
