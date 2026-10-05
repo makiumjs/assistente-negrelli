@@ -103,4 +103,35 @@ r = ask("quanto fa due più due");
 assert.equal(r.p.intent, "non_trovato");
 console.log("✓ Non trovato:", r.a.speech);
 
+console.log("\n=== 6. Test Piano Attività ===");
+r = ask("quando sono i consigli di classe della 4ITA");
+assert.equal(r.p.intent, "attivita");
+assert.equal(r.p.subType, "consigli_classe");
+assert.ok(r.a.title.includes("4ITA"));
+console.log("✓ Consigli di Classe 4ITA:", r.a.speech);
+
+r = ask("quando è il collegio docenti");
+assert.equal(r.p.intent, "attivita");
+assert.equal(r.p.subType, "collegio");
+assert.equal(r.a.title, "Collegio Docenti");
+console.log("✓ Collegio Docenti:", r.a.speech);
+
+r = ask("quando ci sono i colloqui generali");
+assert.equal(r.p.intent, "attivita");
+assert.equal(r.p.subType, "colloqui");
+assert.ok(r.a.title.includes("Colloqui"));
+console.log("✓ Colloqui Generali:", r.a.speech);
+
+r = ask("quali sono le attività di ottobre");
+assert.equal(r.p.intent, "attivita");
+assert.equal(r.p.mese, "ottobre");
+assert.ok(r.a.title.includes("Ottobre"));
+console.log("✓ Attività Ottobre:", r.a.speech);
+
+r = ask("quando sono gli scrutini della 4ITA");
+assert.equal(r.p.intent, "attivita");
+assert.equal(r.p.subType, "scrutini");
+assert.ok(r.a.title.includes("4ITA"));
+console.log("✓ Scrutini 4ITA:", r.a.speech);
+
 console.log("\n TUTTI I TEST SONO PASSATI CON SUCCESSO! ");
