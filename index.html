@@ -855,29 +855,25 @@
         logoTexture.needsUpdate = true;
       }
 
-      // Badge Gruppo ITIS Negrelli sul petto
+      // Badge Emblema ITIS Negrelli sul petto (Cilindro 3D non compenetrato)
       const badgeGroup = new THREE.Group();
-      badgeGroup.position.set(0, -0.4, 0.44);
+      badgeGroup.position.set(0, -0.4, 0.52);
 
-      const badgeBackMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.8, roughness: 0.2 });
-      const badgeBackGeo = new THREE.CylinderGeometry(0.30, 0.30, 0.03, 32);
-      const badgeBack = new THREE.Mesh(badgeBackGeo, badgeBackMat);
-      badgeBack.rotation.x = Math.PI / 2;
-      badgeGroup.add(badgeBack);
-
-      const badgeFrontGeo = new THREE.PlaneGeometry(0.58, 0.58);
-      const badgeFrontMat = new THREE.MeshStandardMaterial({
+      const badgeGeo = new THREE.CylinderGeometry(0.26, 0.26, 0.04, 64);
+      const badgeSideMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, metalness: 0.8, roughness: 0.2 });
+      const badgeFaceMat = new THREE.MeshStandardMaterial({
         map: logoTexture,
-        transparent: true,
-        roughness: 0.2,
-        metalness: 0.1,
         emissiveMap: logoTexture,
         emissive: 0xffffff,
-        emissiveIntensity: 0.4
+        emissiveIntensity: 0.35,
+        roughness: 0.2,
+        metalness: 0.1
       });
-      const badgeFront = new THREE.Mesh(badgeFrontGeo, badgeFrontMat);
-      badgeFront.position.z = 0.02;
-      badgeGroup.add(badgeFront);
+
+      // Materiali cilindro: [lato, cappuccio_superiore, cappuccio_inferiore]
+      const badgeMesh = new THREE.Mesh(badgeGeo, [badgeSideMat, badgeFaceMat, badgeFaceMat]);
+      badgeMesh.rotation.x = Math.PI / 2;
+      badgeGroup.add(badgeMesh);
 
       robotGroup.add(badgeGroup);
 
