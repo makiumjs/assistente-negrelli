@@ -1033,26 +1033,27 @@
       rightEar.position.set(0.48, 0.05, 0);
       headGroup.add(rightEar);
 
-      // Badge 3D Punto Esclamativo (!) per Reazione Comando
+      // Badge 3D Punto Esclamativo (!) per Reazione Comando (Posizionato a destra ad altezza testa, più spesso)
       const exclGroup = new THREE.Group();
-      exclGroup.position.set(0, 1.15, 0);
+      exclGroup.position.set(0.62, 0.40, 0.25);
       exclGroup.scale.set(0, 0, 0);
 
       const exclMat = new THREE.MeshStandardMaterial({
         color: 0x38bdf8,
-        emissive: 0x38bdf8,
-        emissiveIntensity: 2.2,
+        emissive: 0x0284c7,
+        emissiveIntensity: 2.8,
         roughness: 0.1
       });
 
-      const exclStemGeo = new THREE.CylinderGeometry(0.06, 0.03, 0.28, 16);
+      // Stelo e Punto più spessi e d'impatto
+      const exclStemGeo = new THREE.CylinderGeometry(0.12, 0.07, 0.38, 16);
       const exclStem = new THREE.Mesh(exclStemGeo, exclMat);
-      exclStem.position.y = 0.16;
+      exclStem.position.y = 0.22;
       exclGroup.add(exclStem);
 
-      const exclDotGeo = new THREE.SphereGeometry(0.055, 16, 16);
+      const exclDotGeo = new THREE.SphereGeometry(0.09, 16, 16);
       const exclDot = new THREE.Mesh(exclDotGeo, exclMat);
-      exclDot.position.y = -0.04;
+      exclDot.position.y = -0.06;
       exclGroup.add(exclDot);
 
       robotGroup.add(exclGroup);
@@ -1086,10 +1087,10 @@
         let floatY = Math.sin(time * 2.0) * 0.08;
         let spinY = Math.sin(time * 0.8) * 0.05;
 
-        // Reazione al Comando ("Preso il comando": Spin 360° + Salto + Pop '!')
+        // Reazione al Comando ("Preso il comando": Spin 360° + Salto + Pop '!' a destra)
         if (commandAnimationTime >= 0) {
           commandAnimationTime += delta;
-          const duration = 1.5;
+          const duration = 3.0; // Durata raddoppiata (3 secondi)
           if (commandAnimationTime <= duration) {
             const progress = commandAnimationTime / duration;
             const easeOut = 1 - Math.pow(1 - progress, 3);
@@ -1098,13 +1099,13 @@
 
             // Pop Effetto Elastico Punto Esclamativo (!)
             let exclScale = 0;
-            if (progress < 0.25) {
-              const p = progress / 0.25;
+            if (progress < 0.20) {
+              const p = progress / 0.20;
               exclScale = Math.sin(p * Math.PI * 0.5) * 1.35;
-            } else if (progress < 0.75) {
-              exclScale = 1.0 + Math.sin((progress - 0.25) * Math.PI * 4.0) * 0.12;
+            } else if (progress < 0.80) {
+              exclScale = 1.0 + Math.sin((progress - 0.20) * Math.PI * 4.0) * 0.12;
             } else {
-              const p = (1 - progress) / 0.25;
+              const p = (1 - progress) / 0.20;
               exclScale = p * 1.0;
             }
             exclGroup.scale.setScalar(Math.max(0, exclScale));
