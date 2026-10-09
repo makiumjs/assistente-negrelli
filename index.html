@@ -684,29 +684,33 @@
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       container.replaceChildren(renderer.domElement);
 
-      // Illuminazione Ambientale & Punti Luce Neox
-      const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+      // Illuminazione Ambientale & Punti Luce Studiati per Colori Chiari e Brillanti
+      const ambientLight = new THREE.AmbientLight(0xffffff, 2.2);
       scene.add(ambientLight);
 
-      const dirLight = new THREE.DirectionalLight(0x38bdf8, 2.5);
-      dirLight.position.set(2, 4, 3);
-      scene.add(dirLight);
+      const mainLight = new THREE.DirectionalLight(0xffffff, 2.8);
+      mainLight.position.set(3, 5, 4);
+      scene.add(mainLight);
 
-      const rimLight = new THREE.DirectionalLight(0x818cf8, 2.0);
-      rimLight.position.set(-3, 2, -2);
-      scene.add(rimLight);
+      const fillLight = new THREE.DirectionalLight(0xe0f2fe, 1.8);
+      fillLight.position.set(-3, 2, 3);
+      scene.add(fillLight);
+
+      const backLight = new THREE.DirectionalLight(0xbae6fd, 1.2);
+      backLight.position.set(0, -3, -2);
+      scene.add(backLight);
 
       // Gruppo Principale Robot
       const robotGroup = new THREE.Group();
       scene.add(robotGroup);
 
-      // Materiali
-      const bodyMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.8, roughness: 0.2 });
-      const silverMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.9, roughness: 0.15 });
-      const visorMat = new THREE.MeshStandardMaterial({ color: 0x020617, roughness: 0.1 });
-      const ledMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, emissive: 0x38bdf8, emissiveIntensity: 1.5 });
-      const mouthMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, emissive: 0x0284c7, emissiveIntensity: 1.2 });
-      const badgeMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, emissive: 0x0369a1, emissiveIntensity: 1.0 });
+      // Materiali Chiari e Moderni (Ceramica Bianca, Argento Lucido, Accenti Azzurro Negrelli)
+      const bodyMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, metalness: 0.15, roughness: 0.2 });
+      const silverMat = new THREE.MeshStandardMaterial({ color: 0xd1d5db, metalness: 0.75, roughness: 0.2 });
+      const visorMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.1 });
+      const ledMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, emissive: 0x38bdf8, emissiveIntensity: 2.0 });
+      const mouthMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, emissive: 0x38bdf8, emissiveIntensity: 1.8 });
+      const badgeMat = new THREE.MeshStandardMaterial({ color: 0x2563eb, emissive: 0x1d4ed8, emissiveIntensity: 1.0 });
 
       // Torso
       const torsoGeo = new THREE.CylinderGeometry(0.55, 0.45, 0.8, 32);
