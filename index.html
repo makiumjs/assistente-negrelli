@@ -666,6 +666,9 @@
         speak("Il database dell'orario non è ancora disponibile.");
         return;
       }
+      if (typeof window.triggerNegrelliBotCommand === 'function') {
+        window.triggerNegrelliBotCommand();
+      }
       const parsed = parseQuery(text, orarioIdx, { now: new Date(), me: myTeacherName });
       const a = answer(parsed, orarioIdx);
       renderAnswer(a);
@@ -951,11 +954,44 @@
       rightEar.position.set(0.48, 0.05, 0);
       headGroup.add(rightEar);
 
-      // Animazioni
+      // Badge 3D Punto Esclamativo (!) per Reazione Comando
+      const exclGroup = new THREE.Group();
+      exclGroup.position.set(0, 1.15, 0);
+      exclGroup.scale.set(0, 0, 0);
+
+      const exclMat = new THREE.MeshStandardMaterial({
+        color: 0x38bdf8,
+        emissive: 0x38bdf8,
+        emissiveIntensity: 2.2,
+        roughness: 0.1
+      });
+
+      const exclStemGeo = new THREE.CylinderGeometry(0.06, 0.03, 0.28, 16);
+      const exclStem = new THREE.Mesh(exclStemGeo, exclMat);
+      exclStem.position.y = 0.16;
+      exclGroup.add(exclStem);
+
+      const exclDotGeo = new THREE.SphereGeometry(0.055, 16, 16);
+      const exclDot = new THREE.Mesh(exclDotGeo, exclMat);
+      exclDot.position.y = -0.04;
+      exclGroup.add(exclDot);
+
+      robotGroup.add(exclGroup);
+
+      // Gestore Animazioni & Reazione Comandi
       let clock = new THREE.Clock();
       let mouseX = 0, mouseY = 0;
       let targetMouseX = 0, targetMouseY = 0;
-      let blinkTimer = 0;
+      let winkTimer = 0;
+      let nextWinkInterval = 3.5 + Math.random() * 4.0;
+      let isWinking = false;
+      let commandAnimationTime = -1;
+
+      window.triggerNegrelliBotCommand = function() {
+        commandAnimationTime = 0;
+        isWinking = true;
+        winkTimer = 0;
+      };
 
       window.addEventListener('mousemove', (e) => {
         targetMouseX = (e.clientX / window.innerWidth - 0.5) * 0.8;
@@ -964,27 +1000,76 @@
 
       function animate() {
         requestAnimationFrame(animate);
+        const delta = clock.getDelta();
         const time = clock.getElapsedTime();
 
-        // Fluttuazione Robot (Sinusoidale)
-        robotGroup.position.y = Math.sin(time * 2.0) * 0.08;
-        robotGroup.rotation.y = Math.sin(time * 0.8) * 0.05;
+        // Fluttuazione Robot & Base Rotation
+        let floatY = Math.sin(time * 2.0) * 0.08;
+        let spinY = Math.sin(time * 0.8) * 0.05;
 
-        // Inseguimento Mouse
+        // Reazione al Comando ("Preso il comando": Spin 360° + Salto + Pop '!')
+        if (commandAnimationTime >= 0) {
+          commandAnimationTime += delta;
+          const duration = 1.5;
+          if (commandAnimationTime <= duration) {
+            const progress = commandAnimationTime / duration;
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+            spinY += easeOut * Math.PI * 2.0;
+            floatY += Math.sin(progress * Math.PI) * 0.24;
+
+            // Pop Effetto Elastico Punto Esclamativo (!)
+            let exclScale = 0;
+            if (progress < 0.25) {
+              const p = progress / 0.25;
+              exclScale = Math.sin(p * Math.PI * 0.5) * 1.35;
+            } else if (progress < 0.75) {
+              exclScale = 1.0 + Math.sin((progress - 0.25) * Math.PI * 4.0) * 0.12;
+            } else {
+              const p = (1 - progress) / 0.25;
+              exclScale = p * 1.0;
+            }
+            exclGroup.scale.setScalar(Math.max(0, exclScale));
+          } else {
+            commandAnimationTime = -1;
+            exclGroup.scale.set(0, 0, 0);
+          }
+        } else {
+          exclGroup.scale.set(0, 0, 0);
+        }
+
+        robotGroup.position.y = floatY;
+        robotGroup.rotation.y = spinY;
+
+        // Inseguimento Sguardo Mouse
         mouseX += (targetMouseX - mouseX) * 0.08;
         mouseY += (targetMouseY - mouseY) * 0.08;
         headGroup.rotation.y = mouseX;
         headGroup.rotation.x = mouseY;
 
-        // Eyelid Blink (Battito Ciglia casuale)
-        blinkTimer += 0.016;
-        if (blinkTimer > 3.5) {
-          leftEye.scale.y = 0.1;
-          rightEye.scale.y = 0.1;
-          if (blinkTimer > 3.7) {
-            leftEye.scale.y = 1;
-            rightEye.scale.y = 1;
-            blinkTimer = 0;
+        // Animazione Occhiolino (Wink) & Battito Ciglia (Blink)
+        winkTimer += delta;
+
+        if (isWinking) {
+          rightEye.scale.y = 0.08; // Occhiolino destro chiuso
+          leftEye.scale.y = 1.0;   // Occhio sinistro aperto
+          if (winkTimer > 0.45) {
+            isWinking = false;
+            winkTimer = 0;
+            rightEye.scale.y = 1.0;
+          }
+        } else {
+          if (winkTimer > nextWinkInterval) {
+            leftEye.scale.y = 0.1;
+            rightEye.scale.y = 0.1;
+            if (winkTimer > nextWinkInterval + 0.18) {
+              leftEye.scale.y = 1.0;
+              rightEye.scale.y = 1.0;
+              winkTimer = 0;
+              nextWinkInterval = 3.5 + Math.random() * 4.5;
+            }
+          } else {
+            leftEye.scale.y = 1.0;
+            rightEye.scale.y = 1.0;
           }
         }
 
