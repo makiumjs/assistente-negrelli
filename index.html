@@ -427,7 +427,7 @@
           if (resFallback.ok) {
             const jsonFallback = await resFallback.json();
             orarioIdx = buildIndex({
-              meta: { ore: [{ ora: 1, inizio: "8:00" }, { ora: 2, inizio: "8:55" }, { ora: 3, inizio: "9:50" }, { ora: 4, inizio: "11:00" }, { ora: 5, inizio: "12:00" }] },
+              meta: { ore: [{ ora: 1, inizio: "7:50" }, { ora: 2, inizio: "8:45" }, { ora: 3, inizio: "9:40" }, { ora: 4, inizio: "11:00" }, { ora: 5, inizio: "11:55" }, { ora: 6, inizio: "12:50" }] },
               docenti: Object.fromEntries(Object.entries(jsonFallback.docenti || {}).map(([k, v]) => [k, { nome: k, senza_nome: false, orario: v }])),
               classi: {},
               aule: jsonFallback.aule || {},

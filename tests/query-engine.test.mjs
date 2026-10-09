@@ -55,17 +55,19 @@ assert.ok(r.a.speech.includes("quinta ora"));
 assert.ok(r.a.speech.includes("disposizione"));
 console.log("✓ Cassarino lunedì (3ª-4ª ora 3ITA + 5ª disp):", r.a.speech);
 
-r = ask("cosa ha info 5 giovedì");
+r = ask("orario cattedra ele 4 lunedì");
 assert.equal(r.p.intent, "docente");
-assert.equal(r.p.docente.nome, "_info 5");
-assert.equal(r.p.day, "giovedi");
-console.log("✓ Placeholder _info 5:", r.a.speech);
-
-r = ask("orario cattedra ele 2 lunedì");
-assert.equal(r.p.intent, "docente");
-assert.equal(r.p.docente.nome, "_ele 2");
+assert.equal(r.p.docente.nome, "_ele 4");
 assert.equal(r.p.day, "lunedi");
-console.log("✓ Placeholder _ele 2:", r.a.speech);
+console.log("✓ Placeholder _ele 4:", r.a.speech);
+
+r = ask("cosa ha Curtolo lunedì alla sesta ora");
+assert.equal(r.p.intent, "docente");
+assert.equal(r.p.hour, 6);
+assert.equal(r.p.day, "lunedi");
+assert.ok(r.a.speech.includes("sesta ora"));
+assert.ok(r.a.speech.includes("Aula 115"));
+console.log("✓ Curtolo 6ª ora:", r.a.speech);
 
 console.log("\n=== 3. Test Query Aule Libere ===");
 r = ask("Quali laboratori sono liberi mercoledì alla 2ª ora?");

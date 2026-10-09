@@ -34,11 +34,12 @@ OUT_REPORT = "data/report_anomalie.json"
 GIORNI = ["lunedi", "martedi", "mercoledi", "giovedi", "venerdi", "sabato"]
 
 ORE_INFO = [
-    {"ora": 1, "inizio": "8:00"},
-    {"ora": 2, "inizio": "8:55"},
-    {"ora": 3, "inizio": "9:50"},
+    {"ora": 1, "inizio": "7:50"},
+    {"ora": 2, "inizio": "8:45"},
+    {"ora": 3, "inizio": "9:40"},
     {"ora": 4, "inizio": "11:00"},
-    {"ora": 5, "inizio": "12:00"},
+    {"ora": 5, "inizio": "11:55"},
+    {"ora": 6, "inizio": "12:50"},
 ]
 ORE_NUMS = [o["ora"] for o in ORE_INFO]
 
@@ -126,9 +127,17 @@ def extract_grid_tables(pdf_path):
                     continue
                 header_raw = lines[0]
 
-                is_bottom = t.bbox[1] > 410
-                h_start = 461.67 if is_bottom else 66.89
-                h_step = 67.08
+                # Coordinate spaziali dinamiche delle righe e delle colonne
+                h_lines = sorted(set([round(c[1], 1) for r in t.rows for c in r.cells if c] + [round(c[3], 1) for r in t.rows for c in r.cells if c]))
+                v_lines = sorted(set([round(c[0], 1) for r in t.rows for c in r.cells if c] + [round(c[2], 1) for r in t.rows for c in r.cells if c]))
+
+                if len(h_lines) < 2 or len(v_lines) < 2:
+                    continue
+
+                h_start = h_lines[1]
+                h_step = (h_lines[-1] - h_start) / 6.0
+                v_start = v_lines[1]
+                v_step = (v_lines[-1] - v_start) / 6.0
 
                 unique_cells = set()
                 for r in t.rows:
@@ -139,18 +148,18 @@ def extract_grid_tables(pdf_path):
                 grid = {g: {} for g in GIORNI}
                 for cell in sorted(unique_cells, key=lambda c: (c[1], c[0])):
                     x0, y0, x1, y1 = cell
-                    if x0 < 50:
+                    if x0 < v_start - 5:
                         continue  # colonna numeri ore
-                    if y0 < h_start - 10:
+                    if y0 < h_start - 5:
                         continue  # riga di intestazione
-                    col_idx = int(round((x0 - 56.51) / 84.88))
+                    col_idx = int(round((x0 - v_start) / v_step))
                     if not (0 <= col_idx < len(GIORNI)):
                         continue
                     giorno = GIORNI[col_idx]
                     ora_start = int(round((y0 - h_start) / h_step)) + 1
                     ora_end = int(round((y1 - h_start) / h_step))
-                    ora_start = max(1, min(5, ora_start))
-                    ora_end = max(1, min(5, ora_end))
+                    ora_start = max(1, min(6, ora_start))
+                    ora_end = max(1, min(6, ora_end))
                     if ora_start > ora_end:
                         continue
 
@@ -194,18 +203,21 @@ def parse_classi(report):
                 materia = lines[0]
                 aula = ""
                 articolazione = ""
+                docenti_cell = []
 
                 for l in lines[1:]:
                     if RE_AULA.search(l):
                         aula = l
-                    else:
+                    elif re.search(r"\[.*?\]", l):
                         articolazione = l
+                    else:
+                        docenti_cell.extend([d.strip() for d in l.split(",") if d.strip()])
 
                 sched[giorno][ora] = {
                     "materia": materia,
                     "aula": norm_aula(aula) or None,
                     "articolazione": articolazione,
-                    "docenti": [],
+                    "docenti": docenti_cell,
                 }
 
     return out, periodo
@@ -230,14 +242,21 @@ def parse_docenti(report):
             report["docenti_tabelle_ignorate"].append(f"Pagina {page_idx}: nome docente nullo da '{header_raw}'")
             continue
 
+        if nome == "Meneguz":
+            if any("chimica" in txt.lower() for ore in grid.values() for txt in ore.values()):
+                nome = "Meneguz (Chimica)"
+            else:
+                nome = "Meneguz (Scienze)"
+
         sched = out.setdefault(nome, {g: {} for g in GIORNI})
 
         for giorno, ore in grid.items():
             for ora, cell_text in ore.items():
-                if "DISPOSIZIONE" in cell_text.upper():
+                is_disp = "DISPOSIZIONE" in cell_text.upper() or "POTENZIAMENTO" in cell_text.upper()
+                if is_disp:
                     aula = ""
                     for l in cell_text.split("\n"):
-                        if RE_AULA.search(l):
+                        if RE_AULA.search(l) or "POT-DISP" in l.upper():
                             aula = l.strip()
                     sched[giorno][ora] = {
                         "tipo": "disposizione",
@@ -349,9 +368,15 @@ def riconcilia(classi_raw, docenti_raw, report):
         classi[cid] = {g: {} for g in GIORNI}
         for g, ore in sched.items():
             for ora, s in ore.items():
+                docenti_iniziali = []
+                for d in s.get("docenti", []):
+                    d_clean = clean_name(d)
+                    if d_clean == "Meneguz":
+                        d_clean = "Meneguz (Chimica)" if "chimica" in s["materia"].lower() else "Meneguz (Scienze)"
+                    docenti_iniziali.append(canon(d_clean))
                 classi[cid][g][ora] = {
                     "materia": s["materia"],
-                    "docenti": [],
+                    "docenti": docenti_iniziali,
                     "aula": s["aula"],
                     "articolazione": s.get("articolazione", ""),
                 }
@@ -513,7 +538,7 @@ def run():
     print(f"Lettura Orario Docenti: {PDF_DOCENTI}")
     docenti_raw, periodo_doc = parse_docenti(report)
 
-    periodo = periodo_doc or periodo_cls or "dal 28 settembre 2026"
+    periodo = periodo_doc or periodo_cls or "dal 12 ottobre 2026"
 
     classi, docenti = riconcilia(classi_raw, docenti_raw, report)
     aule = costruisci_aule(classi, docenti)
