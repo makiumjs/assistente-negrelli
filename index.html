@@ -40,7 +40,7 @@
       position: relative;
     }
 
-    /* Pannello Avatar 3D (Sinistra / Alto) */
+    /* Pannello Mascotte 3D (Sinistra / Alto) */
     #avatar-panel {
       flex: 1.1;
       position: relative;
@@ -56,14 +56,14 @@
       top: -10%; left: -10%;
       width: 120%; height: 120%;
       background: url('./public/img/sfondo.jpg') center/cover no-repeat;
-      filter: blur(12px) brightness(0.45);
+      filter: blur(12px) brightness(0.4);
       z-index: 1;
     }
 
     .vignette-overlay {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: radial-gradient(circle at center, transparent 40%, rgba(9, 11, 16, 0.8) 100%);
+      background: radial-gradient(circle at center, transparent 35%, rgba(9, 11, 16, 0.85) 100%);
       z-index: 2;
     }
 
@@ -270,7 +270,7 @@
       margin-top: 2px;
     }
 
-    /* Barra Input Fisso in Basso con Controllo Audio & Microfono */
+    /* Barra Input Fisso in Basso */
     #ui-bar {
       flex-shrink: 0;
       width: 100%;
@@ -374,8 +374,7 @@
     {
       "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
-        "talkinghead": "https://cdn.jsdelivr.net/gh/met4citizen/TalkingHead@1.1.0/modules/talkinghead.mjs"
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
       }
     }
   </script>
@@ -418,7 +417,7 @@
   </div>
 
   <script type="module">
-    import { TalkingHead } from 'talkinghead';
+    import * as THREE from 'three';
     import { buildIndex, parseQuery, answer } from './public/js/query-engine.js';
 
     const avatarContainer = document.getElementById('avatar-view');
@@ -439,10 +438,6 @@
     let orarioIdx = null;
     let isSpeaking = false;
     let isListening = false;
-    let currentJaw = 0;
-    let lastJawUpdate = 0;
-    let activeUtterance = null;
-    const morphMeshes = [];
 
     // Audio parlante DISATTIVATO di default per aule silenziose
     let isAudioEnabled = localStorage.getItem('negrelli_audio_enabled') === 'true';
@@ -458,7 +453,6 @@
           window.speechSynthesis.cancel();
         }
         isSpeaking = false;
-        currentJaw = 0;
       }
     }
     updateAudioUI();
@@ -579,15 +573,12 @@
 
       utterance.onend = () => {
         isSpeaking = false;
-        currentJaw = 0;
       };
 
       utterance.onerror = () => {
         isSpeaking = false;
-        currentJaw = 0;
       };
 
-      activeUtterance = utterance;
       window.speechSynthesis.speak(utterance);
     }
 
@@ -681,69 +672,197 @@
       speak(a.speech);
     }
 
-    function updateMouthAnimation(now) {
-      if (now === lastJawUpdate) return;
-      lastJawUpdate = now;
+    // NegrelliBot 3D Mascot Renderer (Mascolino/Femminile Neutro Hi-Tech Robot)
+    function initNegrelliBot(container) {
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+      camera.position.set(0, 0.15, 3.7);
 
-      if (isSpeaking && isAudioEnabled) {
-        const t = now * 0.015;
-        const rawWave = Math.sin(t) * 0.5 + Math.sin(t * 1.8) * 0.3 + Math.sin(t * 0.4) * 0.2;
-        const targetJaw = Math.max(0, Math.min(0.75, rawWave * 1.2));
-        currentJaw += (targetJaw - currentJaw) * 0.35;
-      } else {
-        currentJaw += (0 - currentJaw) * 0.25;
-        if (currentJaw < 0.005) currentJaw = 0;
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      container.replaceChildren(renderer.domElement);
+
+      // Illuminazione Ambientale & Punti Luce Neox
+      const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+      scene.add(ambientLight);
+
+      const dirLight = new THREE.DirectionalLight(0x38bdf8, 2.5);
+      dirLight.position.set(2, 4, 3);
+      scene.add(dirLight);
+
+      const rimLight = new THREE.DirectionalLight(0x818cf8, 2.0);
+      rimLight.position.set(-3, 2, -2);
+      scene.add(rimLight);
+
+      // Gruppo Principale Robot
+      const robotGroup = new THREE.Group();
+      scene.add(robotGroup);
+
+      // Materiali
+      const bodyMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.8, roughness: 0.2 });
+      const silverMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.9, roughness: 0.15 });
+      const visorMat = new THREE.MeshStandardMaterial({ color: 0x020617, roughness: 0.1 });
+      const ledMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, emissive: 0x38bdf8, emissiveIntensity: 1.5 });
+      const mouthMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, emissive: 0x0284c7, emissiveIntensity: 1.2 });
+      const badgeMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, emissive: 0x0369a1, emissiveIntensity: 1.0 });
+
+      // Torso
+      const torsoGeo = new THREE.CylinderGeometry(0.55, 0.45, 0.8, 32);
+      const torso = new THREE.Mesh(torsoGeo, bodyMat);
+      torso.position.y = -0.5;
+      robotGroup.add(torso);
+
+      // Badge ITIS Negrelli sul petto
+      const badgeGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.04, 32);
+      const badge = new THREE.Mesh(badgeGeo, badgeMat);
+      badge.rotation.x = Math.PI / 2;
+      badge.position.set(0, -0.4, 0.44);
+      robotGroup.add(badge);
+
+      // Spalline
+      const shoulderGeo = new THREE.SphereGeometry(0.16, 16, 16);
+      const leftShoulder = new THREE.Mesh(shoulderGeo, silverMat);
+      leftShoulder.position.set(-0.65, -0.25, 0);
+      robotGroup.add(leftShoulder);
+
+      const rightShoulder = new THREE.Mesh(shoulderGeo, silverMat);
+      rightShoulder.position.set(0.65, -0.25, 0);
+      robotGroup.add(rightShoulder);
+
+      // Collo
+      const neckGeo = new THREE.CylinderGeometry(0.15, 0.18, 0.18, 16);
+      const neck = new THREE.Mesh(neckGeo, silverMat);
+      neck.position.y = -0.05;
+      robotGroup.add(neck);
+
+      // Gruppo Testa
+      const headGroup = new THREE.Group();
+      headGroup.position.y = 0.35;
+      robotGroup.add(headGroup);
+
+      const headGeo = new THREE.BoxGeometry(0.9, 0.75, 0.7, 8, 8, 8);
+      const headMesh = new THREE.Mesh(headGeo, bodyMat);
+      headGroup.add(headMesh);
+
+      // Visore Occhi
+      const visorGeo = new THREE.BoxGeometry(0.76, 0.42, 0.1);
+      const visor = new THREE.Mesh(visorGeo, visorMat);
+      visor.position.set(0, 0.05, 0.31);
+      headGroup.add(visor);
+
+      // Occhi LED
+      const eyeGeo = new THREE.SphereGeometry(0.09, 16, 16);
+      const leftEye = new THREE.Mesh(eyeGeo, ledMat);
+      leftEye.scale.set(1, 1, 0.4);
+      leftEye.position.set(-0.2, 0.08, 0.36);
+      headGroup.add(leftEye);
+
+      const rightEye = new THREE.Mesh(eyeGeo, ledMat);
+      rightEye.scale.set(1, 1, 0.4);
+      rightEye.position.set(0.2, 0.08, 0.36);
+      headGroup.add(rightEye);
+
+      // Bocca LED Parlante
+      const mouthGeo = new THREE.BoxGeometry(0.35, 0.05, 0.02);
+      const mouthMesh = new THREE.Mesh(mouthGeo, mouthMat);
+      mouthMesh.position.set(0, -0.1, 0.37);
+      headGroup.add(mouthMesh);
+
+      // Antenna Top
+      const antennaStemGeo = new THREE.CylinderGeometry(0.02, 0.02, 0.25);
+      const antennaStem = new THREE.Mesh(antennaStemGeo, silverMat);
+      antennaStem.position.set(0, 0.5, 0);
+      headGroup.add(antennaStem);
+
+      const antennaTipGeo = new THREE.SphereGeometry(0.06, 16, 16);
+      const antennaTip = new THREE.Mesh(antennaTipGeo, ledMat);
+      antennaTip.position.set(0, 0.65, 0);
+      headGroup.add(antennaTip);
+
+      // Orecchie laterali
+      const earGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.1, 16);
+      const leftEar = new THREE.Mesh(earGeo, silverMat);
+      leftEar.rotation.z = Math.PI / 2;
+      leftEar.position.set(-0.48, 0.05, 0);
+      headGroup.add(leftEar);
+
+      const rightEar = new THREE.Mesh(earGeo, silverMat);
+      rightEar.rotation.z = Math.PI / 2;
+      rightEar.position.set(0.48, 0.05, 0);
+      headGroup.add(rightEar);
+
+      // Animazioni
+      let clock = new THREE.Clock();
+      let mouseX = 0, mouseY = 0;
+      let targetMouseX = 0, targetMouseY = 0;
+      let blinkTimer = 0;
+
+      window.addEventListener('mousemove', (e) => {
+        targetMouseX = (e.clientX / window.innerWidth - 0.5) * 0.8;
+        targetMouseY = (e.clientY / window.innerHeight - 0.5) * 0.6;
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+        const time = clock.getElapsedTime();
+
+        // Fluttuazione Robot (Sinusoidale)
+        robotGroup.position.y = Math.sin(time * 2.0) * 0.08;
+        robotGroup.rotation.y = Math.sin(time * 0.8) * 0.05;
+
+        // Inseguimento Mouse
+        mouseX += (targetMouseX - mouseX) * 0.08;
+        mouseY += (targetMouseY - mouseY) * 0.08;
+        headGroup.rotation.y = mouseX;
+        headGroup.rotation.x = mouseY;
+
+        // Eyelid Blink (Battito Ciglia casuale)
+        blinkTimer += 0.016;
+        if (blinkTimer > 3.5) {
+          leftEye.scale.y = 0.1;
+          rightEye.scale.y = 0.1;
+          if (blinkTimer > 3.7) {
+            leftEye.scale.y = 1;
+            rightEye.scale.y = 1;
+            blinkTimer = 0;
+          }
+        }
+
+        // Animazione Bocca Parlante LED & Antenna Pulsante
+        if (isSpeaking && isAudioEnabled) {
+          const speakWave = Math.abs(Math.sin(time * 18.0) * 0.7 + Math.cos(time * 12.0) * 0.5);
+          mouthMesh.scale.y = 1.0 + speakWave * 3.5;
+          mouthMesh.scale.x = 1.0 + speakWave * 0.4;
+          mouthMat.emissiveIntensity = 2.0 + speakWave * 1.5;
+          antennaTip.scale.setScalar(1.0 + speakWave * 0.3);
+        } else {
+          mouthMesh.scale.set(1, 1, 1);
+          mouthMat.emissiveIntensity = 1.0;
+          antennaTip.scale.set(1, 1, 1);
+        }
+
+        renderer.render(scene, camera);
       }
+
+      animate();
+
+      window.addEventListener('resize', () => {
+        if (!container) return;
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+      });
     }
 
     async function init() {
       await loadSchedule();
 
-      // Avatar 3D protetto con blocco try...catch...finally per massima resilienza
       try {
-        const head = new TalkingHead(avatarContainer, {
-          ttsEndpoint: "https://dummy-tts.local",
-          cameraView: "upper"
-        });
-
-        await head.showAvatar({
-          url: './public/models/avatar.glb',
-          body: 'F',
-          avatarMood: 'neutral'
-        });
-
-        if (head.renderer) {
-          head.renderer.setClearColor(0x000000, 0);
-          head.renderer.domElement.style.background = 'transparent';
-        }
-        if (head.scene) {
-          head.scene.background = null;
-        }
-
-        head.scene.traverse((node) => {
-          if (node.isMesh && node.morphTargetDictionary) {
-            const dict = node.morphTargetDictionary;
-            const jawIdx = dict['jawOpen'] ?? dict['mouthOpen'] ?? dict['viseme_aa'];
-            const funnelIdx = dict['mouthFunnel'] ?? dict['viseme_O'];
-
-            if (jawIdx !== undefined) {
-              morphMeshes.push({ mesh: node, jawIdx, funnelIdx });
-              node.onBeforeRender = () => {
-                updateMouthAnimation(performance.now());
-                node.morphTargetInfluences[jawIdx] = currentJaw;
-                if (funnelIdx !== undefined) node.morphTargetInfluences[funnelIdx] = currentJaw * 0.3;
-              };
-            }
-          }
-        });
-
-        window.addEventListener('resize', () => {
-          if (head && typeof head.onResize === 'function') {
-            head.onResize();
-          }
-        });
+        initNegrelliBot(avatarContainer);
       } catch (err) {
-        console.warn("Avatar 3D non caricato o non supportato su questo dispositivo:", err);
+        console.warn("Rendering NegrelliBot 3D fallito:", err);
       } finally {
         statusOverlay.style.display = 'none';
         inputField.disabled = false;
