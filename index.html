@@ -718,12 +718,168 @@
       torso.position.y = -0.5;
       robotGroup.add(torso);
 
-      // Badge ITIS Negrelli sul petto
-      const badgeGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.04, 32);
-      const badge = new THREE.Mesh(badgeGeo, badgeMat);
-      badge.rotation.x = Math.PI / 2;
-      badge.position.set(0, -0.4, 0.44);
-      robotGroup.add(badge);
+      // Canvas dinamico per Logo ITIS Negrelli sul petto (5 Rami Disciplinari)
+      const logoCanvas = document.createElement('canvas');
+      logoCanvas.width = 512;
+      logoCanvas.height = 512;
+      const logoCtx = logoCanvas.getContext('2d');
+      const logoTexture = new THREE.CanvasTexture(logoCanvas);
+      logoTexture.anisotropy = 16;
+
+      function updateLogoCanvas(time) {
+        const w = 512, h = 512;
+        logoCtx.clearRect(0, 0, w, h);
+
+        // Piastra di fondo circolare con bordo cyan
+        logoCtx.save();
+        logoCtx.beginPath();
+        logoCtx.arc(w / 2, h / 2, 235, 0, Math.PI * 2);
+        logoCtx.fillStyle = '#0f172a';
+        logoCtx.fill();
+        logoCtx.lineWidth = 8;
+        logoCtx.strokeStyle = '#38bdf8';
+        logoCtx.stroke();
+        logoCtx.restore();
+
+        // 5 Nodi dell'albero ITIS Negrelli (Posizioni e Colori ufficiali)
+        const nodes = [
+          { x: 140, y: 220, r: 38, color: '#0284c7', type: 'gear' },  // Meccanica/Automazione
+          { x: 185, y: 125, r: 38, color: '#9333ea', type: 'chart' }, // Economia/Gestione
+          { x: 256, y: 85,  r: 38, color: '#ea580c', type: 'dna' },   // Biotecnologie/Scienze
+          { x: 327, y: 125, r: 38, color: '#06b6d4', type: 'chip' },  // Informatica/Elettronica
+          { x: 372, y: 220, r: 38, color: '#16a34a', type: 'globe' }  // Ambiente/Territorio
+        ];
+
+        // Ramo/Tronco e Radici Grigie
+        logoCtx.strokeStyle = '#64748b';
+        logoCtx.lineCap = 'round';
+        logoCtx.lineJoin = 'round';
+
+        // Rami ai 5 nodi
+        logoCtx.lineWidth = 14;
+        nodes.forEach(n => {
+          logoCtx.beginPath();
+          logoCtx.moveTo(256, 270);
+          logoCtx.quadraticCurveTo(256 + (n.x - 256) * 0.4, 180, n.x, n.y);
+          logoCtx.stroke();
+        });
+
+        // Tronco Centrale
+        logoCtx.lineWidth = 26;
+        logoCtx.beginPath();
+        logoCtx.moveTo(256, 250);
+        logoCtx.lineTo(256, 360);
+        logoCtx.stroke();
+
+        // Radici intrecciate
+        logoCtx.lineWidth = 12;
+        logoCtx.beginPath();
+        logoCtx.moveTo(256, 350);
+        logoCtx.bezierCurveTo(200, 370, 150, 410, 130, 450);
+        logoCtx.moveTo(256, 350);
+        logoCtx.bezierCurveTo(256, 400, 275, 430, 260, 465);
+        logoCtx.moveTo(256, 350);
+        logoCtx.bezierCurveTo(310, 370, 360, 410, 380, 450);
+        logoCtx.stroke();
+
+        // Animazione "Cuore Pulsante a Zone"
+        const heartSpeed = time * 3.5;
+
+        nodes.forEach((n, idx) => {
+          const phase = idx * 1.25;
+          const pulse = Math.pow(Math.max(0, Math.sin(heartSpeed - phase)), 3);
+          const currentScale = 1.0 + pulse * 0.28;
+          const currentR = n.r * currentScale;
+
+          logoCtx.save();
+          logoCtx.translate(n.x, n.y);
+
+          // Alone Luminoso in dissolvenza (Heart Glow)
+          if (pulse > 0.02) {
+            logoCtx.beginPath();
+            logoCtx.arc(0, 0, currentR + 16 * pulse, 0, Math.PI * 2);
+            logoCtx.fillStyle = n.color;
+            logoCtx.globalAlpha = pulse * 0.65;
+            logoCtx.fill();
+            logoCtx.globalAlpha = 1.0;
+          }
+
+          // Gemma Colorata (Foglia)
+          logoCtx.beginPath();
+          logoCtx.arc(0, 0, currentR, 0, Math.PI * 2);
+          logoCtx.fillStyle = n.color;
+          logoCtx.fill();
+          logoCtx.lineWidth = 4;
+          logoCtx.strokeStyle = '#ffffff';
+          logoCtx.stroke();
+
+          // Icona Interna Bianca
+          logoCtx.fillStyle = '#ffffff';
+          logoCtx.strokeStyle = '#ffffff';
+          logoCtx.lineWidth = 3;
+
+          if (n.type === 'gear') {
+            logoCtx.beginPath();
+            logoCtx.arc(0, 0, 10 * currentScale, 0, Math.PI * 2);
+            logoCtx.stroke();
+            for (let a = 0; a < 6; a++) {
+              const ang = (a * Math.PI) / 3;
+              logoCtx.fillRect(Math.cos(ang) * 10 * currentScale - 2.5, Math.sin(ang) * 10 * currentScale - 2.5, 5, 5);
+            }
+          } else if (n.type === 'chart') {
+            logoCtx.fillRect(-10 * currentScale, 2 * currentScale, 4 * currentScale, 9 * currentScale);
+            logoCtx.fillRect(-3 * currentScale, -4 * currentScale, 4 * currentScale, 15 * currentScale);
+            logoCtx.fillRect(4 * currentScale, -10 * currentScale, 4 * currentScale, 21 * currentScale);
+          } else if (n.type === 'dna') {
+            logoCtx.beginPath();
+            logoCtx.arc(0, -5 * currentScale, 5 * currentScale, 0, Math.PI);
+            logoCtx.arc(0, 5 * currentScale, 5 * currentScale, Math.PI, 0);
+            logoCtx.stroke();
+          } else if (n.type === 'chip') {
+            logoCtx.fillRect(-9 * currentScale, -9 * currentScale, 18 * currentScale, 18 * currentScale);
+            logoCtx.fillStyle = n.color;
+            logoCtx.fillRect(-4 * currentScale, -4 * currentScale, 8 * currentScale, 8 * currentScale);
+          } else if (n.type === 'globe') {
+            logoCtx.beginPath();
+            logoCtx.arc(0, 0, 11 * currentScale, 0, Math.PI * 2);
+            logoCtx.stroke();
+            logoCtx.beginPath();
+            logoCtx.moveTo(-11 * currentScale, 0); logoCtx.lineTo(11 * currentScale, 0);
+            logoCtx.moveTo(0, -11 * currentScale); logoCtx.lineTo(0, 11 * currentScale);
+            logoCtx.stroke();
+          }
+
+          logoCtx.restore();
+        });
+
+        logoTexture.needsUpdate = true;
+      }
+
+      // Badge Gruppo ITIS Negrelli sul petto
+      const badgeGroup = new THREE.Group();
+      badgeGroup.position.set(0, -0.4, 0.44);
+
+      const badgeBackMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.8, roughness: 0.2 });
+      const badgeBackGeo = new THREE.CylinderGeometry(0.30, 0.30, 0.03, 32);
+      const badgeBack = new THREE.Mesh(badgeBackGeo, badgeBackMat);
+      badgeBack.rotation.x = Math.PI / 2;
+      badgeGroup.add(badgeBack);
+
+      const badgeFrontGeo = new THREE.PlaneGeometry(0.58, 0.58);
+      const badgeFrontMat = new THREE.MeshStandardMaterial({
+        map: logoTexture,
+        transparent: true,
+        roughness: 0.2,
+        metalness: 0.1,
+        emissiveMap: logoTexture,
+        emissive: 0xffffff,
+        emissiveIntensity: 0.4
+      });
+      const badgeFront = new THREE.Mesh(badgeFrontGeo, badgeFrontMat);
+      badgeFront.position.z = 0.02;
+      badgeGroup.add(badgeFront);
+
+      robotGroup.add(badgeGroup);
 
       // Spalline
       const shoulderGeo = new THREE.SphereGeometry(0.16, 16, 16);
@@ -834,18 +990,10 @@
           }
         }
 
-        // Animazione Bocca Parlante LED & Antenna Pulsante
-        if (isSpeaking && isAudioEnabled) {
-          const speakWave = Math.abs(Math.sin(time * 18.0) * 0.7 + Math.cos(time * 12.0) * 0.5);
-          mouthMesh.scale.y = 1.0 + speakWave * 3.5;
-          mouthMesh.scale.x = 1.0 + speakWave * 0.4;
-          mouthMat.emissiveIntensity = 2.0 + speakWave * 1.5;
-          antennaTip.scale.setScalar(1.0 + speakWave * 0.3);
-        } else {
-          mouthMesh.scale.set(1, 1, 1);
-          mouthMat.emissiveIntensity = 1.0;
-          antennaTip.scale.set(1, 1, 1);
-        }
+        // Aggiornamento Canvas Animato per Logo ITIS Negrelli (Cuore Pulsante a Zone)
+        updateLogoCanvas(time);
+        const heartPulse = Math.max(0, Math.sin(time * 3.5));
+        badgeGroup.scale.setScalar(1.0 + heartPulse * 0.03);
 
         renderer.render(scene, camera);
       }
