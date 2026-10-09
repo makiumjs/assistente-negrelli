@@ -105,7 +105,9 @@ export function buildIndex(db) {
     colloqui_generali: [],
   };
 
-  return { db, docenti, classKeys, aule, starts, attivita };
+  const scansione = db.meta?.scansione_oraria || null;
+
+  return { db, docenti, classKeys, aule, starts, attivita, scansione };
 }
 
 // ------------------------------------------------------------------ entità
@@ -215,8 +217,34 @@ function findHour(q) {
   return null;
 }
 
-function currentLesson(now, idx) {
+export function getDaySchedule(day, idx) {
+  const scansione = idx.scansione || idx.db?.meta?.scansione_oraria;
+  if (scansione) {
+    if (day === "sabato") return scansione.sabato;
+    if (day === "giovedi" || day === "venerdi") return scansione.giovedi_venerdi;
+    if (["lunedi", "martedi", "mercoledi"].includes(day)) return scansione.lunedi_mercoledi;
+  }
+  return null;
+}
+
+function currentLesson(now, idx, day = null) {
+  const dayName = day || JS_DAYS[now.getDay()];
   const t = now.getHours() * 60 + now.getMinutes();
+  const sched = getDaySchedule(dayName, idx);
+
+  if (sched) {
+    for (const item of sched) {
+      if (item.ora) {
+        const [h1, m1] = item.inizio.split(":").map(Number);
+        const [h2, m2] = item.fine.split(":").map(Number);
+        const minStart = h1 * 60 + m1;
+        const minEnd = h2 * 60 + m2;
+        if (t >= minStart && t < minEnd) return item.ora;
+      }
+    }
+    return null;
+  }
+
   const hit = idx.starts.find((s) => t >= s.min && t < s.min + LESSON_MIN);
   return hit ? hit.ora : null;
 }
@@ -231,7 +259,7 @@ export function parseQuery(text, idx, ctx = {}) {
   const day = findDay(q, now);
   const realtime = /\b(adesso|attualmente|in questo momento|in questo istante|ora attuale)\b/.test(q);
   let hour = findHour(q);
-  if (realtime) hour = currentLesson(now, idx);
+  if (realtime) hour = currentLesson(now, idx, day);
 
   const base = { day, hour, realtime, raw: text };
 
@@ -312,7 +340,28 @@ const spokenSpan = (g) =>
 const joinSpeech = (parts) =>
   parts.length === 1 ? parts[0] : parts.slice(0, -1).join(", ") + ", e " + parts[parts.length - 1];
 
-const startOf = (idx, h) => idx.starts.find((s) => s.ora === h)?.inizio || "";
+export function startOf(idx, h, day = "lunedi") {
+  const sched = getDaySchedule(day, idx);
+  if (sched) {
+    const item = sched.find((s) => s.ora === h);
+    if (item) {
+      const exitNote = item.uscita ? " - Uscita 12:05" : "";
+      return `${item.inizio}-${item.fine}${exitNote}`;
+    }
+  }
+  return idx.starts.find((s) => s.ora === h)?.inizio || "";
+}
+
+function saturdayExceeded(p, title) {
+  return {
+    title,
+    badge: "SABATO • USCITA ORE 12:05",
+    lines: [],
+    note: "Il sabato le lezioni terminano al termine della 4ª ora (ore 12:05).",
+    speech: "Il sabato le lezioni terminano alla quarta ora, alle 12:05. Non ci sono lezioni in quinta o sesta ora.",
+    rooms: [],
+  };
+}
 
 function extractRoomsFromText(text) {
   if (!text) return [];
@@ -332,7 +381,7 @@ function closedDay(p, title) {
 }
 
 function hourBadge(p, idx) {
-  const st = startOf(idx, p.hour);
+  const st = startOf(idx, p.hour, p.day);
   return `${dl(p.day).toUpperCase()} • ${p.hour}ª ORA${st ? " (" + st + ")" : ""}`;
 }
 
@@ -358,6 +407,7 @@ function answerDocente(p, idx) {
     : `Prof. ${titleCase(d.nome)}`;
 
   if (p.day === "domenica") return closedDay(p, title);
+  if (p.day === "sabato" && p.hour > 4) return saturdayExceeded(p, title);
   if (p.realtime && p.hour === null) return { ...noHourNow(p), title };
 
   const sched = d.orario[p.day] || {};
@@ -460,6 +510,10 @@ function answerClasse(p, idx) {
       out.push(closedDay(p, `Classe ${cid}`));
       continue;
     }
+    if (p.day === "sabato" && p.hour > 4) {
+      out.push(saturdayExceeded(p, `Classe ${cid}`));
+      continue;
+    }
     if (p.realtime && p.hour === null) {
       out.push({ ...noHourNow(p), title: `Classe ${cid}` });
       continue;
@@ -534,6 +588,7 @@ function mergeAnswers(list) {
 function answerAuleLibere(p, idx) {
   const title = p.onlyLabs ? "Laboratori liberi" : "Aule libere";
   if (p.day === "domenica") return closedDay(p, title);
+  if (p.day === "sabato" && p.hour > 4) return saturdayExceeded(p, title);
   if (p.realtime && p.hour === null) return { ...noHourNow(p), title };
 
   const libereGiorno = idx.db.aule_libere[p.day] || {};
@@ -602,6 +657,10 @@ function answerAula(p, idx) {
     const title = titleCase(r.nome);
     if (p.day === "domenica") {
       out.push(closedDay(p, title));
+      continue;
+    }
+    if (p.day === "sabato" && p.hour > 4) {
+      out.push(saturdayExceeded(p, title));
       continue;
     }
     if (p.realtime && p.hour === null) {

@@ -136,4 +136,17 @@ assert.equal(r.p.subType, "scrutini");
 assert.ok(r.a.title.includes("4ITA"));
 console.log("✓ Scrutini 4ITA:", r.a.speech);
 
+console.log("\n=== 7. Test Scansione Oraria Ufficiale ===");
+r = ask("4ITA lunedì alla prima ora");
+assert.ok(r.a.badge.includes("7:50-8:40"));
+console.log("✓ Scansione Lun-Mer (1ª ora 7:50-8:40):", r.a.badge);
+
+r = ask("4ITA giovedì alla prima ora");
+assert.ok(r.a.badge.includes("7:50-8:50"));
+console.log("✓ Scansione Gio-Ven (1ª ora 7:50-8:50):", r.a.badge);
+
+r = ask("4ITA sabato alla quinta ora");
+assert.equal(r.a.badge, "SABATO • USCITA ORE 12:05");
+console.log("✓ Sabato oltre 4ª ora (Uscita ore 12:05):", r.a.speech);
+
 console.log("\n TUTTI I TEST SONO PASSATI CON SUCCESSO! ");

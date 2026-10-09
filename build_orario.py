@@ -35,13 +35,40 @@ GIORNI = ["lunedi", "martedi", "mercoledi", "giovedi", "venerdi", "sabato"]
 
 ORE_INFO = [
     {"ora": 1, "inizio": "7:50"},
-    {"ora": 2, "inizio": "8:45"},
-    {"ora": 3, "inizio": "9:40"},
-    {"ora": 4, "inizio": "11:00"},
-    {"ora": 5, "inizio": "11:55"},
-    {"ora": 6, "inizio": "12:50"},
+    {"ora": 2, "inizio": "8:40"},
+    {"ora": 3, "inizio": "9:35"},
+    {"ora": 4, "inizio": "10:35"},
+    {"ora": 5, "inizio": "11:25"},
+    {"ora": 6, "inizio": "12:15"},
 ]
 ORE_NUMS = [o["ora"] for o in ORE_INFO]
+
+SCANSIONE_ORARIA = {
+    "lunedi_mercoledi": [
+        {"ora": 1, "inizio": "7:50", "fine": "8:40", "durata": 50},
+        {"ora": 2, "inizio": "8:40", "fine": "9:35", "durata": 55},
+        {"ora": 3, "inizio": "9:35", "fine": "10:25", "durata": 50},
+        {"pausa": "10:25-10:35", "durata": 10},
+        {"ora": 4, "inizio": "10:35", "fine": "11:25", "durata": 50},
+        {"ora": 5, "inizio": "11:25", "fine": "12:15", "durata": 50},
+        {"ora": 6, "inizio": "12:15", "fine": "13:05", "durata": 50},
+    ],
+    "giovedi_venerdi": [
+        {"ora": 1, "inizio": "7:50", "fine": "8:50", "durata": 60},
+        {"ora": 2, "inizio": "8:50", "fine": "9:50", "durata": 60},
+        {"ora": 3, "inizio": "9:50", "fine": "10:50", "durata": 60},
+        {"pausa": "10:50-11:05", "durata": 15},
+        {"ora": 4, "inizio": "11:05", "fine": "12:05", "durata": 60},
+        {"ora": 5, "inizio": "12:05", "fine": "13:05", "durata": 60},
+    ],
+    "sabato": [
+        {"ora": 1, "inizio": "7:50", "fine": "8:50", "durata": 60},
+        {"ora": 2, "inizio": "8:50", "fine": "9:50", "durata": 60},
+        {"ora": 3, "inizio": "9:50", "fine": "10:50", "durata": 60},
+        {"pausa": "10:50-11:05", "durata": 15},
+        {"ora": 4, "inizio": "11:05", "fine": "12:05", "durata": 60, "uscita": True},
+    ],
+}
 
 TABLE_SETTINGS = {
     "vertical_strategy": "lines",
@@ -557,8 +584,10 @@ def run():
             "istituto": "ITIS Negrelli Feltre",
             "periodo": periodo,
             "ore": ORE_INFO,
+            "scansione_oraria": SCANSIONE_ORARIA,
             "giorni": GIORNI,
             "nota_aule": "Copre aule, laboratori, palestra e spazi dell'istituto Negrelli.",
+            "nota_sabato": "Il sabato le lezioni terminano alla 4ª ora (uscita ore 12:05).",
         },
         "docenti": {
             persona_id(n): {
