@@ -725,6 +725,8 @@
       const logoCtx = logoCanvas.getContext('2d');
       const logoTexture = new THREE.CanvasTexture(logoCanvas);
       logoTexture.anisotropy = 16;
+      logoTexture.center.set(0.5, 0.5);
+      logoTexture.rotation = -Math.PI / 2;
 
       function updateLogoCanvas(time) {
         const w = 512, h = 512;
