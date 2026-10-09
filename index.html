@@ -102,7 +102,7 @@
       overflow-y: auto;
     }
 
-    /* Profilo Utente / Docente */
+    /* Profilo Utente / Docente con Pulsante di Rimozione */
     #user-profile-bar {
       display: flex;
       align-items: center;
@@ -126,7 +126,7 @@
       background: #090c14;
       border: 1px solid #334155;
       color: #fff;
-      padding: 6px 10px;
+      padding: 7px 12px;
       border-radius: 6px;
       font-size: 13px;
       flex: 1;
@@ -135,6 +135,25 @@
 
     #user-profile-bar input:focus {
       border-color: var(--accent);
+    }
+
+    #clear-surname-btn {
+      background: rgba(225, 29, 72, 0.15);
+      color: #fda4af;
+      border: 1px solid rgba(225, 29, 72, 0.4);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    #clear-surname-btn:hover {
+      background: rgba(225, 29, 72, 0.3);
+      border-color: #f43f5e;
+      color: #ffffff;
     }
 
     /* Card Risposta */
@@ -251,7 +270,7 @@
       margin-top: 2px;
     }
 
-    /* Barra Input Fisso in Basso */
+    /* Barra Input Fisso in Basso con Controllo Audio & Microfono */
     #ui-bar {
       flex-shrink: 0;
       width: 100%;
@@ -270,7 +289,7 @@
 
     input[type="text"]#query-input {
       flex: 1;
-      max-width: 560px;
+      max-width: 520px;
       padding: 12px 16px;
       border-radius: 8px;
       border: 1px solid #334155;
@@ -288,7 +307,7 @@
       background: var(--primary);
       color: white;
       border: none;
-      padding: 12px 20px;
+      padding: 12px 18px;
       font-size: 15px;
       border-radius: 8px;
       cursor: pointer;
@@ -296,10 +315,26 @@
       flex-shrink: 0;
       min-width: 44px;
       min-height: 44px;
+      transition: all 0.2s ease;
     }
 
     button.action-btn:hover { background: var(--primary-hover); }
     button.action-btn:disabled { background: #334155; cursor: not-allowed; }
+
+    /* Pulsante Audio Toggle */
+    #audio-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    #audio-btn.enabled {
+      background: #059669;
+      border-color: #10b981;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+    }
 
     #mic-btn {
       background: #1e293b;
@@ -359,6 +394,7 @@
       <div id="user-profile-bar">
         <label for="my-surname-input">👤 Il tuo cognome:</label>
         <input type="text" id="my-surname-input" placeholder="Es. Cassarino..." />
+        <button id="clear-surname-btn" type="button" title="Rimuovi cognome memorizzato" style="display:none;">✕ Rimuovi</button>
       </div>
 
       <div class="card" id="info-card" aria-live="polite">
@@ -375,6 +411,7 @@
   </div>
 
   <div id="ui-bar">
+    <button class="action-btn" id="audio-btn" type="button" title="Attiva/Disattiva Parlato">🔇 Audio OFF</button>
     <input type="text" id="query-input" aria-label="Domanda orario" placeholder="Es. Dove si trova la 4ITA alla terza ora?" disabled />
     <button class="action-btn" id="search-btn" disabled>Cerca</button>
     <button class="action-btn" id="mic-btn" disabled title="Dettatura vocale" aria-label="Attiva microfono">🎙️</button>
@@ -388,8 +425,10 @@
     const statusOverlay = document.getElementById('status-overlay');
     const inputField = document.getElementById('query-input');
     const mySurnameInput = document.getElementById('my-surname-input');
+    const clearSurnameBtn = document.getElementById('clear-surname-btn');
     const searchBtn = document.getElementById('search-btn');
     const micBtn = document.getElementById('mic-btn');
+    const audioBtn = document.getElementById('audio-btn');
     const cardTitle = document.getElementById('card-title');
     const cardDesc = document.getElementById('card-desc');
     const cardBadge = document.getElementById('card-badge');
@@ -405,13 +444,62 @@
     let activeUtterance = null;
     const morphMeshes = [];
 
+    // Audio parlante DISATTIVATO di default per aule silenziose
+    let isAudioEnabled = localStorage.getItem('negrelli_audio_enabled') === 'true';
+
+    function updateAudioUI() {
+      if (isAudioEnabled) {
+        audioBtn.textContent = '🔊 Audio ON';
+        audioBtn.classList.add('enabled');
+      } else {
+        audioBtn.textContent = '🔇 Audio OFF';
+        audioBtn.classList.remove('enabled');
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+        }
+        isSpeaking = false;
+        currentJaw = 0;
+      }
+    }
+    updateAudioUI();
+
+    audioBtn.addEventListener('click', () => {
+      isAudioEnabled = !isAudioEnabled;
+      localStorage.setItem('negrelli_audio_enabled', isAudioEnabled ? 'true' : 'false');
+      updateAudioUI();
+    });
+
+    // Gestione Cognome Docente con Persistenza e Rimozione
     let myTeacherName = localStorage.getItem('negrelli_my_surname') || "";
     mySurnameInput.value = myTeacherName;
+    clearSurnameBtn.style.display = myTeacherName ? "inline-block" : "none";
 
-    mySurnameInput.addEventListener('change', () => {
+    function updateSurnameState() {
       myTeacherName = mySurnameInput.value.trim();
-      localStorage.setItem('negrelli_my_surname', myTeacherName);
-      if (myTeacherName && orarioIdx) handleQuery("cosa ho oggi");
+      if (myTeacherName) {
+        localStorage.setItem('negrelli_my_surname', myTeacherName);
+        clearSurnameBtn.style.display = "inline-block";
+        if (orarioIdx) handleQuery("cosa ho oggi");
+      } else {
+        localStorage.removeItem('negrelli_my_surname');
+        clearSurnameBtn.style.display = "none";
+      }
+    }
+
+    mySurnameInput.addEventListener('input', updateSurnameState);
+    mySurnameInput.addEventListener('change', updateSurnameState);
+
+    clearSurnameBtn.addEventListener('click', () => {
+      mySurnameInput.value = "";
+      myTeacherName = "";
+      localStorage.removeItem('negrelli_my_surname');
+      clearSurnameBtn.style.display = "none";
+      cardTitle.textContent = "In attesa di richiesta...";
+      cardBadge.style.display = "none";
+      cardLocationBadge.style.display = "none";
+      cardDesc.style.display = "block";
+      resultLines.replaceChildren();
+      cardNote.textContent = "";
     });
 
     async function loadSchedule() {
@@ -467,6 +555,7 @@
     }
 
     function speak(speechText) {
+      if (!isAudioEnabled) return; // Silent by default for quiet classrooms
       if (!speechText) return;
       if (!('speechSynthesis' in window)) return;
 
@@ -596,7 +685,7 @@
       if (now === lastJawUpdate) return;
       lastJawUpdate = now;
 
-      if (isSpeaking) {
+      if (isSpeaking && isAudioEnabled) {
         const t = now * 0.015;
         const rawWave = Math.sin(t) * 0.5 + Math.sin(t * 1.8) * 0.3 + Math.sin(t * 0.4) * 0.2;
         const targetJaw = Math.max(0, Math.min(0.75, rawWave * 1.2));
