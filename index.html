@@ -6,11 +6,11 @@
   <title>Assistente Orario ITIS Negrelli</title>
   <style>
     :root {
-      --bg: #090b10;
-      --card-bg: rgba(18, 24, 38, 0.85);
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --accent: #38bdf8;
+      --bg: #091316;
+      --card-bg: rgba(13, 31, 35, 0.88);
+      --primary: #0d9488;
+      --primary-hover: #0f766e;
+      --accent: #2dd4bf;
       --text: #f8fafc;
       --text-muted: #94a3b8;
     }
@@ -203,28 +203,28 @@
       margin-right: 6px;
     }
 
-    /* Badge di Posizione Smart con Ombra Pulsante */
+    /* Badge di Posizione Smart con Ombra Pulsante Verde Acqua */
     .badge.location {
-      background: linear-gradient(135deg, #1d4ed8, #2563eb);
+      background: linear-gradient(135deg, #0f766e, #0d9488);
       color: #ffffff;
-      border: 1px solid #60a5fa;
+      border: 1px solid #5eead4;
       font-size: 13px;
       font-weight: 800;
       padding: 7px 16px;
       border-radius: 20px;
       letter-spacing: 0.5px;
       margin-top: 8px;
-      box-shadow: 0 0 14px rgba(59, 130, 246, 0.7);
+      box-shadow: 0 0 14px rgba(45, 212, 191, 0.7);
       animation: location-pulse 2s infinite ease-in-out;
     }
 
     @keyframes location-pulse {
       0%, 100% {
-        box-shadow: 0 0 10px rgba(59, 130, 246, 0.5), 0 0 18px rgba(59, 130, 246, 0.3);
+        box-shadow: 0 0 10px rgba(45, 212, 191, 0.5), 0 0 18px rgba(45, 212, 191, 0.3);
         transform: scale(1);
       }
       50% {
-        box-shadow: 0 0 22px rgba(96, 165, 250, 0.95), 0 0 35px rgba(96, 165, 250, 0.6);
+        box-shadow: 0 0 22px rgba(94, 234, 212, 0.95), 0 0 35px rgba(94, 234, 212, 0.6);
         transform: scale(1.03);
       }
     }
@@ -345,10 +345,10 @@
     }
 
     #surname-btn.active {
-      background: #1d4ed8;
-      border-color: #60a5fa;
+      background: linear-gradient(135deg, #78350f, #b45309);
+      border-color: #f59e0b;
       color: #ffffff;
-      box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
     }
 
     #mic-btn {
@@ -811,13 +811,12 @@
       const robotGroup = new THREE.Group();
       scene.add(robotGroup);
 
-      // Materiali Chiari e Moderni (Ceramica Bianca, Argento Lucido, Accenti Azzurro Negrelli)
+      // Materiali Ufficiali Scuola (Ceramica Bianca, Dettagli Legno Caldo, Accenti LED Verde Acqua)
       const bodyMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, metalness: 0.15, roughness: 0.2 });
-      const silverMat = new THREE.MeshStandardMaterial({ color: 0xd1d5db, metalness: 0.75, roughness: 0.2 });
-      const visorMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.1 });
-      const ledMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, emissive: 0x38bdf8, emissiveIntensity: 2.0 });
-      const mouthMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, emissive: 0x38bdf8, emissiveIntensity: 1.8 });
-      const badgeMat = new THREE.MeshStandardMaterial({ color: 0x2563eb, emissive: 0x1d4ed8, emissiveIntensity: 1.0 });
+      const silverMat = new THREE.MeshStandardMaterial({ color: 0xb45309, metalness: 0.5, roughness: 0.3 }); // Finitura Legno Caldo / Oak
+      const visorMat = new THREE.MeshStandardMaterial({ color: 0x091316, roughness: 0.1 });
+      const ledMat = new THREE.MeshStandardMaterial({ color: 0x0d9488, emissive: 0x2dd4bf, emissiveIntensity: 2.2 });
+      const mouthMat = new THREE.MeshStandardMaterial({ color: 0x0d9488, emissive: 0x2dd4bf, emissiveIntensity: 2.0 });
 
       // Torso
       const torsoGeo = new THREE.CylinderGeometry(0.55, 0.45, 0.8, 32);
@@ -839,14 +838,14 @@
         const w = 512, h = 512;
         logoCtx.clearRect(0, 0, w, h);
 
-        // Piastra di fondo circolare con bordo cyan
+        // Piastra di fondo circolare con bordo Verde Acqua
         logoCtx.save();
         logoCtx.beginPath();
         logoCtx.arc(w / 2, h / 2, 235, 0, Math.PI * 2);
-        logoCtx.fillStyle = '#0f172a';
+        logoCtx.fillStyle = '#091316';
         logoCtx.fill();
-        logoCtx.lineWidth = 8;
-        logoCtx.strokeStyle = '#38bdf8';
+        logoCtx.lineWidth = 10;
+        logoCtx.strokeStyle = '#2dd4bf';
         logoCtx.stroke();
         logoCtx.restore();
 
@@ -969,7 +968,7 @@
       badgeGroup.position.set(0, -0.4, 0.52);
 
       const badgeGeo = new THREE.CylinderGeometry(0.26, 0.26, 0.04, 64);
-      const badgeSideMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, metalness: 0.8, roughness: 0.2 });
+      const badgeSideMat = new THREE.MeshStandardMaterial({ color: 0x0d9488, metalness: 0.8, roughness: 0.2 });
       const badgeFaceMat = new THREE.MeshStandardMaterial({
         map: logoTexture,
         emissiveMap: logoTexture,
@@ -1064,8 +1063,8 @@
       exclGroup.scale.set(0, 0, 0);
 
       const exclMat = new THREE.MeshStandardMaterial({
-        color: 0x38bdf8,
-        emissive: 0x0284c7,
+        color: 0x2dd4bf,
+        emissive: 0x0d9488,
         emissiveIntensity: 2.8,
         roughness: 0.1
       });
