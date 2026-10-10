@@ -90,91 +90,49 @@
       backdrop-filter: blur(8px);
     }
 
-    /* Pannello Destra: Profilo & Scheda Risposta */
+    /* Pannello Destra: Attività & Orario */
     #map-panel {
       flex: 0.9;
       display: flex;
       flex-direction: column;
-      background: #0d111a;
-      border-left: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 16px 20px;
+      background: linear-gradient(165deg, #071215 0%, #0a181c 50%, #0d1e22 100%);
+      border-left: 1px solid rgba(45, 212, 191, 0.16);
+      padding: 18px 22px;
       gap: 14px;
       overflow-y: auto;
     }
 
-    /* Profilo Utente / Docente con Pulsante di Rimozione */
-    #user-profile-bar {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #141a29;
-      border: 1px solid #242e44;
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-size: 13px;
-      color: var(--text-muted);
-      flex-shrink: 0;
-    }
-
-    #user-profile-bar label {
-      font-weight: 600;
-      color: #cbd5e1;
-      white-space: nowrap;
-    }
-
-    #user-profile-bar input {
-      background: #090c14;
-      border: 1px solid #334155;
-      color: #fff;
-      padding: 7px 12px;
-      border-radius: 6px;
-      font-size: 13px;
-      flex: 1;
-      outline: none;
-    }
-
-    #user-profile-bar input:focus {
-      border-color: var(--accent);
-    }
-
-    #clear-surname-btn {
-      background: rgba(225, 29, 72, 0.15);
-      color: #fda4af;
-      border: 1px solid rgba(225, 29, 72, 0.4);
-      border-radius: 6px;
-      padding: 6px 12px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.2s ease;
-    }
-
-    #clear-surname-btn:hover {
-      background: rgba(225, 29, 72, 0.3);
-      border-color: #f43f5e;
-      color: #ffffff;
-    }
-
-    /* Card Risposta */
+    /* Card Attività / Risposta con Rifinitura Legno Caldo e Verde Acqua */
     .card {
-      background: var(--card-bg);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 16px 18px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(10px);
+      position: relative;
+      background: linear-gradient(180deg, rgba(14, 33, 38, 0.95) 0%, rgba(8, 19, 22, 0.98) 100%);
+      border: 1px solid rgba(45, 212, 191, 0.22);
+      border-top: 4px solid #b45309; /* Texture Legno Rovere / Warm Oak */
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(245, 158, 11, 0.35);
+      backdrop-filter: blur(12px);
       flex: 1;
       display: flex;
       flex-direction: column;
       overflow-y: auto;
     }
 
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #78350f, #b45309, #d97706, #b45309, #78350f);
+      border-radius: 12px 12px 0 0;
+    }
+
     #info-card h3 {
       margin: 0 0 6px 0;
-      font-size: 20px;
-      color: var(--accent);
+      font-size: 21px;
+      color: #2dd4bf;
       line-height: 1.3;
+      text-shadow: 0 0 20px rgba(45, 212, 191, 0.35);
     }
 
     #card-desc {
@@ -188,19 +146,25 @@
       color: #94a3b8;
       line-height: 1.4;
       margin-top: 10px;
+      font-style: italic;
     }
 
+    /* Badge Istituzionali */
     .badge {
-      display: inline-block;
-      padding: 4px 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
       border-radius: 6px;
       font-size: 12px;
       font-weight: 700;
-      letter-spacing: 0.3px;
-      background: var(--primary);
-      color: white;
+      letter-spacing: 0.4px;
+      background: linear-gradient(135deg, rgba(13, 148, 136, 0.35) 0%, rgba(180, 83, 9, 0.25) 100%);
+      border: 1px solid #2dd4bf;
+      color: #f8fafc;
       margin-top: 6px;
       margin-right: 6px;
+      box-shadow: 0 2px 8px rgba(13, 148, 136, 0.25);
     }
 
     /* Badge di Posizione Smart con Ombra Pulsante Verde Acqua */
@@ -235,56 +199,70 @@
       overflow-y: auto;
     }
 
+    /* Righe della Tabella Attività ed Orari con Accento Legno */
     .row {
       display: grid;
-      grid-template-columns: 110px 1fr;
+      grid-template-columns: 115px 1fr;
       gap: 12px;
-      padding: 9px 0;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 10px 10px;
+      border-radius: 8px;
+      border-top: 1px solid rgba(45, 212, 191, 0.1);
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .row:hover {
+      background: linear-gradient(90deg, rgba(45, 212, 191, 0.06) 0%, rgba(180, 83, 9, 0.05) 100%);
     }
 
     .row.heading {
       display: block;
       font-weight: 700;
-      color: var(--accent);
-      padding-top: 12px;
+      color: #2dd4bf;
+      padding-top: 14px;
+      border-top: 2px solid rgba(180, 83, 9, 0.4);
     }
 
     .row .when {
       font-size: 13px;
       font-weight: 700;
-      color: var(--accent);
+      color: #2dd4bf;
+      border-left: 3px solid #b45309; /* Accento Legno Rovere sulla colonna date */
+      padding-left: 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .row .main {
       font-size: 15px;
       font-weight: 600;
-      color: var(--text);
+      color: #ffffff; /* Bianco puro ad alta leggibilità */
       line-height: 1.35;
     }
 
     .row .sub {
       font-size: 13px;
-      color: var(--text-muted);
+      color: #99f6e4; /* Verde Acqua morbido */
       line-height: 1.35;
-      margin-top: 2px;
+      margin-top: 3px;
     }
 
     /* Barra Input Fisso in Basso */
+    /* Barra Input Fisso in Basso Coordinata */
     #ui-bar {
       flex-shrink: 0;
       width: 100%;
       height: 72px;
-      background: #11141c;
+      background: linear-gradient(180deg, #0b171a 0%, #060e10 100%);
       padding: 10px 16px;
       padding-bottom: max(10px, env(safe-area-inset-bottom));
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 10px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: 1px solid rgba(45, 212, 191, 0.2);
       z-index: 50;
-      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(180, 83, 9, 0.2);
     }
 
     input[type="text"]#query-input {
@@ -292,21 +270,23 @@
       max-width: 520px;
       padding: 12px 16px;
       border-radius: 8px;
-      border: 1px solid #334155;
-      background: #0a0c10;
+      border: 1px solid rgba(45, 212, 191, 0.25);
+      background: #091316;
       color: #fff;
       font-size: 16px;
       outline: none;
+      transition: all 0.2s ease;
     }
 
     input[type="text"]#query-input:focus {
-      border-color: var(--primary);
+      border-color: var(--accent);
+      box-shadow: 0 0 14px rgba(45, 212, 191, 0.25);
     }
 
     button.action-btn {
-      background: var(--primary);
+      background: linear-gradient(135deg, #0d9488, #14b8a6);
       color: white;
-      border: none;
+      border: 1px solid #5eead4;
       padding: 12px 18px;
       font-size: 15px;
       border-radius: 8px;
@@ -316,31 +296,42 @@
       min-width: 44px;
       min-height: 44px;
       transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(13, 148, 136, 0.3);
     }
 
-    button.action-btn:hover { background: var(--primary-hover); }
-    button.action-btn:disabled { background: #334155; cursor: not-allowed; }
+    button.action-btn:hover {
+      background: linear-gradient(135deg, #0f766e, #0d9488);
+      box-shadow: 0 0 12px rgba(45, 212, 191, 0.5);
+    }
+
+    button.action-btn:disabled {
+      background: #14282c;
+      border-color: #213c42;
+      color: #64748b;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
 
     /* Pulsante Audio Toggle */
     #audio-btn {
-      background: #1e293b;
-      border: 1px solid #334155;
-      color: #94a3b8;
+      background: #0d1e22;
+      border: 1px solid rgba(45, 212, 191, 0.3);
+      color: #99f6e4;
       font-size: 14px;
     }
 
     #audio-btn.enabled {
-      background: #059669;
-      border-color: #10b981;
+      background: linear-gradient(135deg, #0d9488, #10b981);
+      border-color: #34d399;
       color: #ffffff;
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
     }
 
-    /* Pulsante Cognome Docente */
+    /* Pulsante Cognome Docente con Finitura Legno Rovere */
     #surname-btn {
-      background: #1e293b;
-      border: 1px solid #334155;
-      color: #94a3b8;
+      background: #0d1e22;
+      border: 1px solid rgba(217, 119, 6, 0.4);
+      color: #fde68a;
       font-size: 14px;
     }
 
@@ -348,12 +339,13 @@
       background: linear-gradient(135deg, #78350f, #b45309);
       border-color: #f59e0b;
       color: #ffffff;
-      box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.45);
     }
 
     #mic-btn {
-      background: #1e293b;
-      border: 1px solid #334155;
+      background: #0d1e22;
+      border: 1px solid rgba(45, 212, 191, 0.3);
+      color: #99f6e4;
       font-size: 18px;
       padding: 11px 14px;
       min-width: 44px;
@@ -369,6 +361,24 @@
     @keyframes pulse-mic {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.08); }
+    }
+
+    /* Scrollbar personalizzata uniforme */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(8, 17, 20, 0.7);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(45, 212, 191, 0.3);
+      border-radius: 4px;
+      border: 1px solid transparent;
+      background-clip: padding-box;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(45, 212, 191, 0.55);
     }
 
     :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
@@ -393,31 +403,10 @@
         max-height: 44dvh;
         width: 100%;
         border-left: none;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-top: 1px solid rgba(45, 212, 191, 0.2);
         padding: 10px 12px;
         gap: 8px;
         overflow-y: auto;
-      }
-
-      #user-profile-bar {
-        padding: 8px 10px;
-        gap: 6px;
-        flex-wrap: wrap;
-      }
-
-      #user-profile-bar label {
-        font-size: 12px;
-      }
-
-      #user-profile-bar input {
-        padding: 6px 10px;
-        font-size: 13px;
-        min-width: 110px;
-      }
-
-      #clear-surname-btn {
-        padding: 5px 10px;
-        font-size: 11px;
       }
 
       .card {
