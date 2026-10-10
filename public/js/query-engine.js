@@ -261,7 +261,8 @@ export function parseQuery(text, idx, ctx = {}) {
   let hour = findHour(q);
   if (realtime) hour = currentLesson(now, idx, day);
 
-  const base = { day, hour, realtime, raw: text };
+  const isProssimo = /\b(prossim[oiea]|successiv[oiea]|imminent[ei]|futur[oiea])\b/.test(q0);
+  const base = { day, hour, realtime, raw: text, now, isProssimo };
 
   // Controllo per le Attività (Collegi docenti, Consigli di classe, Scrutini, Colloqui, ecc.)
   const isAttivita = /\b(attivita|impegni|collegio|collegi|consiglio|consigli|cdc|scrutini|scrutinio|colloqui|colloquio|glo|pdp|pei|dipartimenti|dipartimento|esami|idoneita|debito|debiti)\b/.test(q0);
@@ -715,12 +716,65 @@ function answerAula(p, idx) {
   return mergeAnswers(out);
 }
 
-function answerAttivita(p, idx) {
+const MONTH_INDEX = {
+  settembre: 8, ottobre: 9, novembre: 10, dicembre: 11,
+  gennaio: 0, febbraio: 1, marzo: 2, aprile: 3, maggio: 4, giugno: 5, luglio: 6, agosto: 7
+};
+
+export function parseActivityDate(item) {
+  if (!item) return null;
+  let year = null, month = null, day = null, hour = 0, minute = 0;
+  const str = `${item.giorno || ""} ${item.periodo || ""} ${item.data || ""} ${item.mese || ""}`.toLowerCase();
+
+  const numDate = str.match(/\b(\d{1,2})[./](\d{1,2})[./](\d{2,4})\b/);
+  if (numDate) {
+    day = parseInt(numDate[1], 10);
+    month = parseInt(numDate[2], 10) - 1;
+    let y = parseInt(numDate[3], 10);
+    year = y < 100 ? 2000 + y : y;
+  } else {
+    const mMatch = str.match(/\b(settembre|ottobre|novembre|dicembre|gennaio|febbraio|marzo|aprile|maggio|giugno)\b/);
+    if (mMatch) {
+      month = MONTH_INDEX[mMatch[1]];
+      year = month >= 8 ? 2026 : 2027;
+      const dMatch = str.match(/\b(\d{1,2})\b/);
+      day = dMatch ? parseInt(dMatch[1], 10) : 1;
+      const yMatch = str.match(/\b(202[6-7])\b/);
+      if (yMatch) year = parseInt(yMatch[1], 10);
+    }
+  }
+
+  const timeStr = `${item.ora || ""} ${item.orario || ""}`;
+  const tMatch = timeStr.match(/\b(\d{1,2})[:.](\d{2})\b/);
+  if (tMatch) {
+    hour = parseInt(tMatch[1], 10);
+    minute = parseInt(tMatch[2], 10);
+  }
+
+  if (year !== null && month !== null && day !== null) {
+    return new Date(year, month, day, hour, minute);
+  }
+  return null;
+}
+
+function sortActivities(items) {
+  return [...items].sort((a, b) => {
+    const da = parseActivityDate(a);
+    const db = parseActivityDate(b);
+    if (da && db) return da.getTime() - db.getTime();
+    if (da) return -1;
+    if (db) return 1;
+    return 0;
+  });
+}
+
+function answerAttivita(p, idx, ctx = {}) {
   const att = idx.attivita || {};
   const istituto = att.attivita_istituto || [];
   const sintesi = att.attivita_classe_sintesi || [];
   const consigli = att.consigli_classe_dettaglio || [];
   const colloqui = att.colloqui_generali || [];
+  const now = ctx?.now || p.now || new Date();
 
   // 1. Consigli di classe o Scrutini per una classe specifica
   if (p.classi?.length && (p.subType === "consigli_classe" || p.subType === "scrutini" || p.subType === "generale")) {
@@ -734,7 +788,36 @@ function answerAttivita(p, idx) {
     }
 
     if (matches.length > 0) {
+      matches = sortActivities(matches);
       const isScrutiniOnly = p.subType === "scrutini";
+
+      if (p.isProssimo) {
+        const upcoming = matches.filter((m) => {
+          const d = parseActivityDate(m);
+          return d && d >= now;
+        });
+        const target = upcoming.length > 0 ? upcoming[0] : matches[matches.length - 1];
+        const nextList = upcoming.length > 0 ? upcoming : matches;
+        const lines = nextList.map((m) => ({
+          when: m.giorno || m.periodo,
+          main: `Ore ${m.ora} • ${m.aula || "Lab. Multimediale"}`,
+          sub: m.periodo ? `${m.periodo}` : "",
+        }));
+        const targetWhere = target.aula ? ` in ${target.aula}` : "";
+        const title = isScrutiniOnly ? `Prossimo Scrutinio ${clsId}` : `Prossimo Consiglio di Classe ${clsId}`;
+        const speech = isScrutiniOnly
+          ? `Il prossimo scrutinio per la ${clsId} è in programma ${target.giorno || target.periodo} alle ore ${target.ora}${targetWhere}.`
+          : `Il prossimo consiglio di classe per la ${clsId} si terrà ${target.giorno || target.periodo} alle ${target.ora}${targetWhere}.`;
+        return {
+          title,
+          badge: "PROSSIMA ATTIVITÀ",
+          lines,
+          note: `Calendario dal Piano Annuale delle Attività 2026/27 per la classe ${clsId}.`,
+          speech,
+          rooms: nextList.map((m) => m.aula).filter(Boolean),
+        };
+      }
+
       const title = isScrutiniOnly ? `Scrutini Classe ${clsId}` : `Consigli di Classe ${clsId}`;
       const lines = matches.map((m) => ({
         when: m.giorno || m.periodo,
@@ -763,8 +846,8 @@ function answerAttivita(p, idx) {
       sub: "",
     }));
     return {
-      title: "Calendario Scrutini",
-      badge: "PIANO ATTIVITÀ",
+      title: p.isProssimo ? "Prossimi Scrutini" : "Calendario Scrutini",
+      badge: p.isProssimo ? "PROSSIMA ATTIVITÀ" : "PIANO ATTIVITÀ",
       lines: lines.length ? lines : [{ when: "Gennaio / Giugno", main: "Scrutini I e II periodo", sub: "" }],
       note: "Sintesi sessioni di scrutinio dal Piano Annuale delle Attività.",
       speech: "Le sessioni di scrutinio sono previste a gennaio per il primo periodo e a giugno per il secondo periodo.",
@@ -774,7 +857,32 @@ function answerAttivita(p, idx) {
 
   // 3. Collegio Docenti
   if (p.subType === "collegio" || /\bcollegio\b/i.test(p.queryText || "")) {
-    const collegi = istituto.filter((i) => /collegio docenti/i.test(i.attivita));
+    let collegi = istituto.filter((i) => /collegio docenti/i.test(i.attivita));
+    collegi = sortActivities(collegi);
+
+    if (p.isProssimo) {
+      const upcoming = collegi.filter((c) => {
+        const d = parseActivityDate(c);
+        return d && d >= now;
+      });
+      const target = upcoming.length > 0 ? upcoming[0] : collegi[collegi.length - 1];
+      const nextList = upcoming.length > 0 ? upcoming : collegi;
+      const lines = nextList.map((c) => ({
+        when: `${cap(c.mese)} ${c.data}`,
+        main: c.attivita,
+        sub: c.orario ? `Orario: ${c.orario}${c.durata ? " (" + c.durata + ")" : ""}` : "",
+      }));
+      const orarioStr = target.orario ? ` dalle ore ${target.orario}` : "";
+      return {
+        title: "Prossimo Collegio Docenti",
+        badge: "PROSSIMA ATTIVITÀ",
+        lines,
+        note: "Date e orari delle sedute del Collegio Docenti a.s. 2026/27.",
+        speech: `Il prossimo Collegio Docenti si terrà in data ${cap(target.mese)} ${target.data}${orarioStr}. Oggetto: ${target.attivita.replace(/\n/g, ' ')}.`,
+        rooms: [],
+      };
+    }
+
     const lines = collegi.map((c) => ({
       when: `${cap(c.mese)} ${c.data}`,
       main: c.attivita,
@@ -803,6 +911,30 @@ function answerAttivita(p, idx) {
         filtered = colloqui.filter((c) => c.sede.toLowerCase() === "rizzarda");
       }
     }
+    filtered = sortActivities(filtered);
+
+    if (p.isProssimo) {
+      const upcoming = filtered.filter((c) => {
+        const d = parseActivityDate(c);
+        return d && d >= now;
+      });
+      const target = upcoming.length > 0 ? upcoming[0] : filtered[filtered.length - 1];
+      const nextList = upcoming.length > 0 ? upcoming : filtered;
+      const lines = nextList.map((c) => ({
+        when: `${c.periodo} • ${c.giorno} ${c.data}`,
+        main: `Sede: ${c.sede} (${c.classi})`,
+        sub: "",
+      }));
+      return {
+        title: "Prossimi Colloqui Generali",
+        badge: "PROSSIMA ATTIVITÀ",
+        lines,
+        note: "Date dei colloqui generali per il I e II periodo.",
+        speech: `I prossimi colloqui generali per ${target.sede} si terranno ${target.giorno} ${target.data} (${target.classi}).`,
+        rooms: [],
+      };
+    }
+
     const lines = filtered.map((c) => ({
       when: `${c.periodo} • ${c.giorno} ${c.data}`,
       main: `Sede: ${c.sede} (${c.classi})`,
@@ -823,10 +955,11 @@ function answerAttivita(p, idx) {
     const meseNorm = p.mese.toLowerCase();
     const listIst = istituto.filter((i) => i.mese.toLowerCase() === meseNorm);
     const listSin = sintesi.filter((s) => s.mese.toLowerCase() === meseNorm);
-    const lines = [
-      ...listIst.map((i) => ({ when: i.data, main: i.attivita, sub: i.orario ? `Orario: ${i.orario}` : "" })),
-      ...listSin.map((s) => ({ when: s.data, main: s.attivita, sub: "Sintesi collegiale" })),
+    const rawLines = [
+      ...listIst.map((i) => ({ ...i, when: i.data, main: i.attivita, sub: i.orario ? `Orario: ${i.orario}` : "" })),
+      ...listSin.map((s) => ({ ...s, when: s.data, main: s.attivita, sub: "Sintesi collegiale" })),
     ];
+    const lines = sortActivities(rawLines);
     return {
       title: `Attività di ${cap(p.mese)}`,
       badge: "PIANO ATTIVITÀ",
@@ -839,8 +972,31 @@ function answerAttivita(p, idx) {
     };
   }
 
-  // 6. Panoramica generale attività
-  const lines = istituto.slice(0, 8).map((i) => ({
+  // 6. Panoramica generale attività o Prossima attività generale
+  const sortedIst = sortActivities(istituto);
+  if (p.isProssimo) {
+    const upcoming = sortedIst.filter((i) => {
+      const d = parseActivityDate(i);
+      return d && d >= now;
+    });
+    const target = upcoming.length > 0 ? upcoming[0] : sortedIst[0];
+    const nextList = upcoming.length > 0 ? upcoming : sortedIst;
+    const lines = nextList.slice(0, 8).map((i) => ({
+      when: `${cap(i.mese)} ${i.data}`,
+      main: i.attivita,
+      sub: i.orario ? `Orario: ${i.orario}` : "",
+    }));
+    return {
+      title: "Prossima Attività d'Istituto",
+      badge: "PROSSIMA ATTIVITÀ",
+      lines,
+      note: "Principali appuntamenti e impegni collegiali del personale docente.",
+      speech: `La prossima attività d'istituto in programma è: ${target.attivita.replace(/\n/g, ' ')}, prevista il ${cap(target.mese)} ${target.data}.`,
+      rooms: [],
+    };
+  }
+
+  const lines = sortedIst.slice(0, 8).map((i) => ({
     when: `${cap(i.mese)} ${i.data}`,
     main: i.attivita,
     sub: i.orario ? `Orario: ${i.orario}` : "",
@@ -855,7 +1011,7 @@ function answerAttivita(p, idx) {
   };
 }
 
-export function answer(p, idx) {
+export function answer(p, idx, ctx = {}) {
   switch (p.intent) {
     case "docente":
       return answerDocente(p, idx);
@@ -866,7 +1022,7 @@ export function answer(p, idx) {
     case "aula":
       return answerAula(p, idx);
     case "attivita":
-      return answerAttivita(p, idx);
+      return answerAttivita(p, idx, ctx);
     case "ambiguo": {
       const names = p.candidati.slice(0, 4).map((d) => titleCase(d.nome));
       return {

@@ -136,6 +136,29 @@ assert.equal(r.p.subType, "scrutini");
 assert.ok(r.a.title.includes("4ITA"));
 console.log("✓ Scrutini 4ITA:", r.a.speech);
 
+r = ask("qual è il prossimo collegio docenti");
+assert.equal(r.p.intent, "attivita");
+assert.equal(r.p.isProssimo, true);
+assert.equal(r.a.title, "Prossimo Collegio Docenti");
+assert.equal(r.a.badge, "PROSSIMA ATTIVITÀ");
+assert.ok(r.a.speech.includes("28 mercoledì"));
+console.log("✓ Prossimo Collegio Docenti:", r.a.speech);
+
+r = ask("prossimo consiglio di classe della 4ITA");
+assert.equal(r.p.intent, "attivita");
+assert.equal(r.p.isProssimo, true);
+assert.equal(r.a.title, "Prossimo Consiglio di Classe 4ITA");
+assert.equal(r.a.badge, "PROSSIMA ATTIVITÀ");
+assert.ok(r.a.speech.includes("9 ottobre 2026"));
+console.log("✓ Prossimo CdC 4ITA:", r.a.speech);
+
+r = ask("qual è la prossima attività");
+assert.equal(r.p.intent, "attivita");
+assert.equal(r.p.isProssimo, true);
+assert.equal(r.a.title, "Prossima Attività d'Istituto");
+assert.equal(r.a.badge, "PROSSIMA ATTIVITÀ");
+console.log("✓ Prossima Attività Istituto:", r.a.speech);
+
 console.log("\n=== 7. Test Scansione Oraria Ufficiale ===");
 r = ask("4ITA lunedì alla prima ora");
 assert.ok(r.a.badge.includes("7:50-8:40"));

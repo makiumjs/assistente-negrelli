@@ -90,9 +90,11 @@
       backdrop-filter: blur(8px);
     }
 
-    /* Pannello Destra: Attività & Orario */
+    /* Pannello Destra: Attività & Orario (Larghezza fissa calibrata per evitare dilatazioni) */
     #map-panel {
-      flex: 0.9;
+      flex: 0 0 460px;
+      width: 460px;
+      max-width: 460px;
       display: flex;
       flex-direction: column;
       background: linear-gradient(165deg, #071215 0%, #0a181c 50%, #0d1e22 100%);
@@ -402,6 +404,7 @@
         flex: 0 1 auto;
         max-height: 44dvh;
         width: 100%;
+        max-width: 100%;
         border-left: none;
         border-top: 1px solid rgba(45, 212, 191, 0.2);
         padding: 10px 12px;
@@ -615,7 +618,7 @@
       }
     }
 
-    // Normalizzazione parlata estesa per Web Speech API su tutte le ore (1ª-8ª)
+    // Normalizzazione parlata estesa per Web Speech API su ore, sigle scolastiche e date
     function sanitizeForSpeech(text) {
       if (!text) return "";
       const ORD = {
@@ -625,16 +628,26 @@
       return text
         .replace(/\b([1-8])ª\s*ora\b/gi, (m, n) => `in ${ORD[n] || n} ora`)
         .replace(/\b([1-8])ª\b/gi, (m, n) => ORD[n] || n)
-        .replace(/\b1ITA\b/gi, "prima I.T.A.")
-        .replace(/\b2ITA\b/gi, "seconda I.T.A.")
-        .replace(/\b3ITA\b/gi, "terza I.T.A.")
-        .replace(/\b4ITA\b/gi, "quarta I.T.A.")
-        .replace(/\b5ITA\b/gi, "quinta I.T.A.")
-        .replace(/\b1ITE\b/gi, "prima I.T.E.")
-        .replace(/\b1BTA\b/gi, "prima B.T.A.")
-        .replace(/\b1BTB\b/gi, "prima B.T.B.")
-        .replace(/\b2CAT\b/gi, "seconda C.A.T.")
-        .replace(/\b4EE\b/gi, "quarta E.E.")
+        .replace(/\b1°\b/g, "primo")
+        .replace(/\b2°\b/g, "secondo")
+        .replace(/\ba\.s\.\b/gi, "anno scolastico")
+        .replace(/\b2026\/27\b/g, "duemilaventisei ventisette")
+        .replace(/\bPAA\b/g, "Piano Annuale delle Attività")
+        .replace(/\bPOF\b/g, "P.O.F.")
+        .replace(/\bPTOF\b/g, "P.T.O.F.")
+        .replace(/\bPEI\b/g, "P.E.I.")
+        .replace(/\bPDP\b/g, "P.D.P.")
+        .replace(/\bGLO\b/g, "G.L.O.")
+        .replace(/\bUDA\b/g, "U.D.A.")
+        .replace(/\bCdC\b|\bCDC\b/g, "consigli di classe")
+        .replace(/\bI e II periodo\b/gi, "primo e secondo periodo")
+        .replace(/\bI periodo\b/gi, "primo periodo")
+        .replace(/\bII periodo\b/gi, "secondo periodo")
+        .replace(/\b([1-5])([A-Z]{2,4})\b/g, (m, num, letters) => {
+          const ordStr = ORD[num] || num;
+          const letterSpelled = letters.split("").join(".");
+          return `${ordStr} ${letterSpelled}.`;
+        })
         .replace(/\bLab\b/gi, "Laboratorio")
         .replace(/\bdisposizione\b/gi, "a disposizione")
         .replace(/\s+/g, " ")
