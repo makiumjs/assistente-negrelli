@@ -40174,5 +40174,476 @@
         "classi": "tutte"
       }
     ]
+  },
+  "calendario": {
+    "meta": {
+      "istituto": "ITIS Negrelli - Feltre",
+      "anno_scolastico": "2026/2027",
+      "comunicato": "Comunicato n. 75 del 10 ottobre 2026",
+      "delibera": "Delibera Consiglio di Istituto del 31 agosto 2026",
+      "inizio_lezioni": "2026-09-10",
+      "inizio_lezioni_testo": "Giovedì 10 settembre 2026",
+      "fine_lezioni": "2027-06-08",
+      "fine_lezioni_testo": "Martedì 8 giugno 2027"
+    },
+    "vacanze": [
+      {
+        "id": "ponte_immacolata",
+        "titolo": "Ponte dell'Immacolata",
+        "da": "2026-12-07",
+        "a": "2026-12-07",
+        "rientro": "2026-12-09",
+        "descrizione": "Lunedì 7 dicembre 2026 (ponte dell'Immacolata)",
+        "date": [
+          "2026-12-07"
+        ]
+      },
+      {
+        "id": "vacanze_natale",
+        "titolo": "Vacanze di Natale",
+        "da": "2026-12-24",
+        "a": "2027-01-05",
+        "rientro": "2027-01-07",
+        "descrizione": "Da giovedì 24 dicembre 2026 a martedì 5 gennaio 2027 (rientro 7 gennaio dopo l'Epifania)",
+        "date": [
+          "2026-12-24",
+          "2026-12-25",
+          "2026-12-26",
+          "2026-12-27",
+          "2026-12-28",
+          "2026-12-29",
+          "2026-12-30",
+          "2026-12-31",
+          "2027-01-01",
+          "2027-01-02",
+          "2027-01-03",
+          "2027-01-04",
+          "2027-01-05"
+        ]
+      },
+      {
+        "id": "carnevale",
+        "titolo": "Carnevale e Mercoledì delle Ceneri",
+        "da": "2027-02-08",
+        "a": "2027-02-10",
+        "rientro": "2027-02-11",
+        "descrizione": "Da lunedì 8 febbraio a mercoledì 10 febbraio 2027 (rientro giovedì 11 febbraio)",
+        "date": [
+          "2027-02-08",
+          "2027-02-09",
+          "2027-02-10"
+        ]
+      },
+      {
+        "id": "vacanze_pasqua",
+        "titolo": "Vacanze di Pasqua",
+        "da": "2027-03-25",
+        "a": "2027-03-30",
+        "rientro": "2027-03-31",
+        "descrizione": "Da giovedì 25 marzo a martedì 30 marzo 2027 (rientro mercoledì 31 marzo)",
+        "date": [
+          "2027-03-25",
+          "2027-03-26",
+          "2027-03-27",
+          "2027-03-28",
+          "2027-03-29",
+          "2027-03-30"
+        ]
+      },
+      {
+        "id": "ponte_primo_maggio",
+        "titolo": "Ponte del 1° Maggio",
+        "da": "2027-04-29",
+        "a": "2027-04-30",
+        "rientro": "2027-05-03",
+        "descrizione": "Da giovedì 29 aprile a venerdì 30 aprile 2027 (ponte per la festa del Lavoro)",
+        "date": [
+          "2027-04-29",
+          "2027-04-30"
+        ]
+      },
+      {
+        "id": "ponte_patrono",
+        "titolo": "Ponte del Santo Patrono",
+        "da": "2027-05-15",
+        "a": "2027-05-15",
+        "rientro": "2027-05-17",
+        "descrizione": "Sabato 15 maggio 2027 (ponte del Santo Patrono)",
+        "date": [
+          "2027-05-15"
+        ]
+      }
+    ],
+    "festivita": [
+      {
+        "data": "2026-10-04",
+        "nome": "San Francesco d'Assisi"
+      },
+      {
+        "data": "2026-11-01",
+        "nome": "Tutti i Santi"
+      },
+      {
+        "data": "2026-12-08",
+        "nome": "Immacolata Concezione"
+      },
+      {
+        "data": "2026-12-25",
+        "nome": "Natale"
+      },
+      {
+        "data": "2026-12-26",
+        "nome": "Santo Stefano"
+      },
+      {
+        "data": "2027-01-01",
+        "nome": "Capodanno"
+      },
+      {
+        "data": "2027-01-06",
+        "nome": "Epifania"
+      },
+      {
+        "data": "2027-03-29",
+        "nome": "Lunedì dell'Angelo (Pasquetta)"
+      },
+      {
+        "data": "2027-04-25",
+        "nome": "Festa della Liberazione"
+      },
+      {
+        "data": "2027-05-01",
+        "nome": "Festa del Lavoro"
+      },
+      {
+        "data": "2027-06-02",
+        "nome": "Festa della Repubblica"
+      }
+    ],
+    "chiusure_totali": [
+      {
+        "data": "2026-12-07",
+        "motivo": "Ponte dell'Immacolata"
+      },
+      {
+        "data": "2026-12-24",
+        "motivo": "Vigilia di Natale"
+      },
+      {
+        "data": "2026-12-31",
+        "motivo": "Vigilia di Capodanno"
+      },
+      {
+        "data": "2027-01-02",
+        "motivo": "Chiusura natalizia deliberata"
+      },
+      {
+        "data": "2027-03-27",
+        "motivo": "Vigilia di Pasqua"
+      },
+      {
+        "data": "2027-04-30",
+        "motivo": "Ponte 1° Maggio"
+      },
+      {
+        "data": "2027-05-15",
+        "motivo": "Ponte del Santo Patrono"
+      },
+      {
+        "data": "2027-07-17",
+        "motivo": "Sabato estivo"
+      },
+      {
+        "data": "2027-07-24",
+        "motivo": "Sabato estivo"
+      },
+      {
+        "data": "2027-07-31",
+        "motivo": "Sabato estivo"
+      },
+      {
+        "data": "2027-08-07",
+        "motivo": "Sabato estivo"
+      },
+      {
+        "data": "2027-08-14",
+        "motivo": "Sabato estivo"
+      }
+    ],
+    "giorni_sospensione": {
+      "2026-12-07": {
+        "tipo": "vacanza",
+        "id": "ponte_immacolata",
+        "titolo": "Ponte dell'Immacolata",
+        "descrizione": "Lunedì 7 dicembre 2026 (ponte dell'Immacolata)",
+        "rientro": "2026-12-09",
+        "chiuso_uffici": true
+      },
+      "2026-12-24": {
+        "tipo": "vacanza",
+        "id": "vacanze_natale",
+        "titolo": "Vacanze di Natale",
+        "descrizione": "Da giovedì 24 dicembre 2026 a martedì 5 gennaio 2027 (rientro 7 gennaio dopo l'Epifania)",
+        "rientro": "2027-01-07",
+        "chiuso_uffici": true
+      },
+      "2026-12-25": {
+        "tipo": "festivita",
+        "id": "festivita",
+        "titolo": "Natale",
+        "descrizione": "Natale (festività obbligatoria)",
+        "rientro": null
+      },
+      "2026-12-26": {
+        "tipo": "festivita",
+        "id": "festivita",
+        "titolo": "Santo Stefano",
+        "descrizione": "Santo Stefano (festività obbligatoria)",
+        "rientro": null
+      },
+      "2026-12-27": {
+        "tipo": "vacanza",
+        "id": "vacanze_natale",
+        "titolo": "Vacanze di Natale",
+        "descrizione": "Da giovedì 24 dicembre 2026 a martedì 5 gennaio 2027 (rientro 7 gennaio dopo l'Epifania)",
+        "rientro": "2027-01-07"
+      },
+      "2026-12-28": {
+        "tipo": "vacanza",
+        "id": "vacanze_natale",
+        "titolo": "Vacanze di Natale",
+        "descrizione": "Da giovedì 24 dicembre 2026 a martedì 5 gennaio 2027 (rientro 7 gennaio dopo l'Epifania)",
+        "rientro": "2027-01-07"
+      },
+      "2026-12-29": {
+        "tipo": "vacanza",
+        "id": "vacanze_natale",
+        "titolo": "Vacanze di Natale",
+        "descrizione": "Da giovedì 24 dicembre 2026 a martedì 5 gennaio 2027 (rientro 7 gennaio dopo l'Epifania)",
+        "rientro": "2027-01-07"
+      },
+      "2026-12-30": {
+        "tipo": "vacanza",
+        "id": "vacanze_natale",
+        "titolo": "Vacanze di Natale",
+        "descrizione": "Da giovedì 24 dicembre 2026 a martedì 5 gennaio 2027 (rientro 7 gennaio dopo l'Epifania)",
+        "rientro": "2027-01-07"
+      },
+      "2026-12-31": {
+        "tipo": "vacanza",
+        "id": "vacanze_natale",
+        "titolo": "Vacanze di Natale",
+        "descrizione": "Da giovedì 24 dicembre 2026 a martedì 5 gennaio 2027 (rientro 7 gennaio dopo l'Epifania)",
+        "rientro": "2027-01-07",
+        "chiuso_uffici": true
+      },
+      "2027-01-01": {
+        "tipo": "festivita",
+        "id": "festivita",
+        "titolo": "Capodanno",
+        "descrizione": "Capodanno (festività obbligatoria)",
+        "rientro": null
+      },
+      "2027-01-02": {
+        "tipo": "vacanza",
+        "id": "vacanze_natale",
+        "titolo": "Vacanze di Natale",
+        "descrizione": "Da giovedì 24 dicembre 2026 a martedì 5 gennaio 2027 (rientro 7 gennaio dopo l'Epifania)",
+        "rientro": "2027-01-07",
+        "chiuso_uffici": true
+      },
+      "2027-01-03": {
+        "tipo": "vacanza",
+        "id": "vacanze_natale",
+        "titolo": "Vacanze di Natale",
+        "descrizione": "Da giovedì 24 dicembre 2026 a martedì 5 gennaio 2027 (rientro 7 gennaio dopo l'Epifania)",
+        "rientro": "2027-01-07"
+      },
+      "2027-01-04": {
+        "tipo": "vacanza",
+        "id": "vacanze_natale",
+        "titolo": "Vacanze di Natale",
+        "descrizione": "Da giovedì 24 dicembre 2026 a martedì 5 gennaio 2027 (rientro 7 gennaio dopo l'Epifania)",
+        "rientro": "2027-01-07"
+      },
+      "2027-01-05": {
+        "tipo": "vacanza",
+        "id": "vacanze_natale",
+        "titolo": "Vacanze di Natale",
+        "descrizione": "Da giovedì 24 dicembre 2026 a martedì 5 gennaio 2027 (rientro 7 gennaio dopo l'Epifania)",
+        "rientro": "2027-01-07"
+      },
+      "2027-02-08": {
+        "tipo": "vacanza",
+        "id": "carnevale",
+        "titolo": "Carnevale e Mercoledì delle Ceneri",
+        "descrizione": "Da lunedì 8 febbraio a mercoledì 10 febbraio 2027 (rientro giovedì 11 febbraio)",
+        "rientro": "2027-02-11"
+      },
+      "2027-02-09": {
+        "tipo": "vacanza",
+        "id": "carnevale",
+        "titolo": "Carnevale e Mercoledì delle Ceneri",
+        "descrizione": "Da lunedì 8 febbraio a mercoledì 10 febbraio 2027 (rientro giovedì 11 febbraio)",
+        "rientro": "2027-02-11"
+      },
+      "2027-02-10": {
+        "tipo": "vacanza",
+        "id": "carnevale",
+        "titolo": "Carnevale e Mercoledì delle Ceneri",
+        "descrizione": "Da lunedì 8 febbraio a mercoledì 10 febbraio 2027 (rientro giovedì 11 febbraio)",
+        "rientro": "2027-02-11"
+      },
+      "2027-03-25": {
+        "tipo": "vacanza",
+        "id": "vacanze_pasqua",
+        "titolo": "Vacanze di Pasqua",
+        "descrizione": "Da giovedì 25 marzo a martedì 30 marzo 2027 (rientro mercoledì 31 marzo)",
+        "rientro": "2027-03-31"
+      },
+      "2027-03-26": {
+        "tipo": "vacanza",
+        "id": "vacanze_pasqua",
+        "titolo": "Vacanze di Pasqua",
+        "descrizione": "Da giovedì 25 marzo a martedì 30 marzo 2027 (rientro mercoledì 31 marzo)",
+        "rientro": "2027-03-31"
+      },
+      "2027-03-27": {
+        "tipo": "vacanza",
+        "id": "vacanze_pasqua",
+        "titolo": "Vacanze di Pasqua",
+        "descrizione": "Da giovedì 25 marzo a martedì 30 marzo 2027 (rientro mercoledì 31 marzo)",
+        "rientro": "2027-03-31",
+        "chiuso_uffici": true
+      },
+      "2027-03-28": {
+        "tipo": "vacanza",
+        "id": "vacanze_pasqua",
+        "titolo": "Vacanze di Pasqua",
+        "descrizione": "Da giovedì 25 marzo a martedì 30 marzo 2027 (rientro mercoledì 31 marzo)",
+        "rientro": "2027-03-31"
+      },
+      "2027-03-29": {
+        "tipo": "festivita",
+        "id": "festivita",
+        "titolo": "Lunedì dell'Angelo (Pasquetta)",
+        "descrizione": "Lunedì dell'Angelo (Pasquetta) (festività obbligatoria)",
+        "rientro": null
+      },
+      "2027-03-30": {
+        "tipo": "vacanza",
+        "id": "vacanze_pasqua",
+        "titolo": "Vacanze di Pasqua",
+        "descrizione": "Da giovedì 25 marzo a martedì 30 marzo 2027 (rientro mercoledì 31 marzo)",
+        "rientro": "2027-03-31"
+      },
+      "2027-04-29": {
+        "tipo": "vacanza",
+        "id": "ponte_primo_maggio",
+        "titolo": "Ponte del 1° Maggio",
+        "descrizione": "Da giovedì 29 aprile a venerdì 30 aprile 2027 (ponte per la festa del Lavoro)",
+        "rientro": "2027-05-03"
+      },
+      "2027-04-30": {
+        "tipo": "vacanza",
+        "id": "ponte_primo_maggio",
+        "titolo": "Ponte del 1° Maggio",
+        "descrizione": "Da giovedì 29 aprile a venerdì 30 aprile 2027 (ponte per la festa del Lavoro)",
+        "rientro": "2027-05-03",
+        "chiuso_uffici": true
+      },
+      "2027-05-15": {
+        "tipo": "vacanza",
+        "id": "ponte_patrono",
+        "titolo": "Ponte del Santo Patrono",
+        "descrizione": "Sabato 15 maggio 2027 (ponte del Santo Patrono)",
+        "rientro": "2027-05-17",
+        "chiuso_uffici": true
+      },
+      "2026-10-04": {
+        "tipo": "festivita",
+        "id": "festivita",
+        "titolo": "San Francesco d'Assisi",
+        "descrizione": "San Francesco d'Assisi (festività obbligatoria)",
+        "rientro": null
+      },
+      "2026-11-01": {
+        "tipo": "festivita",
+        "id": "festivita",
+        "titolo": "Tutti i Santi",
+        "descrizione": "Tutti i Santi (festività obbligatoria)",
+        "rientro": null
+      },
+      "2026-12-08": {
+        "tipo": "festivita",
+        "id": "festivita",
+        "titolo": "Immacolata Concezione",
+        "descrizione": "Immacolata Concezione (festività obbligatoria)",
+        "rientro": null
+      },
+      "2027-01-06": {
+        "tipo": "festivita",
+        "id": "festivita",
+        "titolo": "Epifania",
+        "descrizione": "Epifania (festività obbligatoria)",
+        "rientro": null
+      },
+      "2027-04-25": {
+        "tipo": "festivita",
+        "id": "festivita",
+        "titolo": "Festa della Liberazione",
+        "descrizione": "Festa della Liberazione (festività obbligatoria)",
+        "rientro": null
+      },
+      "2027-05-01": {
+        "tipo": "festivita",
+        "id": "festivita",
+        "titolo": "Festa del Lavoro",
+        "descrizione": "Festa del Lavoro (festività obbligatoria)",
+        "rientro": null
+      },
+      "2027-06-02": {
+        "tipo": "festivita",
+        "id": "festivita",
+        "titolo": "Festa della Repubblica",
+        "descrizione": "Festa della Repubblica (festività obbligatoria)",
+        "rientro": null
+      },
+      "2027-07-17": {
+        "tipo": "chiusura_istituto",
+        "id": "chiusura",
+        "titolo": "Sabato estivo",
+        "descrizione": "Chiusura totale istituto e uffici: Sabato estivo",
+        "chiuso_uffici": true
+      },
+      "2027-07-24": {
+        "tipo": "chiusura_istituto",
+        "id": "chiusura",
+        "titolo": "Sabato estivo",
+        "descrizione": "Chiusura totale istituto e uffici: Sabato estivo",
+        "chiuso_uffici": true
+      },
+      "2027-07-31": {
+        "tipo": "chiusura_istituto",
+        "id": "chiusura",
+        "titolo": "Sabato estivo",
+        "descrizione": "Chiusura totale istituto e uffici: Sabato estivo",
+        "chiuso_uffici": true
+      },
+      "2027-08-07": {
+        "tipo": "chiusura_istituto",
+        "id": "chiusura",
+        "titolo": "Sabato estivo",
+        "descrizione": "Chiusura totale istituto e uffici: Sabato estivo",
+        "chiuso_uffici": true
+      },
+      "2027-08-14": {
+        "tipo": "chiusura_istituto",
+        "id": "chiusura",
+        "titolo": "Sabato estivo",
+        "descrizione": "Chiusura totale istituto e uffici: Sabato estivo",
+        "chiuso_uffici": true
+      }
+    }
   }
 }

@@ -13,6 +13,7 @@ from collections import defaultdict
 
 import pdfplumber
 from parse_attivita import parse_attivita_pdf
+from parse_calendario import parse_calendario_pdf
 
 def find_pdf_path(filename):
     candidates = [
@@ -579,6 +580,14 @@ def run():
         print(f"  ⚠ Avviso: impossibile caricare il Piano Attività ({e})")
         attivita = {}
 
+    print("Lettura Calendario Scolastico PDF...")
+    try:
+        calendario = parse_calendario_pdf()
+        print(f"  ✓ Calendario caricato: {len(calendario.get('vacanze', []))} periodi vacanze, {len(calendario.get('giorni_sospensione', {}))} giorni sospesi.")
+    except Exception as e:
+        print(f"  ⚠ Avviso: impossibile caricare il Calendario Scolastico ({e})")
+        calendario = {}
+
     dataset = {
         "meta": {
             "istituto": "ITIS Negrelli Feltre",
@@ -601,6 +610,7 @@ def run():
         "aule": aule,
         "aule_libere": libere,
         "attivita": attivita,
+        "calendario": calendario,
     }
 
     os.makedirs(os.path.dirname(OUT_JSON), exist_ok=True)

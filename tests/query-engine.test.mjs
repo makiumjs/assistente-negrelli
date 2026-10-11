@@ -172,4 +172,90 @@ r = ask("4ITA sabato alla quinta ora");
 assert.equal(r.a.badge, "SABATO • USCITA ORE 12:05");
 console.log("✓ Sabato oltre 4ª ora (Uscita ore 12:05):", r.a.speech);
 
+console.log("\n=== 8. Test Calendario Scolastico ===");
+r = ask("quando finisce la scuola");
+assert.equal(r.p.intent, "calendario");
+assert.equal(r.p.subType, "fine_scuola");
+assert.ok(r.a.speech.includes("8 giugno 2027"));
+assert.equal(r.a.badge, "CALENDARIO SCOLASTICO");
+console.log("✓ Fine scuola:", r.a.speech);
+
+r = ask("quando inizia la scuola");
+assert.equal(r.p.intent, "calendario");
+assert.equal(r.p.subType, "inizio_scuola");
+assert.ok(r.a.speech.includes("10 settembre 2026"));
+console.log("✓ Inizio scuola:", r.a.speech);
+
+r = ask("quando sono le vacanze di natale");
+assert.equal(r.p.intent, "calendario");
+assert.equal(r.p.subType, "natale");
+assert.ok(r.a.speech.includes("24 dicembre 2026"));
+assert.ok(r.a.speech.includes("7 gennaio 2027"));
+assert.equal(r.a.badge, "VACANZE NATALIZIE");
+console.log("✓ Vacanze di Natale:", r.a.speech);
+
+r = ask("quando sono le vacanze di pasqua");
+assert.equal(r.p.intent, "calendario");
+assert.equal(r.p.subType, "pasqua");
+assert.ok(r.a.speech.includes("25 marzo"));
+assert.ok(r.a.speech.includes("31 marzo 2027"));
+assert.equal(r.a.badge, "VACANZE PASQUALI");
+console.log("✓ Vacanze di Pasqua:", r.a.speech);
+
+r = ask("quando è carnevale");
+assert.equal(r.p.intent, "calendario");
+assert.equal(r.p.subType, "carnevale");
+assert.ok(r.a.speech.includes("8 febbraio"));
+assert.ok(r.a.speech.includes("11 febbraio 2027"));
+assert.equal(r.a.badge, "CARNEVALE");
+console.log("✓ Carnevale e Ceneri:", r.a.speech);
+
+r = ask("quali sono i ponti");
+assert.equal(r.p.intent, "calendario");
+assert.equal(r.p.subType, "ponti");
+assert.ok(r.a.speech.includes("7 dicembre"));
+assert.ok(r.a.speech.includes("primo maggio"));
+assert.ok(r.a.speech.includes("Santo Patrono"));
+assert.equal(r.a.badge, "PONTI DELIBERATI");
+console.log("✓ Tutti i ponti deliberati:", r.a.speech);
+
+r = ask("quando è il ponte dell'immacolata");
+assert.equal(r.p.intent, "calendario");
+assert.equal(r.p.subType, "ponti");
+assert.ok(r.a.speech.includes("7 dicembre"));
+assert.ok(r.a.speech.includes("9 dicembre"));
+console.log("✓ Ponte Immacolata specifico:", r.a.speech);
+
+r = ask("qual è la prossima vacanza");
+assert.equal(r.p.intent, "calendario");
+assert.equal(r.p.subType, "prossima");
+assert.ok(r.a.speech.includes("Ponte dell'Immacolata"));
+console.log("✓ Prossima vacanza:", r.a.speech);
+
+r = ask("calendario scolastico");
+assert.equal(r.p.intent, "calendario");
+assert.equal(r.p.subType, "generale");
+assert.equal(r.a.badge, "CALENDARIO");
+console.log("✓ Panoramica calendario:", r.a.speech);
+
+r = ask("cosa fa Cassarino il 7 dicembre");
+assert.ok(r.a.speech.includes("Cassarino non ha lezioni"));
+assert.ok(r.a.speech.includes("Ponte dell'Immacolata"));
+assert.ok(r.a.speech.includes("9 dicembre"));
+assert.equal(r.a.badge, "VACANZE SCOLASTICHE");
+console.log("✓ Blocco orario docente su sospensione (7 dic):", r.a.speech);
+
+r = ask("cosa ha la 4ITA il 25 dicembre");
+assert.ok(r.a.speech.includes("4ITA non ha lezioni"));
+assert.ok(r.a.speech.includes("Natale"));
+assert.equal(r.a.badge, "FESTIVITÀ");
+console.log("✓ Blocco orario classe su festività (25 dic):", r.a.speech);
+
+const dec7Now = new Date("2026-12-07T10:00:00");
+const pDec7 = parseQuery("cosa ho oggi", idx, { now: dec7Now, me: "Cassarino" });
+const aDec7 = answer(pDec7, idx);
+assert.ok(aDec7.speech.includes("non hai lezioni"));
+assert.ok(aDec7.speech.includes("Ponte dell'Immacolata"));
+console.log("✓ Blocco orario relativo 'oggi' in giorno di vacanza:", aDec7.speech);
+
 console.log("\n TUTTI I TEST SONO PASSATI CON SUCCESSO! ");

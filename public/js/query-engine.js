@@ -36,6 +36,40 @@ const DAY_LABEL = {
 const dl = (d) => DAY_LABEL[d] || d;
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
+export const IT_MONTHS = {
+  gennaio: 1,
+  febbraio: 2,
+  marzo: 3,
+  aprile: 4,
+  maggio: 5,
+  giugno: 6,
+  luglio: 7,
+  agosto: 8,
+  settembre: 9,
+  ottobre: 10,
+  novembre: 11,
+  dicembre: 12,
+};
+export const IT_MONTH_NAMES = Object.entries(IT_MONTHS).reduce((acc, [k, v]) => {
+  acc[v] = k;
+  return acc;
+}, {});
+
+function pad2(n) {
+  return String(n).padStart(2, "0");
+}
+
+export function formatDateYMD(d) {
+  return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+}
+
+export function formatDateSpoken(ymd) {
+  if (!ymd) return "";
+  const [y, m, d] = ymd.split("-").map(Number);
+  const mName = IT_MONTH_NAMES[m] || "";
+  return `${d} ${mName}`;
+}
+
 export function formatDocenteName(nome) {
   if (!nome) return "";
   if (nome.startsWith("_")) {
@@ -107,7 +141,15 @@ export function buildIndex(db) {
 
   const scansione = db.meta?.scansione_oraria || null;
 
-  return { db, docenti, classKeys, aule, starts, attivita, scansione };
+  const calendario = db.calendario || {
+    meta: {},
+    vacanze: [],
+    festivita: [],
+    chiusure_totali: [],
+    giorni_sospensione: {},
+  };
+
+  return { db, docenti, classKeys, aule, starts, attivita, scansione, calendario };
 }
 
 // ------------------------------------------------------------------ entità
@@ -190,7 +232,23 @@ function findRooms(q, idx) {
   return [];
 }
 
+export function findExplicitDate(q) {
+  const m = q.match(/\b(?:il|l|del|dello|della)?\s*(\d{1,2})(?:°|ª|o)?\s+(settembre|ottobre|novembre|dicembre|gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto)(?:\s+(\d{4}))?\b/i);
+  if (!m) return null;
+  const day = parseInt(m[1], 10);
+  const mName = m[2].toLowerCase();
+  const month = IT_MONTHS[mName];
+  if (!month) return null;
+  const year = m[3] ? parseInt(m[3], 10) : (month >= 9 ? 2026 : 2027);
+  const targetDate = new Date(year, month - 1, day, 10, 0, 0);
+  const ymd = `${year}-${pad2(month)}-${pad2(day)}`;
+  const dayOfWeek = JS_DAYS[targetDate.getDay()];
+  return { ymd, targetDate, dayOfWeek, day, month, mName, year, matchedText: m[0] };
+}
+
 function findDay(q, now) {
+  const explicit = findExplicitDate(q);
+  if (explicit) return explicit.dayOfWeek;
   for (const d of ["lunedi", "martedi", "mercoledi", "giovedi", "venerdi", "sabato", "domenica"]) {
     if (new RegExp(`\\b${d}\\b`).test(q)) return d;
   }
@@ -256,13 +314,36 @@ export function parseQuery(text, idx, ctx = {}) {
   const { ids: classi, rest } = findClasses(q0, idx);
   const q = rest;
 
+  const explicitDate = findExplicitDate(q0);
+  let targetDateYMD = null;
+  let targetDate = null;
+  if (explicitDate) {
+    targetDateYMD = explicitDate.ymd;
+    targetDate = explicitDate.targetDate;
+  } else if (/\boggi\b/.test(q0)) {
+    targetDate = new Date(now);
+    targetDateYMD = formatDateYMD(targetDate);
+  } else if (/\bdomani\b/.test(q0)) {
+    targetDate = new Date(now.getTime() + 86400000);
+    targetDateYMD = formatDateYMD(targetDate);
+  } else if (/\bdopodomani\b/.test(q0)) {
+    targetDate = new Date(now.getTime() + 2 * 86400000);
+    targetDateYMD = formatDateYMD(targetDate);
+  } else if (/\bieri\b/.test(q0)) {
+    targetDate = new Date(now.getTime() - 86400000);
+    targetDateYMD = formatDateYMD(targetDate);
+  }
+
+  const giorniSospensione = idx.calendario?.giorni_sospensione || {};
+  const sospensione = targetDateYMD && giorniSospensione[targetDateYMD] ? giorniSospensione[targetDateYMD] : null;
+
   const day = findDay(q, now);
   const realtime = /\b(adesso|attualmente|in questo momento|in questo istante|ora attuale)\b/.test(q);
   let hour = findHour(q);
   if (realtime) hour = currentLesson(now, idx, day);
 
   const isProssimo = /\b(prossim[oiea]|successiv[oiea]|imminent[ei]|futur[oiea])\b/.test(q0);
-  const base = { day, hour, realtime, raw: text, now, isProssimo };
+  const base = { day, hour, realtime, raw: text, now, isProssimo, targetDateStr: targetDateYMD, sospensione };
 
   // Controllo per le Attività (Collegi docenti, Consigli di classe, Scrutini, Colloqui, ecc.)
   const isAttivita = /\b(attivita|impegni|collegio|collegi|consiglio|consigli|cdc|scrutini|scrutinio|colloqui|colloquio|glo|pdp|pei|dipartimenti|dipartimento|esami|idoneita|debito|debiti)\b/.test(q0);
@@ -286,6 +367,40 @@ export function parseQuery(text, idx, ctx = {}) {
     return { ...base, intent: "attivita", subType, classi, mese, queryText: q0 };
   }
 
+  // Controllo per Calendario Scolastico (vacanze, inizio/fine lezioni, ponti, festività)
+  const isCalendario =
+    /\b(calendario|vacanz[ae]|festivit[aà]|pont[ei]|sospension[ei]|rientro|chiusur[ae] scolastic[ae]|chiusur[ae] della scuola|chiusur[ae] dell istituto)\b/.test(q0) ||
+    /\b(quando\s+(?:finisce|finiscono|termina|terminano)\s+(?:la\s+scuola|le\s+lezioni|l\s*anno))\b/.test(q0) ||
+    /\b(quando\s+(?:inizia|iniziano|comincia|cominciano)\s+(?:la\s+scuola|le\s+lezioni|l\s*anno))\b/.test(q0) ||
+    /\b(quando\s+(?:chiude|chiudono)\s+(?:la\s+scuola|i\s+cancelli|gli\s+uffici))\b/.test(q0) ||
+    /\b(quando\s+(?:si\s+torna|si\s+rientra)\s+a\s+scuola)\b/.test(q0) ||
+    /\b(fine\s+(?:della\s+scuola|scuola|delle\s+lezioni|lezioni)|ultimo\s+giorno\s+di\s+scuola|termine\s+(?:delle\s+lezioni|lezioni))\b/.test(q0) ||
+    /\b(inizio\s+(?:della\s+scuola|scuola|delle\s+lezioni|lezioni)|primo\s+giorno\s+di\s+scuola)\b/.test(q0) ||
+    /\b(natale|natalizi[ae]|pasqua|pasquali|carnevale|ceneri|mercoledi\s+delle\s+ceneri|patrono|santo\s+patrono|immacolata)\b/.test(q0);
+
+  if (isCalendario) {
+    let subType = "generale";
+    if (/\b(fine\s+(?:della\s+scuola|scuola|delle\s+lezioni|lezioni)|ultimo\s+giorno\s+di\s+scuola|quando\s+(?:finisce|finiscono|termina|terminano)\s+(?:la\s+scuola|le\s+lezioni|l\s*anno)|termine\s+(?:delle\s+lezioni|lezioni))\b/.test(q0)) {
+      subType = "fine_scuola";
+    } else if (/\b(inizio\s+(?:della\s+scuola|scuola|delle\s+lezioni|lezioni)|primo\s+giorno\s+di\s+scuola|quando\s+(?:inizia|iniziano|comincia|cominciano)\s+(?:la\s+scuola|le\s+lezioni|l\s*anno))\b/.test(q0)) {
+      subType = "inizio_scuola";
+    } else if (/\b(natale|natalizi[ae]|vigilia\s+di\s+natale|capodanno|epifania)\b/.test(q0)) {
+      subType = "natale";
+    } else if (/\b(pasqua|pasquali|settimana\s+santa|lunedi\s+dell\s*angelo|pasquetta)\b/.test(q0)) {
+      subType = "pasqua";
+    } else if (/\b(carnevale|ceneri|mercoledi\s+delle\s+ceneri)\b/.test(q0)) {
+      subType = "carnevale";
+    } else if (/\b(pont[ei]|patrono|santo\s+patrono|immacolata|primo\s+maggio|1\s*maggio|festa\s+del\s+lavoro)\b/.test(q0)) {
+      subType = "ponti";
+    } else if (/\b(festivit[aà]|feste|giorni\s+festivi)\b/.test(q0)) {
+      subType = "festivita";
+    } else if (isProssimo) {
+      subType = "prossima";
+    }
+
+    return { ...base, intent: "calendario", subType, targetDateYMD, sospensione, queryText: q0 };
+  }
+
   const mentionsRoomWord = /\b(aula|aule|laboratorio|laboratori|lab|palestra|stanza|stanze)\b/.test(q);
   const wantsFree = /\b(liber[aeio]|vuot[aeio]|disponibil[ei])\b/.test(q);
   const onlyLabs = /\b(laboratori|laboratorio|lab)\b/.test(q);
@@ -306,6 +421,11 @@ export function parseQuery(text, idx, ctx = {}) {
 
   const me = ctx.me ? scoreDocenti(normalize(ctx.me), idx) : [];
   if (me.length === 1) return { ...base, intent: "docente", docente: me[0], isSelf: true };
+
+  if (sospensione) {
+    return { ...base, intent: "sospensione", targetDateYMD, sospensione };
+  }
+
   return { ...base, intent: "non_trovato" };
 }
 
@@ -1011,7 +1131,269 @@ function answerAttivita(p, idx, ctx = {}) {
   };
 }
 
+function answerSospensione(p, idx) {
+  const susp = p.sospensione;
+  const isDoc = p.docente ? titleCase(p.docente.nome) : null;
+  const isCls = p.classi?.length ? p.classi[0].toUpperCase() : null;
+  const isRoom = p.rooms?.length ? p.rooms[0].nome : null;
+
+  let whoSubject = "non ci sono lezioni";
+  if (p.isSelf) {
+    whoSubject = "non hai lezioni";
+  } else if (isDoc) {
+    whoSubject = `il professor ${isDoc} non ha lezioni`;
+  } else if (isCls) {
+    whoSubject = `la classe ${isCls} non ha lezioni`;
+  } else if (isRoom) {
+    whoSubject = `${isRoom} non è utilizzata per lezioni`;
+  }
+
+  const badge = susp.tipo === "vacanza" ? "VACANZE SCOLASTICHE" : susp.tipo === "festivita" ? "FESTIVITÀ" : "ISTITUTO CHIUSO";
+
+  let rientroText = "";
+  if (susp.rientro) {
+    const [ry, rm, rd] = susp.rientro.split("-").map(Number);
+    const rDate = new Date(ry, rm - 1, rd);
+    const rDayName = dl(JS_DAYS[rDate.getDay()]);
+    const rMonthName = IT_MONTH_NAMES[rm] || "";
+    rientroText = `Le lezioni riprendono ${rDayName} ${rd} ${rMonthName}.`;
+  }
+
+  const lines = [
+    {
+      when: susp.titolo,
+      main: susp.descrizione || "Sospensione delle lezioni",
+      sub: susp.rientro ? `Rientro a scuola: ${susp.rientro}` : (susp.chiuso_uffici ? "Chiusura totale istituto e uffici" : "Attività didattiche sospese"),
+    },
+  ];
+
+  let art = "Il ";
+  if (p.targetDateStr) {
+    const dNum = parseInt(p.targetDateStr.split("-")[2], 10);
+    if (dNum === 1 || dNum === 8 || dNum === 11) art = "L'";
+  }
+
+  const dateSpoken = p.targetDateStr ? formatDateSpoken(p.targetDateStr) : "in questa data";
+  const speech = `${art}${dateSpoken} ${whoSubject}: la scuola è chiusa per ${susp.titolo}.${rientroText ? " " + rientroText : ""}`;
+
+  return {
+    title: `Lezioni Sospese • ${susp.titolo}`,
+    badge,
+    lines,
+    note: "Calendario scolastico ufficiale 2026/27 (Comunicato n. 75).",
+    speech,
+    rooms: [],
+  };
+}
+
+function answerCalendario(p, idx, ctx = {}) {
+  const cal = idx.calendario || {};
+  const meta = cal.meta || {};
+  const vacanze = cal.vacanze || [];
+  const festivita = cal.festivita || [];
+  const now = ctx?.now || p.now || new Date();
+  const nowYMD = formatDateYMD(now);
+
+  if (p.subType === "fine_scuola") {
+    const fine = meta.fine_lezioni_testo || "Martedì 8 giugno 2027";
+    const inizio = meta.inizio_lezioni_testo || "Giovedì 10 settembre 2026";
+    return {
+      title: "Termine delle Lezioni a.s. 2026/27",
+      badge: "CALENDARIO SCOLASTICO",
+      lines: [
+        { when: fine, main: "Ultimo giorno di scuola (termine delle lezioni)", sub: meta.delibera || "Delibera CdI del 31 agosto 2026" },
+        { when: inizio, main: "Inizio dell'anno scolastico", sub: meta.comunicato || "Comunicato n. 75" },
+      ],
+      note: "Calendario scolastico ufficiale 2026/27 dell'ITIS Negrelli.",
+      speech: `Le lezioni per l'anno scolastico 2026/2027 terminano ${fine.toLowerCase()}.`,
+      rooms: [],
+    };
+  }
+
+  if (p.subType === "inizio_scuola") {
+    const fine = meta.fine_lezioni_testo || "Martedì 8 giugno 2027";
+    const inizio = meta.inizio_lezioni_testo || "Giovedì 10 settembre 2026";
+    return {
+      title: "Inizio delle Lezioni a.s. 2026/27",
+      badge: "CALENDARIO SCOLASTICO",
+      lines: [
+        { when: inizio, main: "Inizio attività didattiche", sub: "Primo giorno di scuola" },
+        { when: fine, main: "Fine attività didattiche", sub: "Ultimo giorno di lezione" },
+      ],
+      note: "Calendario scolastico ufficiale 2026/27 dell'ITIS Negrelli.",
+      speech: `L'anno scolastico 2026/2027 è iniziato ${inizio.toLowerCase()} e terminerà ${fine.toLowerCase()}.`,
+      rooms: [],
+    };
+  }
+
+  if (p.subType === "natale") {
+    return {
+      title: "Vacanze di Natale",
+      badge: "VACANZE NATALIZIE",
+      lines: [
+        { when: "24 dicembre 2026 - 5 gennaio 2027", main: "Sospensione delle lezioni", sub: "Chiusura totale istituto e uffici: 24 e 31 dicembre, 2 gennaio" },
+        { when: "Mercoledì 6 gennaio 2027", main: "Epifania (festività obbligatoria)", sub: "Istituto chiuso" },
+        { when: "Giovedì 7 gennaio 2027", main: "Rientro a scuola", sub: "Ripresa regolare delle lezioni" },
+      ],
+      note: "Delibera del Consiglio di Istituto del 31 agosto 2026 (Comunicato n. 75).",
+      speech: "Le vacanze di Natale vanno da giovedì 24 dicembre 2026 a martedì 5 gennaio 2027. Considerando l'Epifania il 6 gennaio, si rientra a scuola giovedì 7 gennaio 2027.",
+      rooms: [],
+    };
+  }
+
+  if (p.subType === "pasqua") {
+    return {
+      title: "Vacanze di Pasqua",
+      badge: "VACANZE PASQUALI",
+      lines: [
+        { when: "25 marzo - 30 marzo 2027", main: "Sospensione delle lezioni per festività pasquali", sub: "Domenica 28 Pasqua, lunedì 29 Pasquetta; sabato 27 chiusura uffici" },
+        { when: "Mercoledì 31 marzo 2027", main: "Rientro a scuola", sub: "Ripresa regolare delle lezioni" },
+      ],
+      note: "Calendario scolastico regionale 2026/2027 e delibera d'istituto.",
+      speech: "Le vacanze di Pasqua vanno da giovedì 25 marzo a martedì 30 marzo 2027. Il rientro a scuola è mercoledì 31 marzo 2027.",
+      rooms: [],
+    };
+  }
+
+  if (p.subType === "carnevale") {
+    return {
+      title: "Carnevale e Mercoledì delle Ceneri",
+      badge: "CARNEVALE",
+      lines: [
+        { when: "8 febbraio - 10 febbraio 2027", main: "Sospensione delle lezioni per Carnevale e Ceneri", sub: "Lunedì 8, martedì 9 grasso e mercoledì 10 delle Ceneri" },
+        { when: "Giovedì 11 febbraio 2027", main: "Rientro a scuola", sub: "Ripresa regolare delle lezioni" },
+      ],
+      note: "Calendario scolastico regionale 2026/2027.",
+      speech: "Le vacanze di Carnevale e del Mercoledì delle Ceneri vanno da lunedì 8 febbraio a mercoledì 10 febbraio 2027. Si rientra a scuola giovedì 11 febbraio 2027.",
+      rooms: [],
+    };
+  }
+
+  if (p.subType === "ponti") {
+    const qText = p.queryText || "";
+    const isImmacolata = /immacolata/i.test(qText);
+    const isPrimoMaggio = /primo\s*maggio|1\s*maggio|lavoro/i.test(qText);
+    const isPatrono = /patrono/i.test(qText);
+
+    if (isImmacolata) {
+      return {
+        title: "Ponte dell'Immacolata",
+        badge: "PONTE DELIBERATO",
+        lines: [
+          { when: "Lunedì 7 dicembre 2026", main: "Ponte dell'Immacolata (lezioni sospese e chiusura istituto)", sub: "Deliberato dal Consiglio di Istituto" },
+          { when: "Martedì 8 dicembre 2026", main: "Immacolata Concezione (festività obbligatoria)", sub: "Istituto chiuso" },
+          { when: "Mercoledì 9 dicembre 2026", main: "Rientro a scuola", sub: "Ripresa regolare delle lezioni" },
+        ],
+        note: "Delibera del Consiglio di Istituto del 31 agosto 2026 (Comunicato n. 75).",
+        speech: "Per l'Immacolata le lezioni sono sospese lunedì 7 dicembre per ponte deliberato con chiusura dell'istituto, e martedì 8 dicembre per festività. Si rientra a scuola mercoledì 9 dicembre.",
+        rooms: [],
+      };
+    }
+
+    if (isPrimoMaggio) {
+      return {
+        title: "Ponte del 1° Maggio",
+        badge: "PONTE DELIBERATO",
+        lines: [
+          { when: "29 - 30 aprile 2027", main: "Sospensione delle lezioni per la Festa del Lavoro", sub: "Venerdì 30 aprile chiusura uffici" },
+          { when: "Sabato 1 maggio 2027", main: "Festa del Lavoro (festività obbligatoria)", sub: "Istituto chiuso" },
+          { when: "Lunedì 3 maggio 2027", main: "Rientro a scuola", sub: "Ripresa regolare delle lezioni" },
+        ],
+        note: "Delibera del Consiglio di Istituto del 31 agosto 2026 (Comunicato n. 75).",
+        speech: "Il ponte del primo maggio va da giovedì 29 aprile a venerdì 30 aprile 2027. Con la festività di sabato 1° maggio e domenica 2, si rientra a scuola lunedì 3 maggio 2027.",
+        rooms: [],
+      };
+    }
+
+    if (isPatrono) {
+      return {
+        title: "Ponte del Santo Patrono",
+        badge: "PONTE DELIBERATO",
+        lines: [
+          { when: "Sabato 15 maggio 2027", main: "Ponte del Santo Patrono", sub: "Lezioni sospese e chiusura totale istituto e uffici" },
+          { when: "Lunedì 17 maggio 2027", main: "Rientro a scuola", sub: "Domenica 16 maggio" },
+        ],
+        note: "Delibera del Consiglio di Istituto del 31 agosto 2026 (Comunicato n. 75).",
+        speech: "Il ponte del Santo Patrono è sabato 15 maggio 2027, con chiusura totale dell'istituto e sospensione delle lezioni. Si rientra a scuola lunedì 17 maggio 2027.",
+        rooms: [],
+      };
+    }
+
+    return {
+      title: "Ponti e Sospensioni Deliberate 2026/27",
+      badge: "PONTI DELIBERATI",
+      lines: [
+        { when: "Lunedì 7 dicembre 2026", main: "Ponte dell'Immacolata", sub: "8 dicembre festività • Rientro mercoledì 9 dicembre" },
+        { when: "29 - 30 aprile 2027", main: "Ponte del 1° Maggio", sub: "1° maggio festività • Rientro lunedì 3 maggio" },
+        { when: "Sabato 15 maggio 2027", main: "Ponte del Santo Patrono", sub: "Chiusura totale istituto • Rientro lunedì 17 maggio" },
+      ],
+      note: "Sospensioni deliberate dal Consiglio di Istituto (Comunicato n. 75).",
+      speech: "I ponti deliberati per l'anno scolastico sono tre: lunedì 7 dicembre per l'Immacolata con rientro il 9 dicembre, dal 29 al 30 aprile per il primo maggio con rientro il 3 maggio, e sabato 15 maggio per il Santo Patrono con rientro il 17 maggio.",
+      rooms: [],
+    };
+  }
+
+  if (p.subType === "prossima") {
+    const upcoming = vacanze.filter((v) => v.a >= nowYMD);
+    const target = upcoming.length > 0 ? upcoming[0] : vacanze[vacanze.length - 1];
+    const lines = upcoming.slice(0, 4).map((v) => ({
+      when: v.titolo,
+      main: v.descrizione,
+      sub: v.rientro ? `Rientro a scuola: ${v.rientro}` : "",
+    }));
+    return {
+      title: `Prossima Sospensione: ${target.titolo}`,
+      badge: "PROSSIMA CHIUSURA",
+      lines: lines.length ? lines : [{ when: "8 giugno 2027", main: "Fine anno scolastico", sub: "" }],
+      note: "Calendario scolastico ufficiale 2026/27.",
+      speech: `La prossima sospensione delle lezioni è per ${target.titolo}: ${target.descrizione}. Rientro a scuola il ${formatDateSpoken(target.rientro)}.`,
+      rooms: [],
+    };
+  }
+
+  if (p.subType === "festivita") {
+    const lines = festivita.map((f) => ({
+      when: formatDateSpoken(f.data),
+      main: f.nome,
+      sub: "Festività obbligatoria (istituto chiuso)",
+    }));
+    return {
+      title: "Festività Obbligatorie a.s. 2026/27",
+      badge: "FESTIVITÀ",
+      lines,
+      note: "Festività nazionali e religiose da calendario ufficiale.",
+      speech: "Le festività obbligatorie dell'anno scolastico includono San Francesco il 4 ottobre, Ognissanti il 1° novembre, l'Immacolata l'8 dicembre, Natale, Capodanno, Epifania, Pasquetta il 29 marzo, il 25 aprile, il 1° maggio e il 2 giugno.",
+      rooms: [],
+    };
+  }
+
+  // Fallback generale calendario
+  const lines = [
+    { when: "10 settembre 2026", main: "Inizio delle lezioni", sub: "Primo giorno di scuola" },
+    { when: "7 dicembre 2026", main: "Ponte dell'Immacolata", sub: "Rientro mercoledì 9 dicembre" },
+    { when: "24 dic 2026 - 5 gen 2027", main: "Vacanze di Natale", sub: "Rientro giovedì 7 gennaio" },
+    { when: "8 - 10 febbraio 2027", main: "Carnevale e Ceneri", sub: "Rientro giovedì 11 febbraio" },
+    { when: "25 - 30 marzo 2027", main: "Vacanze di Pasqua", sub: "Rientro mercoledì 31 marzo" },
+    { when: "29 - 30 aprile 2027", main: "Ponte del 1° Maggio", sub: "Rientro lunedì 3 maggio" },
+    { when: "Sabato 15 maggio 2027", main: "Ponte del Santo Patrono", sub: "Rientro lunedì 17 maggio" },
+    { when: "8 giugno 2027", main: "Termine delle lezioni", sub: "Ultimo giorno di scuola" },
+  ];
+
+  return {
+    title: "Calendario Scolastico 2026/27",
+    badge: "CALENDARIO",
+    lines,
+    note: "Calendario scolastico ufficiale ITIS Negrelli (Comunicato n. 75).",
+    speech: "Il calendario scolastico 2026/2027 prevede le vacanze di Natale dal 24 dicembre al 5 gennaio, Carnevale dall'8 al 10 febbraio, Pasqua dal 25 al 30 marzo, e i tre ponti del 7 dicembre, del primo maggio e del Santo Patrono il 15 maggio. Le lezioni terminano l'8 giugno.",
+    rooms: [],
+  };
+}
+
 export function answer(p, idx, ctx = {}) {
+  if (p.sospensione && p.intent !== "calendario") {
+    return answerSospensione(p, idx);
+  }
+
   switch (p.intent) {
     case "docente":
       return answerDocente(p, idx);
@@ -1023,6 +1405,10 @@ export function answer(p, idx, ctx = {}) {
       return answerAula(p, idx);
     case "attivita":
       return answerAttivita(p, idx, ctx);
+    case "calendario":
+      return answerCalendario(p, idx, ctx);
+    case "sospensione":
+      return answerSospensione(p, idx);
     case "ambiguo": {
       const names = p.candidati.slice(0, 4).map((d) => titleCase(d.nome));
       return {
