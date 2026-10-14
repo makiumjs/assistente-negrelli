@@ -466,6 +466,23 @@
       background: linear-gradient(90deg, rgba(240, 253, 250, 0.85) 0%, rgba(254, 243, 199, 0.45) 100%);
     }
 
+    .row.has-room {
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: rgba(13, 148, 136, 0.2);
+    }
+
+    .row.has-room:hover {
+      background: linear-gradient(90deg, rgba(204, 251, 241, 0.85) 0%, rgba(254, 243, 199, 0.55) 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(13, 148, 136, 0.12);
+    }
+
+    .row.has-room:active {
+      transform: translateY(0);
+      background: rgba(204, 251, 241, 0.95);
+    }
+
     .row.heading {
       display: block;
       font-weight: 700;
@@ -483,6 +500,34 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+    }
+
+    .row .when.clickable-hour {
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .row .when .hour-map-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--teal-primary);
+      background: rgba(13, 148, 136, 0.10);
+      border: 1px solid rgba(13, 148, 136, 0.25);
+      border-radius: 4px;
+      padding: 1px 5px;
+      margin-top: 3px;
+      width: fit-content;
+      transition: all 0.15s ease;
+    }
+
+    .row.has-room:hover .hour-map-badge,
+    .row .when.clickable-hour:hover .hour-map-badge {
+      background: var(--teal-primary);
+      color: #ffffff;
+      border-color: var(--teal-primary);
     }
 
     .row .main {
@@ -746,11 +791,10 @@
       <div class="vignette-overlay"></div>
       <div id="avatar-view"></div>
 
-      <!-- Switcher 3D Assistente / Mappa 2D / Riferimento Visivo -->
+      <!-- Switcher 3D Assistente / Mappa 2D -->
       <div id="view-mode-bar" role="tablist" aria-label="Modalità visualizzazione">
         <button id="btn-mode-bot" class="mode-btn active" type="button" role="tab" aria-selected="true">🤖 Assistente 3D</button>
         <button id="btn-mode-map" class="mode-btn" type="button" role="tab" aria-selected="false">🗺️ Mappa Piani</button>
-        <a href="./riferimento_visivo.html" class="mode-btn" style="text-decoration:none;" title="Apri Strumento Modifica Aule a schermo intero">✏️ Modifica Aule</a>
       </div>
 
       <!-- Vista Mappa Interattiva 2D -->
@@ -1238,6 +1282,31 @@
       };
     }
 
+    // Helper per individuare il locale associato ad una riga dell'orario
+    function findRoomForLine(l, a) {
+      if (l.aula) {
+        const loc = resolveRoomLocation(l.aula);
+        if (loc) return loc;
+      }
+      if (l.room) {
+        const loc = resolveRoomLocation(l.room);
+        if (loc) return loc;
+      }
+      if (l.sub) {
+        const loc = resolveRoomLocation(l.sub);
+        if (loc) return loc;
+      }
+      if (l.main) {
+        const loc = resolveRoomLocation(l.main);
+        if (loc) return loc;
+      }
+      if (a && a.rooms && a.rooms.length === 1) {
+        const loc = resolveRoomLocation(a.rooms[0]);
+        if (loc) return loc;
+      }
+      return null;
+    }
+
     // Rendering sicuro del contenuto e del Badge di Posizione Smart
     function renderAnswer(a, parsed = null, opts = {}) {
       cardTitle.textContent = a.title || "";
@@ -1261,9 +1330,21 @@
         const labelCode = /^\d{3}$/.test(firstLoc.code) ? `AULA ${firstLoc.code}` : firstLoc.name.toUpperCase();
         cardLocationBadge.textContent = `📍 ${firstLoc.floorLabel} • ${labelCode} (Mappa 2D)`;
 
-        if (parsed && (parsed.isWhere || parsed.intent === 'spazio_mappa')) {
+        const rawText = (parsed && (parsed.raw || parsed.qNorm || "")) || "";
+        const isAulaQuery = Boolean(
+          opts.autoSwitchMap ||
+          (parsed && (
+            parsed.intent === 'aula' ||
+            parsed.intent === 'spazio_mappa' ||
+            parsed.isWhere ||
+            /\b(in che aula|quale aula|che aula|dove si trova|dov'è|dov e)\b/i.test(rawText)
+          ))
+        );
+
+        if (isAulaQuery) {
           currentFloor = targetFloor;
           highlightedCodes = codes;
+          resetMapTransform();
           setViewMode('map');
         } else if (mapViewContainer.style.display !== 'none') {
           renderFloorMap(targetFloor, codes);
@@ -1288,9 +1369,43 @@
         const row = document.createElement('div');
         row.className = 'row' + (l.heading ? ' heading' : '');
 
+        const loc = findRoomForLine(l, a);
+
         const when = document.createElement('div');
         when.className = 'when';
         when.textContent = l.when || "";
+
+        if (loc) {
+          row.classList.add('has-room');
+          when.classList.add('clickable-hour');
+          when.setAttribute('role', 'button');
+          when.setAttribute('tabindex', '0');
+          when.title = `Tappa per aprire ${loc.name} (${loc.floorLabel}) sulla Mappa Piani`;
+
+          const pinBadge = document.createElement('span');
+          pinBadge.className = 'hour-map-badge';
+          pinBadge.textContent = `📍 ${loc.code}`;
+          pinBadge.title = `Visualizza ${loc.name} (${loc.floorLabel}) sulla mappa`;
+          when.appendChild(pinBadge);
+
+          const triggerMapSwitch = (e) => {
+            e.stopPropagation();
+            currentFloor = loc.floor;
+            highlightedCodes = [loc.code];
+            resetMapTransform();
+            setViewMode('map');
+          };
+
+          when.addEventListener('click', triggerMapSwitch);
+          row.addEventListener('click', triggerMapSwitch);
+          when.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              triggerMapSwitch(e);
+            }
+          });
+        }
+
         row.appendChild(when);
 
         if (!l.heading) {

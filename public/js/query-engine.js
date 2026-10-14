@@ -476,7 +476,7 @@ export function parseQuery(text, idx, ctx = {}) {
   if (realtime) hour = currentLesson(now, idx, day);
 
   const isProssimo = /\b(prossim[oiea]|successiv[oiea]|imminent[ei]|futur[oiea])\b/.test(q0);
-  const isWhere = /\b(dove|dov e|che piano|quale piano|mappa|posizione|ubicazione|raggiung)\b/.test(q0);
+  const isWhere = /\b(dove|dov e|che piano|quale piano|mappa|posizione|ubicazione|raggiung|in che aula|quale aula|che aula)\b/.test(q0);
   const base = { day, hour, realtime, raw: text, now, isProssimo, targetDateStr: targetDateYMD, sospensione, isWhere, qNorm: q0 };
 
   // Controllo per le Attività (Collegi docenti, Consigli di classe, Scrutini, Colloqui, ecc.)
@@ -721,7 +721,7 @@ function answerDocente(p, idx) {
     return {
       title,
       badge: `${dl(p.day).toUpperCase()} • GIORNATA INTERA`,
-      lines: descs.map((x) => ({ when: span(x.g), main: x.main, sub: x.sub })),
+      lines: descs.map((x) => ({ when: span(x.g), main: x.main, sub: x.sub, aula: x.aula })),
       speech: `${dayCap} ${subj} ${joinSpeech(descs.map((x) => `${spokenSpan(x.g)} ${x.say}`))}.`.replace(/\s+/g, " "),
       rooms: roomsCollected,
     };
@@ -743,7 +743,7 @@ function answerDocente(p, idx) {
   return {
     title,
     badge: hourBadge(p, idx),
-    lines: [{ when: `${p.hour}ª ora`, main: x.main, sub: x.sub }],
+    lines: [{ when: `${p.hour}ª ora`, main: x.main, sub: x.sub, aula: x.aula }],
     speech: `${dayCap} in ${when} ${subj} ${x.say}.`.replace(/\s+/g, " "),
     rooms: x.aula ? [x.aula] : [],
   };
@@ -797,7 +797,7 @@ function answerClasse(p, idx) {
       out.push({
         title: `Classe ${cid}`,
         badge: `${dl(p.day).toUpperCase()} • GIORNATA INTERA`,
-        lines: descs.map((x) => ({ when: span(x.g), main: x.main, sub: x.sub })),
+        lines: descs.map((x) => ({ when: span(x.g), main: x.main, sub: x.sub, aula: x.aula })),
         speech: `${dayCap} la ${cid} ${joinSpeech(descs.map((x) => `${spokenSpan(x.g)} ${x.say}`))}.`,
         rooms: descs.map((x) => x.aula).filter(Boolean),
       });
@@ -821,7 +821,7 @@ function answerClasse(p, idx) {
     out.push({
       title: `Classe ${cid}`,
       badge: hourBadge(p, idx),
-      lines: [{ when: `${p.hour}ª ora`, main: x.main, sub: x.sub }],
+      lines: [{ when: `${p.hour}ª ora`, main: x.main, sub: x.sub, aula: x.aula }],
       speech: `${dayCap} in ${when} la ${cid} ${x.say}.`,
       rooms: x.aula ? [x.aula] : [],
     });
@@ -902,7 +902,7 @@ function answerAuleLibere(p, idx) {
   return {
     title,
     badge: hourBadge(p, idx),
-    lines: free.map((a) => ({ when: "Libera", main: titleCase(a), sub: "" })),
+    lines: free.map((a) => ({ when: "Libera", main: titleCase(a), sub: "", aula: a })),
     note: free.length ? "" : "Tutti gli spazi richiesti risultano occupati.",
     speech: free.length
       ? `${dayCap} in ${when} sono disponibili: ${joinSpeech(free.map(titleCase))}.`
@@ -945,7 +945,7 @@ function answerAula(p, idx) {
     if (p.hour === null) {
       const lines = Object.keys(occ)
         .sort((a, b) => a - b)
-        .map((h) => ({ when: `${h}ª ora`, main: desc(occ[h]), sub: "" }));
+        .map((h) => ({ when: `${h}ª ora`, main: desc(occ[h]), sub: "", aula: r.nome }));
       const baseNote = lines.length ? "" : "Non occupata in questa giornata.";
       const baseSpeech = lines.length
         ? `${dayCap} ${title} è occupata in ${lines.length} ore.`
@@ -968,7 +968,7 @@ function answerAula(p, idx) {
         ? {
             title,
             badge: hourBadge(p, idx),
-            lines: [{ when: "Occupata", main: desc(o), sub: "" }],
+            lines: [{ when: "Occupata", main: desc(o), sub: "", aula: r.nome }],
             note: locNote,
             speech: `${p.isWhere ? locSpeech : ""}${dayCap} in ${when} ${title} è occupata dalla ${desc(o)}.`,
             rooms: [r.nome],
@@ -976,7 +976,7 @@ function answerAula(p, idx) {
         : {
             title,
             badge: hourBadge(p, idx),
-            lines: [{ when: "Libera", main: "", sub: "" }],
+            lines: [{ when: "Libera", main: "", sub: "", aula: r.nome }],
             note: locNote,
             speech: `${p.isWhere ? locSpeech : ""}${dayCap} in ${when} ${title} è libera.`,
             rooms: [r.nome],
