@@ -298,4 +298,49 @@ assert.equal(r.a.badge, "PROSSIMO GLO");
 assert.ok(r.a.speech.includes("lunedì 26 ottobre 2026"));
 console.log("✓ Prossimo GLO:", r.a.speech);
 
+console.log("\n=== 10. Test Ricerca Posizione & Mappe Piani (Wayfinding) ===");
+r = ask("dov'è l'aula 118");
+assert.equal(r.p.intent, "aula");
+assert.equal(r.p.isWhere, true);
+assert.ok(r.a.note.includes("1° PIANO"));
+assert.ok(r.a.speech.includes("1° piano") || r.a.speech.includes("primo piano"));
+console.log("✓ Dov'è Aula 118:", r.a.speech);
+
+r = ask("dov'è la mensa");
+assert.equal(r.p.intent, "spazio_mappa");
+assert.equal(r.p.space.code, "028");
+assert.equal(r.p.space.floor, 0);
+assert.ok(r.a.speech.includes("piano terra"));
+console.log("✓ Dov'è Mensa (Locale 028):", r.a.speech);
+
+r = ask("dove si trova la segreteria");
+assert.equal(r.p.intent, "spazio_mappa");
+assert.equal(r.p.space.floor, 1);
+assert.ok(r.a.speech.includes("1° piano"));
+console.log("✓ Dov'è Segreteria:", r.a.speech);
+
+r = ask("dov'è la biblioteca");
+assert.equal(r.p.intent, "spazio_mappa");
+assert.equal(r.p.space.floor, 0);
+assert.ok(r.a.speech.includes("piano terra"));
+console.log("✓ Dov'è Biblioteca:", r.a.speech);
+
+r = ask("dov'è l'officina");
+assert.equal(r.p.intent, "spazio_mappa");
+assert.equal(r.p.space.code, "026");
+assert.ok(r.a.speech.includes("piano terra"));
+console.log("✓ Dov'è Officina (Locale 026):", r.a.speech);
+
+r = ask("dov'è la sala insegnanti");
+assert.equal(r.p.intent, "spazio_mappa");
+assert.equal(r.p.space.code, "060");
+assert.ok(r.a.speech.includes("piano terra"));
+console.log("✓ Dov'è Sala Insegnanti (Locale 060):", r.a.speech);
+
+r = ask("dov'è il bar");
+assert.equal(r.p.intent, "spazio_mappa");
+assert.equal(r.p.space.code, "069");
+console.log("✓ Dov'è Bar / Caffetteria (Locale 069):", r.a.speech);
+
 console.log("\n TUTTI I TEST SONO PASSATI CON SUCCESSO! ");
+

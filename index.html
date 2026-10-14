@@ -101,6 +101,227 @@
       z-index: 3;
     }
 
+    /* Switcher Modalità 3D Mascot / Mappa 2D Wayfinding */
+    #view-mode-bar {
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      display: flex;
+      gap: 6px;
+      z-index: 25;
+      background: rgba(255, 255, 255, 0.94);
+      padding: 4px;
+      border-radius: 28px;
+      border: 1px solid rgba(13, 148, 136, 0.25);
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.1);
+      backdrop-filter: blur(12px);
+    }
+
+    .mode-btn {
+      border: none;
+      background: transparent;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+      min-height: 36px;
+    }
+
+    .mode-btn:hover {
+      background: #f1f5f9;
+      color: var(--text-main);
+    }
+
+    .mode-btn.active {
+      background: linear-gradient(135deg, var(--teal-primary), #14b8a6);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(13, 148, 136, 0.35);
+    }
+
+    /* Contenitore Mappa Interattiva 2D */
+    #map-view-container {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 4;
+      display: flex;
+      flex-direction: column;
+      background: #f8fafc;
+      overflow: hidden;
+    }
+
+    #map-top-bar {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 18px;
+      background: #ffffff;
+      border-bottom: 1px solid rgba(13, 148, 136, 0.18);
+      gap: 12px;
+      flex-wrap: wrap;
+      z-index: 10;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    }
+
+    .floor-tabs {
+      display: flex;
+      gap: 6px;
+    }
+
+    .floor-tab-btn {
+      border: 1.5px solid #cbd5e1;
+      background: #f8fafc;
+      padding: 7px 15px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .floor-tab-btn:hover {
+      background: #e2e8f0;
+      border-color: #94a3b8;
+    }
+
+    .floor-tab-btn.active {
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.25);
+    }
+
+    .floor-tab-btn[data-floor="0"].active {
+      background: #1d4ed8;
+      border-color: #1e40af;
+    }
+    .floor-tab-btn[data-floor="1"].active {
+      background: #6d28d9;
+      border-color: #5b21b6;
+    }
+    .floor-tab-btn[data-floor="2"].active {
+      background: #047857;
+      border-color: #065f46;
+    }
+
+    #floor-info-badge {
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 280px;
+    }
+
+    #map-stage-wrapper {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      user-select: none;
+    }
+
+    #map-svg-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-origin: center center;
+      transition: transform 0.15s ease-out;
+    }
+
+    #map-svg-container svg {
+      width: 100%;
+      height: 100%;
+      max-height: 100%;
+      display: block;
+    }
+
+    /* Pin interattivi su SVG */
+    .room-pin {
+      cursor: pointer;
+      outline: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .room-pin:hover text, .room-pin:focus text {
+      font-weight: 900;
+    }
+
+    .room-pin:hover rect.pin-bg, .room-pin:focus rect.pin-bg {
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+      stroke-width: 2.4px !important;
+    }
+
+    .room-pin.selected rect.pin-bg {
+      stroke: #dc2626 !important;
+      stroke-width: 3.5px !important;
+      filter: drop-shadow(0 0 10px rgba(220, 38, 38, 0.7));
+    }
+
+    .radar-pulse {
+      animation: radar-ring 1.8s infinite ease-out;
+      transform-origin: center center;
+    }
+
+    @keyframes radar-ring {
+      0% { r: 10px; opacity: 1; stroke-width: 4px; }
+      100% { r: 48px; opacity: 0; stroke-width: 1px; }
+    }
+
+    #map-controls {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 15;
+    }
+
+    .map-ctrl-btn {
+      width: 38px;
+      height: 38px;
+      background: #ffffff;
+      border: 1px solid rgba(13, 148, 136, 0.25);
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #0f172a;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s ease;
+    }
+
+    .map-ctrl-btn:hover {
+      background: #f1f5f9;
+    }
+
+    #card-location-badge {
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    #card-location-badge:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 18px rgba(13, 148, 136, 0.55);
+    }
+
     #status-overlay {
       position: absolute;
       bottom: 20px;
@@ -524,6 +745,33 @@
       <div class="blurred-background"></div>
       <div class="vignette-overlay"></div>
       <div id="avatar-view"></div>
+
+      <!-- Switcher 3D Assistente / Mappa 2D -->
+      <div id="view-mode-bar" role="tablist" aria-label="Modalità visualizzazione">
+        <button id="btn-mode-bot" class="mode-btn active" type="button" role="tab" aria-selected="true">🤖 Assistente 3D</button>
+        <button id="btn-mode-map" class="mode-btn" type="button" role="tab" aria-selected="false">🗺️ Mappa Piani</button>
+      </div>
+
+      <!-- Vista Mappa Interattiva 2D -->
+      <div id="map-view-container" style="display:none;" aria-label="Mappa interattiva dei piani">
+        <div id="map-top-bar">
+          <div class="floor-tabs" role="tablist" aria-label="Seleziona piano">
+            <button class="floor-tab-btn active" data-floor="0" type="button">Piano Terra (0)</button>
+            <button class="floor-tab-btn" data-floor="1" type="button">1° Piano (1)</button>
+            <button class="floor-tab-btn" data-floor="2" type="button">2° Piano (2)</button>
+          </div>
+          <div id="floor-info-badge">Clicca su un locale per vedere orario e occupazione</div>
+        </div>
+        <div id="map-stage-wrapper">
+          <div id="map-svg-container"></div>
+          <div id="map-controls">
+            <button class="map-ctrl-btn" id="map-zoom-in" type="button" title="Ingrandisci mappa" aria-label="Ingrandisci">＋</button>
+            <button class="map-ctrl-btn" id="map-zoom-out" type="button" title="Riduci mappa" aria-label="Riduci">－</button>
+            <button class="map-ctrl-btn" id="map-zoom-reset" type="button" title="Centra mappa" aria-label="Centra mappa">⟲</button>
+          </div>
+        </div>
+      </div>
+
       <div id="status-overlay">Caricamento assistente...</div>
     </div>
 
@@ -532,9 +780,9 @@
         <h3 id="card-title">In attesa di richiesta...</h3>
         <div>
           <span id="card-badge" style="display:none;" class="badge"></span>
-          <span id="card-location-badge" style="display:none;" class="badge location"></span>
+          <span id="card-location-badge" style="display:none;" class="badge location" title="Clicca per aprire la posizione sulla Mappa 2D"></span>
         </div>
-        <div id="card-desc">Chiedi: «Dove si trova la 4ITA alla terza ora?», «Quando è il GLO della 4ITA?» o «Quando sono le vacanze di Natale?»</div>
+        <div id="card-desc">Chiedi: «Dove si trova la 4ITA alla terza ora?», «Dov'è il laboratorio di chimica?», «Quando è il GLO della 4ITA?» o apri la Mappa Piani 2D.</div>
         <div id="result-lines"></div>
         <div id="card-note"></div>
       </div>
@@ -551,7 +799,7 @@
 
   <script type="module">
     import * as THREE from 'three';
-    import { buildIndex, parseQuery, answer } from './public/js/query-engine.js';
+    import { buildIndex, parseQuery, answer, resolveRoomLocation } from './public/js/query-engine.js';
 
     const avatarContainer = document.getElementById('avatar-view');
     const statusOverlay = document.getElementById('status-overlay');
@@ -567,7 +815,21 @@
     const cardNote = document.getElementById('card-note');
     const resultLines = document.getElementById('result-lines');
 
+    const btnModeBot = document.getElementById('btn-mode-bot');
+    const btnModeMap = document.getElementById('btn-mode-map');
+    const mapViewContainer = document.getElementById('map-view-container');
+    const mapSvgContainer = document.getElementById('map-svg-container');
+    const floorInfoBadge = document.getElementById('floor-info-badge');
+    const floorTabBtns = document.querySelectorAll('.floor-tab-btn');
+
     let orarioIdx = null;
+    let mappeData = null;
+    const svgCache = {};
+    let currentFloor = 0;
+    let highlightedCodes = [];
+    let mapZoom = 1.0;
+    let mapPanX = 0;
+    let mapPanY = 0;
     let isSpeaking = false;
     let isListening = false;
 
@@ -670,6 +932,235 @@
       }
     }
 
+    async function loadMappe() {
+      try {
+        const res = await fetch('./public/data/mappe.json');
+        if (res.ok) {
+          mappeData = await res.json();
+        }
+      } catch (e) {
+        console.warn("Caricamento mappe.json non riuscito:", e);
+      }
+    }
+
+    function applyMapTransform() {
+      mapSvgContainer.style.transform = `translate(${mapPanX}px, ${mapPanY}px) scale(${mapZoom})`;
+    }
+
+    function resetMapTransform() {
+      mapZoom = 1.0;
+      mapPanX = 0;
+      mapPanY = 0;
+      applyMapTransform();
+    }
+
+    function setViewMode(mode) {
+      const isMap = mode === 'map';
+      btnModeBot.classList.toggle('active', !isMap);
+      btnModeBot.setAttribute('aria-selected', String(!isMap));
+      btnModeMap.classList.toggle('active', isMap);
+      btnModeMap.setAttribute('aria-selected', String(isMap));
+      mapViewContainer.style.display = isMap ? 'flex' : 'none';
+      if (isMap) {
+        renderFloorMap(currentFloor, highlightedCodes);
+      }
+    }
+
+    btnModeBot.addEventListener('click', () => setViewMode('bot'));
+    btnModeMap.addEventListener('click', () => setViewMode('map'));
+
+    floorTabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const f = Number(btn.getAttribute('data-floor'));
+        resetMapTransform();
+        renderFloorMap(f, highlightedCodes);
+      });
+    });
+
+    document.getElementById('map-zoom-in').addEventListener('click', () => {
+      mapZoom = Math.min(3.2, +(mapZoom + 0.3).toFixed(2));
+      applyMapTransform();
+    });
+    document.getElementById('map-zoom-out').addEventListener('click', () => {
+      mapZoom = Math.max(0.7, +(mapZoom - 0.3).toFixed(2));
+      if (mapZoom <= 1.0) { mapPanX = 0; mapPanY = 0; }
+      applyMapTransform();
+    });
+    document.getElementById('map-zoom-reset').addEventListener('click', resetMapTransform);
+
+    // Drag & Wheel zoom su mappa
+    const mapStageWrapper = document.getElementById('map-stage-wrapper');
+    let isDraggingMap = false;
+    let dragStartX = 0, dragStartY = 0;
+
+    mapStageWrapper.addEventListener('mousedown', (e) => {
+      if (e.target.closest('.room-pin') || e.target.closest('#map-controls')) return;
+      isDraggingMap = true;
+      dragStartX = e.clientX - mapPanX;
+      dragStartY = e.clientY - mapPanY;
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (!isDraggingMap) return;
+      mapPanX = e.clientX - dragStartX;
+      mapPanY = e.clientY - dragStartY;
+      applyMapTransform();
+    });
+    window.addEventListener('mouseup', () => { isDraggingMap = false; });
+    mapStageWrapper.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const delta = e.deltaY < 0 ? 0.18 : -0.18;
+      mapZoom = Math.min(3.5, Math.max(0.75, +(mapZoom + delta).toFixed(2)));
+      if (mapZoom <= 1.0) { mapPanX = 0; mapPanY = 0; }
+      applyMapTransform();
+    }, { passive: false });
+
+    function expandHighlightCodes(codes) {
+      const out = new Set(codes);
+      if (out.has('020') || out.has('021')) { out.add('020'); out.add('021'); }
+      if (out.has('116') || out.has('117')) { out.add('116'); out.add('117'); }
+      if (out.has('206') || out.has('207')) { out.add('206'); out.add('207'); }
+      if (out.has('058') || out.has('059')) { out.add('058'); out.add('059'); }
+      return [...out];
+    }
+
+    async function renderFloorMap(floorNum, highlightList = []) {
+      currentFloor = floorNum;
+      highlightedCodes = expandHighlightCodes(highlightList);
+
+      floorTabBtns.forEach(b => {
+        b.classList.toggle('active', Number(b.getAttribute('data-floor')) === floorNum);
+      });
+
+      if (!mappeData) await loadMappe();
+      if (!mappeData) return;
+
+      const floorObj = mappeData.floors.find(f => f.floor === floorNum) || mappeData.floors[0];
+      floorInfoBadge.textContent = `${floorObj.shortTitle.toUpperCase()} • ${floorObj.subtitle}`;
+
+      if (!svgCache[floorNum]) {
+        const res = await fetch(floorObj.svgUrl);
+        svgCache[floorNum] = await res.text();
+      }
+
+      mapSvgContainer.innerHTML = svgCache[floorNum];
+      const svgEl = mapSvgContainer.querySelector('svg');
+      if (!svgEl) return;
+
+      const ns = "http://www.w3.org/2000/svg";
+      const pinsLayer = document.createElementNS(ns, "g");
+      pinsLayer.setAttribute("id", "interactive-pins");
+
+      const isFloor2 = floorNum === 2;
+      const scalePin = isFloor2 ? 0.76 : 1.0;
+
+      floorObj.rooms.forEach(r => {
+        if (r.cat === 'vuoto') return;
+        const isSelected = highlightedCodes.includes(r.code);
+
+        const g = document.createElementNS(ns, "g");
+        g.setAttribute("class", `room-pin${isSelected ? " selected" : ""}`);
+        g.setAttribute("tabindex", "0");
+        g.setAttribute("role", "button");
+        g.setAttribute("aria-label", `${r.name} (${r.floorLabel}, ${r.wing})`);
+        g.setAttribute("transform", `translate(${r.svgX}, ${r.svgY})`);
+
+        // Alone circolare sottostante
+        const haloRadius = (r.size === 'lg' ? 42 : r.size === 'md' ? 30 : r.size === 'sm' ? 22 : 16) * scalePin;
+        const halo = document.createElementNS(ns, "circle");
+        halo.setAttribute("r", String(haloRadius));
+        halo.setAttribute("fill", isSelected ? "#fee2e2" : r.fillColor);
+        halo.setAttribute("stroke", isSelected ? "#dc2626" : r.color);
+        halo.setAttribute("stroke-width", isSelected ? "2.5" : "1.2");
+        halo.setAttribute("fill-opacity", isSelected ? "0.8" : "0.52");
+        g.appendChild(halo);
+
+        // Anello Radar Pulsante se cercato / selezionato
+        if (isSelected) {
+          const pulse = document.createElementNS(ns, "circle");
+          pulse.setAttribute("class", "radar-pulse");
+          pulse.setAttribute("r", "20");
+          pulse.setAttribute("fill", "none");
+          pulse.setAttribute("stroke", "#dc2626");
+          g.appendChild(pulse);
+        }
+
+        const fontSizeMain = (r.size === 'lg' ? 13 : r.size === 'md' ? 10.5 : r.size === 'sm' ? 9 : 8) * scalePin;
+        const fontSizeSub = (r.size === 'lg' ? 9.5 : r.size === 'md' ? 8 : 7) * scalePin;
+        const showSub = r.sub && (r.size === 'lg' || r.size === 'md');
+        const textLen = Math.max(r.name.length, showSub ? r.sub.length * 0.82 : 0);
+        const boxW = Math.max(46 * scalePin, textLen * fontSizeMain * 0.62 + 16 * scalePin);
+        const boxH = showSub ? (fontSizeMain + fontSizeSub + 13 * scalePin) : (fontSizeMain + 10 * scalePin);
+
+        const rect = document.createElementNS(ns, "rect");
+        rect.setAttribute("class", "pin-bg");
+        rect.setAttribute("x", String(-boxW / 2));
+        rect.setAttribute("y", String(-boxH / 2));
+        rect.setAttribute("width", String(boxW));
+        rect.setAttribute("height", String(boxH));
+        rect.setAttribute("rx", String(6 * scalePin));
+        rect.setAttribute("fill", isSelected ? "#dc2626" : r.color);
+        rect.setAttribute("stroke", isSelected ? "#7f1d1d" : r.borderColor);
+        rect.setAttribute("stroke-width", "1.4");
+        g.appendChild(rect);
+
+        const tMain = document.createElementNS(ns, "text");
+        tMain.setAttribute("x", "0");
+        tMain.setAttribute("y", showSub ? String(-fontSizeSub * 0.45) : "1");
+        tMain.setAttribute("text-anchor", "middle");
+        tMain.setAttribute("dominant-baseline", "middle");
+        tMain.setAttribute("fill", "#ffffff");
+        tMain.setAttribute("font-size", String(fontSizeMain));
+        tMain.setAttribute("font-weight", "800");
+        tMain.setAttribute("font-family", "system-ui, -apple-system, sans-serif");
+        tMain.textContent = r.name;
+        g.appendChild(tMain);
+
+        if (showSub) {
+          const tSub = document.createElementNS(ns, "text");
+          tSub.setAttribute("x", "0");
+          tSub.setAttribute("y", String(fontSizeMain * 0.62));
+          tSub.setAttribute("text-anchor", "middle");
+          tSub.setAttribute("dominant-baseline", "middle");
+          tSub.setAttribute("fill", "#f1f5f9");
+          tSub.setAttribute("font-size", String(fontSizeSub));
+          tSub.setAttribute("font-weight", "600");
+          tSub.setAttribute("font-family", "system-ui, -apple-system, sans-serif");
+          tSub.textContent = r.sub;
+          g.appendChild(tSub);
+        }
+
+        const onPinActivate = (e) => {
+          e.stopPropagation();
+          const queryTarget = r.scheduleKey || (r.code.match(/^\d{3}$/) ? `dov'è locale ${r.code}` : `dov'è ${r.name}`);
+          inputField.value = r.scheduleKey ? `Aula ${r.scheduleKey}` : `Dov'è ${r.name}`;
+          handleQuery(queryTarget, { keepMapFloor: floorNum, forceHighlight: [r.code] });
+        };
+
+        g.addEventListener("click", onPinActivate);
+        g.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onPinActivate(e);
+          }
+        });
+
+        pinsLayer.appendChild(g);
+      });
+
+      svgEl.appendChild(pinsLayer);
+    }
+
+    let lastLocationTarget = null;
+
+    cardLocationBadge.addEventListener('click', () => {
+      if (lastLocationTarget) {
+        currentFloor = lastLocationTarget.floor;
+        highlightedCodes = lastLocationTarget.codes;
+        resetMapTransform();
+        setViewMode('map');
+      }
+    });
+
     // Normalizzazione parlata estesa per Web Speech API su ore, sigle scolastiche e date
     function sanitizeForSpeech(text) {
       if (!text) return "";
@@ -747,47 +1238,48 @@
     }
 
     // Rendering sicuro del contenuto e del Badge di Posizione Smart
-    function renderAnswer(a) {
+    function renderAnswer(a, parsed = null, opts = {}) {
       cardTitle.textContent = a.title || "";
       cardBadge.style.display = a.badge ? "inline-block" : "none";
       cardBadge.textContent = a.badge || "";
       cardDesc.style.display = (a.lines && a.lines.length) ? "none" : "block";
       cardNote.textContent = a.note || "";
 
-      // Determinazione Smart di Piano e Aula con ombra pulsante
+      // Determinazione Smart di Piano e Aula con collegamento alla Mappa 2D
       const roomNames = a.rooms || [];
-      const roomNumbers = [];
-      let isPalestra = false;
-      let isRizzarda = false;
-      let primaryRoomName = "";
+      const resolvedLocs = roomNames.map(r => resolveRoomLocation(r)).filter(Boolean);
+      let isRizzarda = roomNames.some(r => /rizzarda/i.test(r));
 
-      roomNames.forEach(rName => {
-        if (/palestra/i.test(rName)) isPalestra = true;
-        if (/rizzarda/i.test(rName)) isRizzarda = true;
-        const numMatch = rName.match(/\b\d{3}\b/);
-        if (numMatch && !roomNumbers.includes(numMatch[0])) roomNumbers.push(numMatch[0]);
-        if (!primaryRoomName && rName) primaryRoomName = rName;
-      });
-
-      if (roomNumbers.length > 0) {
-        const firstNum = roomNumbers[0];
-        const floorChar = firstNum[0];
-        let floorText = "PIANO TERRA";
-        if (floorChar === '1') floorText = "1° PIANO";
-        else if (floorChar === '2') floorText = "2° PIANO";
+      if (resolvedLocs.length > 0) {
+        const firstLoc = resolvedLocs[0];
+        const targetFloor = opts.keepMapFloor !== undefined ? opts.keepMapFloor : firstLoc.floor;
+        const codes = opts.forceHighlight || resolvedLocs.filter(l => l.floor === targetFloor).map(l => l.code);
+        lastLocationTarget = { floor: targetFloor, codes };
 
         cardLocationBadge.style.display = "inline-block";
-        cardLocationBadge.textContent = `📍 ${floorText} • AULA ${firstNum}`;
-      } else if (isPalestra) {
-        cardLocationBadge.style.display = "inline-block";
-        cardLocationBadge.textContent = "📍 PIANO TERRA • PALESTRA";
+        const labelCode = /^\d{3}$/.test(firstLoc.code) ? `AULA ${firstLoc.code}` : firstLoc.name.toUpperCase();
+        cardLocationBadge.textContent = `📍 ${firstLoc.floorLabel} • ${labelCode} (Mappa 2D)`;
+
+        if (parsed && (parsed.isWhere || parsed.intent === 'spazio_mappa')) {
+          currentFloor = targetFloor;
+          highlightedCodes = codes;
+          setViewMode('map');
+        } else if (mapViewContainer.style.display !== 'none') {
+          renderFloorMap(targetFloor, codes);
+        } else {
+          currentFloor = targetFloor;
+          highlightedCodes = codes;
+        }
       } else if (isRizzarda) {
+        lastLocationTarget = null;
         cardLocationBadge.style.display = "inline-block";
         cardLocationBadge.textContent = "📍 SEDE RIZZARDA";
-      } else if (primaryRoomName) {
+      } else if (roomNames.length > 0) {
+        lastLocationTarget = null;
         cardLocationBadge.style.display = "inline-block";
-        cardLocationBadge.textContent = `📍 ${primaryRoomName.toUpperCase()}`;
+        cardLocationBadge.textContent = `📍 ${roomNames[0].toUpperCase()}`;
       } else {
+        lastLocationTarget = null;
         cardLocationBadge.style.display = "none";
       }
 
@@ -819,7 +1311,7 @@
       }));
     }
 
-    function handleQuery(text) {
+    function handleQuery(text, opts = {}) {
       if (!orarioIdx) {
         speak("Il database dell'orario non è ancora disponibile.");
         return;
@@ -829,7 +1321,7 @@
       }
       const parsed = parseQuery(text, orarioIdx, { now: new Date(), me: myTeacherName });
       const a = answer(parsed, orarioIdx);
-      renderAnswer(a);
+      renderAnswer(a, parsed, opts);
       speak(a.speech);
     }
 
@@ -1250,7 +1742,7 @@
     }
 
     async function init() {
-      await loadSchedule();
+      await Promise.all([loadSchedule(), loadMappe()]);
 
       try {
         initNegrelliBot(avatarContainer);

@@ -260,6 +260,109 @@ export function findExplicitDate(q) {
   return { ymd, targetDate, dayOfWeek, day, month, mName, year, matchedText: m[0] };
 }
 
+// Catalogo fisico completo (Wayfinding DWG) per tutte le aule, laboratori e servizi d'istituto
+export const MAP_DIRECTORY = [
+  // Piano Terra (0)
+  { code: "INGRESSO", name: "Ingresso Principale / Atrio", floor: 0, floorLabel: "PIANO TERRA", wing: "Corpo Sud-Ovest (Locale 029)", keywords: ["ingresso", "entrata", "atrio", "portineria", "accoglienza"] },
+  { code: "004", name: "Palestra", floor: 0, floorLabel: "PIANO TERRA", wing: "Blocco Ovest (Locale 004)", keywords: ["palestra", "campo da gioco", "educazione fisica", "scienze motorie"] },
+  { code: "005-006", name: "Spogliatoi Palestra", floor: 0, floorLabel: "PIANO TERRA", wing: "Blocco Ovest (Locali 005-008)", keywords: ["spogliatoio", "spogliatoi"] },
+  { code: "009", name: "Infermeria", floor: 0, floorLabel: "PIANO TERRA", wing: "Blocco Ovest, lato Palestra (Locale 009)", keywords: ["infermeria", "primo soccorso", " pronto soccorso", "medicheria"] },
+  { code: "014", name: "Aula 014", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Nord-Est", keywords: ["014"] },
+  { code: "015", name: "Aula 015", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Est", keywords: ["015"] },
+  { code: "016", name: "Aula 016", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Est", keywords: ["016"] },
+  { code: "017", name: "Aula 017", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Centro-Est", keywords: ["017"] },
+  { code: "018", name: "Lab. Linux 018", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Nord (Locale 018)", keywords: ["018", "lab linux", "laboratorio linux"] },
+  { code: "019", name: "Aula 019", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Nord-Ovest", keywords: ["019"] },
+  { code: "020", name: "Lab. Multimediale 020-021", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Ovest (Locali 020-021)", keywords: ["020", "021", "multimediale", "lab multimediale"] },
+  { code: "022", name: "Aula 022", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Sud-Ovest", keywords: ["022"] },
+  { code: "024", name: "Lab 1 (Cod. 024)", floor: 0, floorLabel: "PIANO TERRA", wing: "Blocco Est, lato Officina (Locale 024)", keywords: ["024", "lab 1", "laboratorio 1"] },
+  { code: "025", name: "Lab 2 (Cod. 025)", floor: 0, floorLabel: "PIANO TERRA", wing: "Blocco Est, lato Officina (Locale 025)", keywords: ["025", "lab 2", "laboratorio 2"] },
+  { code: "026", name: "Officina Meccanica", floor: 0, floorLabel: "PIANO TERRA", wing: "Blocco Est (Locale 026 • 246 m²)", keywords: ["026", "officina", "officina meccanica", "macchine utensili", "torneria"] },
+  { code: "028", name: "Mensa Scolastica", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Sud (Locale 028 • 242 m²)", keywords: ["028", "mensa", "ristorazione", "pranzo"] },
+  { code: "030", name: "Lab 5 (Cod. 030)", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Ovest (Locale 030)", keywords: ["030", "lab 5", "laboratorio 5"] },
+  { code: "031", name: "Lab 4 (Cod. 031)", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Nord-Ovest (Locale 031)", keywords: ["031", "lab 4", "laboratorio 4"] },
+  { code: "033", name: "Agorà / Spazio Studio", floor: 0, floorLabel: "PIANO TERRA", wing: "Corpo Centrale (Locali 032-033)", keywords: ["032", "033", "agora", "spazio studio"] },
+  { code: "035", name: "Uffici Accoglienza", floor: 0, floorLabel: "PIANO TERRA", wing: "Corpo Centrale-Est (Locale 035)", keywords: ["035", "accoglienza"] },
+  { code: "058", name: "Biblioteca d'Istituto", floor: 0, floorLabel: "PIANO TERRA", wing: "Corpo Centrale (Locali 058-059)", keywords: ["058", "059", "biblioteca", "sala lettura"] },
+  { code: "060", name: "Sala Insegnanti", floor: 0, floorLabel: "PIANO TERRA", wing: "Corpo Centrale-Sud (Locale 060)", keywords: ["060", "sala insegnanti", "sala docenti", "sala professori", "aula docenti", "aula insegnanti"] },
+  { code: "069", name: "Caffetteria / Bar", floor: 0, floorLabel: "PIANO TERRA", wing: "Atrio Sud, vicino all'Ingresso (Locale 069)", keywords: ["069", "bar", "caffetteria", "ristoro", "macchinette"] },
+  { code: "070", name: "Archivio", floor: 0, floorLabel: "PIANO TERRA", wing: "Lato Est (Locale 070)", keywords: ["070", "archivio"] },
+  { code: "ASC", name: "Ascensore Centrale", floor: 0, floorLabel: "PIANO TERRA", wing: "Corpo Centrale (Locale 046 — collega Piani 0, 1 e 2)", keywords: ["046", "ascensore"] },
+
+  // Primo Piano (1)
+  { code: "104-106", name: "Segreteria & Uffici Dirigenza", floor: 1, floorLabel: "1° PIANO", wing: "Ala Sud-Ovest (Locali 104, 105, 106, 138)", keywords: ["104", "105", "106", "138", "segreteria", "uffici", "ufficio", "presidenza", "dirigenza", "didattica", "vicepresidenza"] },
+  { code: "110", name: "Aula 110", floor: 1, floorLabel: "1° PIANO", wing: "Ala Nord-Est", keywords: ["110"] },
+  { code: "111", name: "Aula 111", floor: 1, floorLabel: "1° PIANO", wing: "Ala Est", keywords: ["111"] },
+  { code: "112", name: "Aula 112", floor: 1, floorLabel: "1° PIANO", wing: "Ala Est", keywords: ["112"] },
+  { code: "113", name: "Aula 113", floor: 1, floorLabel: "1° PIANO", wing: "Ala Centro-Est", keywords: ["113"] },
+  { code: "114", name: "Aula 114", floor: 1, floorLabel: "1° PIANO", wing: "Ala Sud-Est", keywords: ["114"] },
+  { code: "115", name: "Aula 115", floor: 1, floorLabel: "1° PIANO", wing: "Ala Sud", keywords: ["115"] },
+  { code: "116", name: "Lab. CAD-Automazione 116-117", floor: 1, floorLabel: "1° PIANO", wing: "Ala Ovest (Locali 116-117)", keywords: ["116", "117", "cad", "automazione"] },
+  { code: "118", name: "Lab. Costruzioni 118", floor: 1, floorLabel: "1° PIANO", wing: "Ala Nord-Ovest (Locale 118)", keywords: ["118", "costruzioni"] },
+  { code: "119", name: "Aula 119", floor: 1, floorLabel: "1° PIANO", wing: "Ala Nord", keywords: ["119"] },
+  { code: "125", name: "Lab. Chimica 125", floor: 1, floorLabel: "1° PIANO", wing: "Blocco Est (Locale 125)", keywords: ["125", "chimica"] },
+  { code: "126", name: "Lab. Biologia 126", floor: 1, floorLabel: "1° PIANO", wing: "Blocco Est (Locale 126)", keywords: ["126", "biologia", "scienze"] },
+  { code: "128", name: "Aula Informale 128", floor: 1, floorLabel: "1° PIANO", wing: "Corpo Centrale-Nord (Locale 128)", keywords: ["128"] },
+  { code: "129", name: "Lab. Disegno 129", floor: 1, floorLabel: "1° PIANO", wing: "Corpo Centrale (Locale 129)", keywords: ["129", "disegno"] },
+  { code: "130", name: "Aula Informale 130", floor: 1, floorLabel: "1° PIANO", wing: "Ala Ovest (Locale 130)", keywords: ["130"] },
+  { code: "131", name: "Aula Informale 131", floor: 1, floorLabel: "1° PIANO", wing: "Ala Ovest (Locale 131)", keywords: ["131"] },
+  { code: "134", name: "Aula 134", floor: 1, floorLabel: "1° PIANO", wing: "Ala Sud-Ovest (Locale 134)", keywords: ["134"] },
+  { code: "135", name: "Lab. Fisica 135", floor: 1, floorLabel: "1° PIANO", wing: "Corpo Centrale-Sud (Locale 135)", keywords: ["135", "fisica"] },
+
+  // Secondo Piano (2)
+  { code: "201", name: "Aula 201", floor: 2, floorLabel: "2° PIANO", wing: "Ala Nord-Est", keywords: ["201"] },
+  { code: "202", name: "Aula 202", floor: 2, floorLabel: "2° PIANO", wing: "Ala Est", keywords: ["202"] },
+  { code: "203", name: "Aula 203", floor: 2, floorLabel: "2° PIANO", wing: "Ala Est", keywords: ["203"] },
+  { code: "204", name: "Aula 204", floor: 2, floorLabel: "2° PIANO", wing: "Ala Sud-Est", keywords: ["204"] },
+  { code: "205", name: "Aula 205", floor: 2, floorLabel: "2° PIANO", wing: "Ala Sud", keywords: ["205"] },
+  { code: "206", name: "Lab. Informatica 206-207", floor: 2, floorLabel: "2° PIANO", wing: "Ala Ovest (Locali 206-207)", keywords: ["206", "207", "lab informatica", "laboratorio informatica"] },
+  { code: "208", name: "Lab. Elettronica 208", floor: 2, floorLabel: "2° PIANO", wing: "Ala Nord-Ovest (Locale 208)", keywords: ["208", "elettronica", "elettrotecnica"] },
+  { code: "209", name: "Aula 209", floor: 2, floorLabel: "2° PIANO", wing: "Ala Centro-Est", keywords: ["209"] },
+  { code: "210", name: "Lab. Lingue 210", floor: 2, floorLabel: "2° PIANO", wing: "Ala Nord (Locale 210)", keywords: ["210", "lingue", "linguistico"] },
+  { code: "213", name: "Aula Informale 213", floor: 2, floorLabel: "2° PIANO", wing: "Ala Ovest (Locale 213)", keywords: ["213"] },
+  { code: "223", name: "Lab. Sistemi 223", floor: 2, floorLabel: "2° PIANO", wing: "Ala Sud (Locale 223)", keywords: ["223", "sistemi"] },
+  { code: "224", name: "Aula 224", floor: 2, floorLabel: "2° PIANO", wing: "Ala Sud-Ovest (Locale 224)", keywords: ["224"] },
+];
+
+export function resolveRoomLocation(roomStr) {
+  if (!roomStr) return null;
+  const norm = normalize(roomStr);
+  const numMatch = roomStr.match(/\b(\d{3})\b/);
+  if (numMatch) {
+    const num = numMatch[1];
+    const hit = MAP_DIRECTORY.find((m) => m.code === num || m.keywords.includes(num));
+    if (hit) return hit;
+    const f = num[0] === "1" ? 1 : num[0] === "2" ? 2 : 0;
+    const fl = f === 1 ? "1° PIANO" : f === 2 ? "2° PIANO" : "PIANO TERRA";
+    return { code: num, name: roomStr, floor: f, floorLabel: fl, wing: "Edificio Principale" };
+  }
+  if (/palestra/i.test(roomStr)) {
+    return MAP_DIRECTORY.find((m) => m.code === "004");
+  }
+  for (const item of MAP_DIRECTORY) {
+    if (item.keywords.some((kw) => new RegExp(`(^|\\s)${kw}(\\s|$)`).test(norm))) {
+      return item;
+    }
+  }
+  return null;
+}
+
+function findMapSpace(qNorm) {
+  const numMatch = qNorm.match(/\b(\d{3})\b/);
+  if (numMatch) {
+    const hit = MAP_DIRECTORY.find((m) => m.code === numMatch[1] || m.keywords.includes(numMatch[1]));
+    if (hit) return hit;
+  }
+  for (const item of MAP_DIRECTORY) {
+    for (const kw of item.keywords) {
+      if (kw.length >= 3 && !/^\d{3}$/.test(kw) && new RegExp(`(^|\\s)${kw}(\\s|$)`).test(qNorm)) {
+        return item;
+      }
+    }
+  }
+  return null;
+}
+
 function findDay(q, now) {
   const explicit = findExplicitDate(q);
   if (explicit) return explicit.dayOfWeek;
@@ -357,7 +460,8 @@ export function parseQuery(text, idx, ctx = {}) {
   if (realtime) hour = currentLesson(now, idx, day);
 
   const isProssimo = /\b(prossim[oiea]|successiv[oiea]|imminent[ei]|futur[oiea])\b/.test(q0);
-  const base = { day, hour, realtime, raw: text, now, isProssimo, targetDateStr: targetDateYMD, sospensione };
+  const isWhere = /\b(dove|dov e|che piano|quale piano|mappa|posizione|ubicazione|raggiung)\b/.test(q0);
+  const base = { day, hour, realtime, raw: text, now, isProssimo, targetDateStr: targetDateYMD, sospensione, isWhere, qNorm: q0 };
 
   // Controllo per le Attività (Collegi docenti, Consigli di classe, Scrutini, Colloqui, ecc.)
   const isAttivita = /\b(attivita|impegni|collegio|collegi|consiglio|consigli|cdc|scrutini|scrutinio|colloqui|colloquio|glo|pdp|pei|dipartimenti|dipartimento|esami|idoneita|debito|debiti)\b/.test(q0);
@@ -434,6 +538,9 @@ export function parseQuery(text, idx, ctx = {}) {
   }
   if (classi.length) return { ...base, intent: "classe", classi };
   if (rooms.length) return { ...base, intent: "aula", rooms };
+
+  const mapSpace = findMapSpace(q0);
+  if (mapSpace) return { ...base, intent: "spazio_mappa", space: mapSpace };
 
   const me = ctx.me ? scoreDocenti(normalize(ctx.me), idx) : [];
   if (me.length === 1) return { ...base, intent: "docente", docente: me[0], isSelf: true };
@@ -792,16 +899,23 @@ function answerAula(p, idx) {
   const out = [];
   for (const r of p.rooms) {
     const title = titleCase(r.nome);
+    const loc = resolveRoomLocation(r.nome);
+    const locNote = loc ? `📍 ${loc.floorLabel} • ${loc.wing}.` : "";
+    const locSpeech = loc ? `${title} si trova al ${loc.floorLabel.toLowerCase()}, ${loc.wing}. ` : "";
+
     if (p.day === "domenica") {
-      out.push(closedDay(p, title));
+      const c = closedDay(p, title);
+      out.push({ ...c, rooms: [r.nome], note: locNote ? `${locNote} ${c.note}` : c.note, speech: p.isWhere ? `${locSpeech}${c.speech}` : c.speech });
       continue;
     }
     if (p.day === "sabato" && p.hour > 4) {
-      out.push(saturdayExceeded(p, title));
+      const s = saturdayExceeded(p, title);
+      out.push({ ...s, rooms: [r.nome], note: locNote ? `${locNote} ${s.note}` : s.note, speech: p.isWhere ? `${locSpeech}${s.speech}` : s.speech });
       continue;
     }
     if (p.realtime && p.hour === null) {
-      out.push({ ...noHourNow(p), title });
+      const n = noHourNow(p);
+      out.push({ ...n, title, rooms: [r.nome], note: locNote ? `${locNote} ${n.note}` : n.note, speech: p.isWhere ? `${locSpeech}${n.speech}` : n.speech });
       continue;
     }
 
@@ -816,14 +930,16 @@ function answerAula(p, idx) {
       const lines = Object.keys(occ)
         .sort((a, b) => a - b)
         .map((h) => ({ when: `${h}ª ora`, main: desc(occ[h]), sub: "" }));
+      const baseNote = lines.length ? "" : "Non occupata in questa giornata.";
+      const baseSpeech = lines.length
+        ? `${dayCap} ${title} è occupata in ${lines.length} ore.`
+        : `${dayCap} ${title} è libera per l'intera giornata.`;
       out.push({
         title,
         badge: `${dl(p.day).toUpperCase()} • GIORNATA`,
         lines,
-        note: lines.length ? "" : "Non occupata in questa giornata.",
-        speech: lines.length
-          ? `${dayCap} ${title} è occupata in ${lines.length} ore.`
-          : `${dayCap} ${title} è libera per l'intera giornata.`,
+        note: [locNote, baseNote].filter(Boolean).join(" "),
+        speech: p.isWhere ? `${locSpeech}${baseSpeech}` : baseSpeech,
         rooms: [r.nome],
       });
       continue;
@@ -837,19 +953,36 @@ function answerAula(p, idx) {
             title,
             badge: hourBadge(p, idx),
             lines: [{ when: "Occupata", main: desc(o), sub: "" }],
-            speech: `${dayCap} in ${when} ${title} è occupata dalla ${desc(o)}.`,
+            note: locNote,
+            speech: `${p.isWhere ? locSpeech : ""}${dayCap} in ${when} ${title} è occupata dalla ${desc(o)}.`,
             rooms: [r.nome],
           }
         : {
             title,
             badge: hourBadge(p, idx),
             lines: [{ when: "Libera", main: "", sub: "" }],
-            speech: `${dayCap} in ${when} ${title} è libera.`,
+            note: locNote,
+            speech: `${p.isWhere ? locSpeech : ""}${dayCap} in ${when} ${title} è libera.`,
             rooms: [r.nome],
           }
     );
   }
   return mergeAnswers(out);
+}
+
+function answerSpazioMappa(p) {
+  const sp = p.space;
+  return {
+    title: sp.name,
+    badge: `MAPPA ISTITUTO • ${sp.floorLabel}`,
+    lines: [
+      { when: "Piano", main: sp.floorLabel, sub: `Codice locale: ${sp.code}` },
+      { when: "Posizione", main: sp.wing, sub: "Clicca sul badge posizione o apri la Mappa 2D per vederlo in pianta" },
+    ],
+    note: `Locale individuato sulle planimetrie ufficiali dell'istituto (${sp.floorLabel}).`,
+    speech: `${sp.name} si trova al ${sp.floorLabel.toLowerCase()}, ${sp.wing}.`,
+    rooms: [sp.code],
+  };
 }
 
 const MONTH_INDEX = {
@@ -1505,6 +1638,8 @@ export function answer(p, idx, ctx = {}) {
       return answerAuleLibere(p, idx);
     case "aula":
       return answerAula(p, idx);
+    case "spazio_mappa":
+      return answerSpazioMappa(p);
     case "attivita":
       return answerAttivita(p, idx, ctx);
     case "calendario":
