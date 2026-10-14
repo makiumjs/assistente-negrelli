@@ -18,12 +18,13 @@ plt.rcParams['font.sans-serif'] = ['Helvetica Neue', 'Avenir Next', 'Arial', 'De
 plt.rcParams['axes.edgecolor'] = '#CBD5E1'
 plt.rcParams['axes.linewidth'] = 0.8
 
-SCRATCH_DIR = "/Users/mako/.gemini/antigravity/brain/a2ec4232-6b56-4a72-bc35-76c95efd3b6e/scratch/mappe"
-OUT_PROJECT_DIR = "/Users/mako/Desktop/Negrelli/mappe_stampabili"
-OUT_DOWNLOAD_DIR = "/Users/mako/Downloads/Mappe/Cartelli_Pronti_Stampa"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+SCRATCH_DIR = os.path.join(BASE_DIR, "mappe_stampabili", ".scratch")
+OUT_PROJECT_DIR = os.path.join(BASE_DIR, "mappe_stampabili")
+OUT_DOWNLOAD_DIR = os.path.join(BASE_DIR, "mappe_stampabili")
 
 os.makedirs(OUT_PROJECT_DIR, exist_ok=True)
-os.makedirs(OUT_DOWNLOAD_DIR, exist_ok=True)
+os.makedirs(SCRATCH_DIR, exist_ok=True)
 
 # Formato Standard ISO 216 A3 Orizzontale (420 x 297 mm, 300 DPI = 4961 x 3508 px)
 A3_INCHES = (420.0 / 25.4, 297.0 / 25.4)
@@ -147,12 +148,12 @@ ROOMS_PIANO_TERRA = [
     # Grandi Spazi Comuni & Sport
     {"code": "004", "name": "PALESTRA", "sub": "Campo da Gioco • 752 m²", "x": 8.0, "y": 19.8, "cat": "comuni", "size": "lg"},
     {"code": "005-006", "name": "SPOGLIATOI", "sub": "Palestra • 005 / 006", "x": 13.3, "y": 22.5, "cat": "comuni", "size": "sm"},
-    {"code": "028", "name": "MENSA SCOLASTICA", "sub": "Sala Ristorazione • 242 m²", "x": 17.2, "y": 6.0, "cat": "comuni", "size": "lg"},
-    {"code": "069", "name": "CAFFETTERIA / BAR", "sub": "Area Ristoro • 069", "x": 18.5, "y": 9.4, "cat": "comuni", "size": "md"},
+    {"code": "028", "name": "AULA INSEGNANTI", "sub": "Docenti (ex Mensa) • 242 m²", "x": 17.2, "y": 6.0, "cat": "uffici", "size": "lg"},
+    {"code": "069", "name": "AREA RISTORO", "sub": "Caffetteria / Bar • 069", "x": 18.5, "y": 9.4, "cat": "comuni", "size": "md"},
 
     # Sala Insegnanti, Uffici & Infermeria
-    {"code": "060", "name": "SALA INSEGNANTI", "sub": "Docenti • Cod. 060", "x": 29.5, "y": 12.8, "cat": "uffici", "size": "md"},
-    {"code": "035", "name": "UFFICI / ACCOGLIENZA", "sub": "Personale • Cod. 035", "x": 29.7, "y": 16.1, "cat": "uffici", "size": "sm"},
+    {"code": "060", "name": "VICEPRESIDENZA", "sub": "Ufficio Vicepresidenza • Cod. 060", "x": 29.5, "y": 12.8, "cat": "uffici", "size": "md"},
+    {"code": "035", "name": "SEGRETERIA DIDATTICA", "sub": "Sportello Didattica • Cod. 035", "x": 29.7, "y": 16.1, "cat": "uffici", "size": "md"},
     {"code": "070", "name": "ARCHIVIO", "sub": "Cod. 070", "x": 33.2, "y": 12.3, "cat": "uffici", "size": "sm"},
     {"code": "009", "name": "INFERMERIA", "sub": "Primo Soccorso • 009", "x": 13.0, "y": 16.6, "cat": "uffici", "size": "sm"},
 
@@ -199,7 +200,7 @@ ROOMS_PIANO_PRIMO = [
 
     # Uffici & Segreteria
     {"code": "104-106", "name": "UFFICI & SEGRETERIA", "sub": "Dirigenza / Amm. • 104, 105, 106, 138", "x": 18.2, "y": 9.2, "cat": "uffici", "size": "md"},
-    {"code": "107", "name": "SPAZIO ATTESA / RELAX", "sub": "Zona Uffici • 107", "x": 18.7, "y": 7.3, "cat": "informale", "size": "xs"},
+    {"code": "107", "name": "UFFICIO VICEPRESIDENZA", "sub": "Vicepresidenza • 107", "x": 18.7, "y": 7.3, "cat": "uffici", "size": "md"},
 
     # Scale & Ascensore
     {"code": "ASC", "name": "ASCENSORE", "sub": "Cod. 046", "x": 28.4, "y": 23.7, "cat": "scale", "size": "sm"},
@@ -1029,7 +1030,7 @@ def write_clean_svg(svg_path, geom, xlim, ylim, scale=40.0):
 
 def export_web_assets(geom_0, geom_1, geom_2):
     """Genera public/data/mappe/piano_{0,1,2}.svg e public/data/mappe.json per l'app web."""
-    web_map_dir = "/Users/mako/Desktop/Negrelli/public/data/mappe"
+    web_map_dir = os.path.join(BASE_DIR, "public", "data", "mappe")
     os.makedirs(web_map_dir, exist_ok=True)
     scale = 40.0
 
@@ -1090,7 +1091,7 @@ def export_web_assets(geom_0, geom_1, geom_2):
             "rooms": rooms_out,
         })
 
-    mappe_json_path = "/Users/mako/Desktop/Negrelli/public/data/mappe.json"
+    mappe_json_path = os.path.join(BASE_DIR, "public", "data", "mappe.json")
     with open(mappe_json_path, "w", encoding="utf-8") as f:
         json.dump({
             "istituto": "I.T.T. L. Negrelli • I.T.G. E. Forcellini — Feltre",

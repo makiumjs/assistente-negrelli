@@ -331,16 +331,35 @@ assert.equal(r.p.space.code, "026");
 assert.ok(r.a.speech.includes("piano terra"));
 console.log("✓ Dov'è Officina (Locale 026):", r.a.speech);
 
-r = ask("dov'è la sala insegnanti");
+r = ask("dov'è l'aula insegnanti");
+assert.equal(r.p.intent, "spazio_mappa");
+assert.equal(r.p.space.code, "028");
+assert.ok(r.a.speech.includes("piano terra"));
+console.log("✓ Dov'è Aula Insegnanti (Locale 028):", r.a.speech);
+
+r = ask("dov'è la vicepresidenza");
 assert.equal(r.p.intent, "spazio_mappa");
 assert.equal(r.p.space.code, "060");
 assert.ok(r.a.speech.includes("piano terra"));
-console.log("✓ Dov'è Sala Insegnanti (Locale 060):", r.a.speech);
+console.log("✓ Dov'è Vicepresidenza (Locale 060):", r.a.speech);
 
-r = ask("dov'è il bar");
+r = ask("dov'è la segreteria didattica");
+assert.equal(r.p.intent, "spazio_mappa");
+assert.equal(r.p.space.code, "035");
+assert.ok(r.a.speech.includes("piano terra"));
+console.log("✓ Dov'è Segreteria Didattica (Locale 035):", r.a.speech);
+
+r = ask("dov'è l'area ristoro");
 assert.equal(r.p.intent, "spazio_mappa");
 assert.equal(r.p.space.code, "069");
-console.log("✓ Dov'è Bar / Caffetteria (Locale 069):", r.a.speech);
+console.log("✓ Dov'è Area Ristoro / Bar (Locale 069):", r.a.speech);
+
+r = ask("dov'è l'ufficio vicepresidenza al primo piano");
+assert.equal(r.p.intent, "spazio_mappa");
+assert.equal(r.p.space.code, "107");
+assert.equal(r.p.space.floor, 1);
+assert.ok(r.a.speech.includes("1° piano"));
+console.log("✓ Dov'è Ufficio Vicepresidenza (Locale 107):", r.a.speech);
 
 console.log("\n TUTTI I TEST SONO PASSATI CON SUCCESSO! ");
 
