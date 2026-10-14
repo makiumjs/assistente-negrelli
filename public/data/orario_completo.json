@@ -40173,6 +40173,206 @@
         "sede": "Rizzarda",
         "classi": "tutte"
       }
+    ],
+    "glo": [
+      {
+        "giorno": "lunedì 26 ottobre 2026",
+        "data_iso": "2026-10-26",
+        "ora": "14:00",
+        "classe": "5ITA",
+        "classe_raw": "5°ITA",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "lunedì 26 ottobre 2026",
+        "data_iso": "2026-10-26",
+        "ora": "14:30",
+        "classe": "5BSS",
+        "classe_raw": "5°BSS",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "lunedì 26 ottobre 2026",
+        "data_iso": "2026-10-26",
+        "ora": "15:00",
+        "classe": "4ITB",
+        "classe_raw": "4°ITB",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "lunedì 26 ottobre 2026",
+        "data_iso": "2026-10-26",
+        "ora": "15:30",
+        "classe": "4ITA",
+        "classe_raw": "4°ITA",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "lunedì 26 ottobre 2026",
+        "data_iso": "2026-10-26",
+        "ora": "16:00",
+        "classe": "3ITA",
+        "classe_raw": "3°ITA",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "lunedì 26 ottobre 2026",
+        "data_iso": "2026-10-26",
+        "ora": "16:30",
+        "classe": "2ITB",
+        "classe_raw": "2°ITB",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "lunedì 26 ottobre 2026",
+        "data_iso": "2026-10-26",
+        "ora": "17:00",
+        "classe": "1BTB",
+        "classe_raw": "1°BTB",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "lunedì 26 ottobre 2026",
+        "data_iso": "2026-10-26",
+        "ora": "17:30",
+        "classe": "1MMC",
+        "classe_raw": "1°MMC",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "martedì 27 ottobre 2026",
+        "data_iso": "2026-10-27",
+        "ora": "13:45",
+        "classe": "5IAMI",
+        "classe_raw": "5°IAMI",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "martedì 27 ottobre 2026",
+        "data_iso": "2026-10-27",
+        "ora": "15:15",
+        "classe": "4IAMI",
+        "classe_raw": "4°IAMI",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "martedì 27 ottobre 2026",
+        "data_iso": "2026-10-27",
+        "ora": "16:45",
+        "classe": "3IAMI",
+        "classe_raw": "3°IAMI",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "martedì 27 ottobre 2026",
+        "data_iso": "2026-10-27",
+        "ora": "18:45",
+        "classe": "1IAMI",
+        "classe_raw": "1°IAMI",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "giovedì 29 ottobre 2026",
+        "data_iso": "2026-10-29",
+        "ora": "13:45",
+        "classe": "2SSAS",
+        "classe_raw": "2°SSAS",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "giovedì 29 ottobre 2026",
+        "data_iso": "2026-10-29",
+        "ora": "15:45",
+        "classe": "5SSAS",
+        "classe_raw": "5°SSAS",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "giovedì 29 ottobre 2026",
+        "data_iso": "2026-10-29",
+        "ora": "16:45",
+        "classe": "3SSAS",
+        "classe_raw": "3°SSAS",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "giovedì 29 ottobre 2026",
+        "data_iso": "2026-10-29",
+        "ora": "17:45",
+        "classe": "4SSAS",
+        "classe_raw": "4°SSAS",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "giovedì 29 ottobre 2026",
+        "data_iso": "2026-10-29",
+        "ora": "18:15",
+        "classe": "1SSAS",
+        "classe_raw": "1°SSAS",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "venerdì 30 ottobre 2026",
+        "data_iso": "2026-10-30",
+        "ora": "14:00",
+        "classe": "2B",
+        "classe_raw": "2°B",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "venerdì 30 ottobre 2026",
+        "data_iso": "2026-10-30",
+        "ora": "14:30",
+        "classe": "1A",
+        "classe_raw": "1°A",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "venerdì 30 ottobre 2026",
+        "data_iso": "2026-10-30",
+        "ora": "15:00",
+        "classe": "1B",
+        "classe_raw": "1°B",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "venerdì 30 ottobre 2026",
+        "data_iso": "2026-10-30",
+        "ora": "15:30",
+        "classe": "5BRIM",
+        "classe_raw": "5°BRIM",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "venerdì 30 ottobre 2026",
+        "data_iso": "2026-10-30",
+        "ora": "16:00",
+        "classe": "3CS",
+        "classe_raw": "3°CS",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      }
     ]
   },
   "calendario": {
@@ -40645,5 +40845,215 @@
         "chiuso_uffici": true
       }
     }
+  },
+  "glo": {
+    "meta": {
+      "istituto": "ITIS Negrelli Feltre",
+      "comunicato": "Comunicato n. 83 del 14 ottobre 2026",
+      "oggetto": "Calendario convocazione GLO per la condivisione dei PEI",
+      "sede": "Un'aula della sede del Negrelli",
+      "periodo": "26 - 30 ottobre 2026",
+      "dirigente": "Manuela Muliner Biga"
+    },
+    "incontri": [
+      {
+        "giorno": "lunedì 26 ottobre 2026",
+        "data_iso": "2026-10-26",
+        "ora": "14:00",
+        "classe": "5ITA",
+        "classe_raw": "5°ITA",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "lunedì 26 ottobre 2026",
+        "data_iso": "2026-10-26",
+        "ora": "14:30",
+        "classe": "5BSS",
+        "classe_raw": "5°BSS",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "lunedì 26 ottobre 2026",
+        "data_iso": "2026-10-26",
+        "ora": "15:00",
+        "classe": "4ITB",
+        "classe_raw": "4°ITB",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "lunedì 26 ottobre 2026",
+        "data_iso": "2026-10-26",
+        "ora": "15:30",
+        "classe": "4ITA",
+        "classe_raw": "4°ITA",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "lunedì 26 ottobre 2026",
+        "data_iso": "2026-10-26",
+        "ora": "16:00",
+        "classe": "3ITA",
+        "classe_raw": "3°ITA",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "lunedì 26 ottobre 2026",
+        "data_iso": "2026-10-26",
+        "ora": "16:30",
+        "classe": "2ITB",
+        "classe_raw": "2°ITB",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "lunedì 26 ottobre 2026",
+        "data_iso": "2026-10-26",
+        "ora": "17:00",
+        "classe": "1BTB",
+        "classe_raw": "1°BTB",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "lunedì 26 ottobre 2026",
+        "data_iso": "2026-10-26",
+        "ora": "17:30",
+        "classe": "1MMC",
+        "classe_raw": "1°MMC",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "martedì 27 ottobre 2026",
+        "data_iso": "2026-10-27",
+        "ora": "13:45",
+        "classe": "5IAMI",
+        "classe_raw": "5°IAMI",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "martedì 27 ottobre 2026",
+        "data_iso": "2026-10-27",
+        "ora": "15:15",
+        "classe": "4IAMI",
+        "classe_raw": "4°IAMI",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "martedì 27 ottobre 2026",
+        "data_iso": "2026-10-27",
+        "ora": "16:45",
+        "classe": "3IAMI",
+        "classe_raw": "3°IAMI",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "martedì 27 ottobre 2026",
+        "data_iso": "2026-10-27",
+        "ora": "18:45",
+        "classe": "1IAMI",
+        "classe_raw": "1°IAMI",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "giovedì 29 ottobre 2026",
+        "data_iso": "2026-10-29",
+        "ora": "13:45",
+        "classe": "2SSAS",
+        "classe_raw": "2°SSAS",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "giovedì 29 ottobre 2026",
+        "data_iso": "2026-10-29",
+        "ora": "15:45",
+        "classe": "5SSAS",
+        "classe_raw": "5°SSAS",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "giovedì 29 ottobre 2026",
+        "data_iso": "2026-10-29",
+        "ora": "16:45",
+        "classe": "3SSAS",
+        "classe_raw": "3°SSAS",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "giovedì 29 ottobre 2026",
+        "data_iso": "2026-10-29",
+        "ora": "17:45",
+        "classe": "4SSAS",
+        "classe_raw": "4°SSAS",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "giovedì 29 ottobre 2026",
+        "data_iso": "2026-10-29",
+        "ora": "18:15",
+        "classe": "1SSAS",
+        "classe_raw": "1°SSAS",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "venerdì 30 ottobre 2026",
+        "data_iso": "2026-10-30",
+        "ora": "14:00",
+        "classe": "2B",
+        "classe_raw": "2°B",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "venerdì 30 ottobre 2026",
+        "data_iso": "2026-10-30",
+        "ora": "14:30",
+        "classe": "1A",
+        "classe_raw": "1°A",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "venerdì 30 ottobre 2026",
+        "data_iso": "2026-10-30",
+        "ora": "15:00",
+        "classe": "1B",
+        "classe_raw": "1°B",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "venerdì 30 ottobre 2026",
+        "data_iso": "2026-10-30",
+        "ora": "15:30",
+        "classe": "5BRIM",
+        "classe_raw": "5°BRIM",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      },
+      {
+        "giorno": "venerdì 30 ottobre 2026",
+        "data_iso": "2026-10-30",
+        "ora": "16:00",
+        "classe": "3CS",
+        "classe_raw": "3°CS",
+        "luogo": "Un'aula della sede del Negrelli",
+        "comunicato": "Comunicato n. 83 del 14/10/2026"
+      }
+    ]
   }
 }

@@ -14,6 +14,7 @@ from collections import defaultdict
 import pdfplumber
 from parse_attivita import parse_attivita_pdf
 from parse_calendario import parse_calendario_pdf
+from parse_glo import parse_glo_pdf
 
 def find_pdf_path(filename):
     candidates = [
@@ -588,6 +589,16 @@ def run():
         print(f"  ⚠ Avviso: impossibile caricare il Calendario Scolastico ({e})")
         calendario = {}
 
+    print("Lettura Calendario GLO (Comunicato n. 83)...")
+    try:
+        glo = parse_glo_pdf()
+        incontri_glo = glo.get("incontri", [])
+        attivita["glo"] = incontri_glo
+        print(f"  ✓ GLO caricati: {len(incontri_glo)} convocazioni PEI.")
+    except Exception as e:
+        print(f"  ⚠ Avviso: impossibile caricare il Calendario GLO ({e})")
+        glo = {}
+
     dataset = {
         "meta": {
             "istituto": "ITIS Negrelli Feltre",
@@ -611,6 +622,7 @@ def run():
         "aule_libere": libere,
         "attivita": attivita,
         "calendario": calendario,
+        "glo": glo,
     }
 
     os.makedirs(os.path.dirname(OUT_JSON), exist_ok=True)

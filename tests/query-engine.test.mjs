@@ -258,4 +258,44 @@ assert.ok(aDec7.speech.includes("non hai lezioni"));
 assert.ok(aDec7.speech.includes("Ponte dell'Immacolata"));
 console.log("✓ Blocco orario relativo 'oggi' in giorno di vacanza:", aDec7.speech);
 
+console.log("\n=== 9. Test Convocazioni GLO (Comunicato n. 83) ===");
+r = ask("quando è il GLO della 4ITA");
+assert.equal(r.p.intent, "attivita");
+assert.equal(r.p.subType, "glo");
+assert.ok(r.a.speech.includes("lunedì 26 ottobre 2026"));
+assert.ok(r.a.speech.includes("15:30"));
+assert.ok(r.a.speech.includes("sede del Negrelli"));
+assert.equal(r.a.badge, "GLO • CONDIVISIONE PEI");
+console.log("✓ GLO 4ITA:", r.a.speech);
+
+r = ask("quando sono i GLO della 3ITA");
+assert.equal(r.p.intent, "attivita");
+assert.equal(r.p.subType, "glo");
+assert.ok(r.a.speech.includes("16:00"));
+assert.ok(r.a.speech.includes("26 ottobre"));
+console.log("✓ GLO 3ITA:", r.a.speech);
+
+r = ask("quando è il GLO della 5IAMI");
+assert.equal(r.p.intent, "attivita");
+assert.equal(r.p.subType, "glo");
+assert.ok(r.a.speech.includes("martedì 27 ottobre 2026"));
+assert.ok(r.a.speech.includes("13:45"));
+console.log("✓ GLO 5IAMI:", r.a.speech);
+
+r = ask("quando sono i GLO per il PEI");
+assert.equal(r.p.intent, "attivita");
+assert.equal(r.p.subType, "glo");
+assert.ok(r.a.speech.includes("26 al 30 ottobre 2026"));
+assert.ok(r.a.speech.includes("22 classi"));
+assert.equal(r.a.badge, "GLO • CONDIVISIONE PEI");
+console.log("✓ Panoramica GLO:", r.a.speech);
+
+r = ask("qual è il prossimo GLO");
+assert.equal(r.p.intent, "attivita");
+assert.equal(r.p.subType, "glo");
+assert.equal(r.p.isProssimo, true);
+assert.equal(r.a.badge, "PROSSIMO GLO");
+assert.ok(r.a.speech.includes("lunedì 26 ottobre 2026"));
+console.log("✓ Prossimo GLO:", r.a.speech);
+
 console.log("\n TUTTI I TEST SONO PASSATI CON SUCCESSO! ");

@@ -110,7 +110,18 @@ export function buildIndex(db) {
     };
   });
 
-  const classKeys = Object.keys(db.classi).map((id) => ({
+  const allClassSet = new Set(Object.keys(db.classi || {}));
+  const gloIncontri = db.glo?.incontri || db.attivita?.glo || [];
+  gloIncontri.forEach((g) => {
+    if (g.classe) allClassSet.add(g.classe);
+  });
+  if (db.attivita?.consigli_classe_dettaglio) {
+    db.attivita.consigli_classe_dettaglio.forEach((c) => {
+      if (c.classi) c.classi.forEach((cls) => allClassSet.add(cls));
+    });
+  }
+
+  const classKeys = Array.from(allClassSet).map((id) => ({
     id,
     key: id.toLowerCase(),
   }));
@@ -137,7 +148,10 @@ export function buildIndex(db) {
     attivita_classe_sintesi: [],
     consigli_classe_dettaglio: [],
     colloqui_generali: [],
+    glo: [],
   };
+
+  const glo = db.glo?.incontri || db.attivita?.glo || [];
 
   const scansione = db.meta?.scansione_oraria || null;
 
@@ -149,7 +163,7 @@ export function buildIndex(db) {
     giorni_sospensione: {},
   };
 
-  return { db, docenti, classKeys, aule, starts, attivita, scansione, calendario };
+  return { db, docenti, classKeys, aule, starts, attivita, scansione, calendario, glo };
 }
 
 // ------------------------------------------------------------------ entità
@@ -157,16 +171,16 @@ function findClasses(q, idx) {
   const exists = (cand) => idx.classKeys.some((c) => c.key.startsWith(cand));
   let s = q;
 
-  // "quarta ita" -> "4ita", "prima bta" -> "1bta"
-  s = s.replace(/\b(prima|seconda|terza|quarta|quinta)\s+([a-z]{2,5})\b/g, (m, o, l) =>
+  // "quarta ita" -> "4ita", "prima bta" -> "1bta", "prima a" -> "1a"
+  s = s.replace(/\b(prima|seconda|terza|quarta|quinta)\s+([a-z]{1,5})\b/g, (m, o, l) =>
     exists(ORD_F[o] + l) ? ORD_F[o] + l : m
   );
-  // "4 ita" -> "4ita", "1 bta" -> "1bta"
-  s = s.replace(/\b([1-5])\s+([a-z]{2,5})\b/g, (m, d, l) => (exists(d + l) ? d + l : m));
+  // "4 ita" -> "4ita", "1 bta" -> "1bta", "1 a" -> "1a"
+  s = s.replace(/\b([1-5])\s+([a-z]{1,5})\b/g, (m, d, l) => (exists(d + l) ? d + l : m));
 
   const ids = [];
   const used = [];
-  for (const tok of s.match(/\b[1-5][a-z]{2,5}\b/g) || []) {
+  for (const tok of s.match(/\b[1-5][a-z]{1,5}\b/g) || []) {
     const exact = idx.classKeys.filter((c) => c.key === tok);
     const hits = exact.length ? exact : idx.classKeys.filter((c) => c.key.startsWith(tok));
     if (hits.length) {
@@ -352,6 +366,7 @@ export function parseQuery(text, idx, ctx = {}) {
     const isCollegio = /\b(collegio|collegi)\b/.test(q0);
     const isColloqui = /\b(colloqui|colloquio)\b/.test(q0);
     const isScrutini = /\b(scrutini|scrutinio)\b/.test(q0);
+    const isGlo = /\b(glo|pei)\b/.test(q0);
     const isConsigli = /\b(consiglio|consigli|cdc)\b/.test(q0);
     const isDipartimenti = /\b(dipartimenti|dipartimento)\b/.test(q0);
     const monthMatch = q0.match(/\b(settembre|ottobre|novembre|dicembre|gennaio|febbraio|marzo|aprile|maggio|giugno)\b/);
@@ -361,6 +376,7 @@ export function parseQuery(text, idx, ctx = {}) {
     if (isCollegio) subType = "collegio";
     else if (isColloqui) subType = "colloqui";
     else if (isScrutini) subType = "scrutini";
+    else if (isGlo) subType = "glo";
     else if (isConsigli) subType = "consigli_classe";
     else if (isDipartimenti) subType = "dipartimenti";
 
@@ -843,6 +859,11 @@ const MONTH_INDEX = {
 
 export function parseActivityDate(item) {
   if (!item) return null;
+  if (item.data_iso) {
+    const [y, m, d] = item.data_iso.split("-").map(Number);
+    const [h, min] = (item.ora || "00:00").split(":").map(Number);
+    return new Date(y, m - 1, d, h, min);
+  }
   let year = null, month = null, day = null, hour = 0, minute = 0;
   const str = `${item.giorno || ""} ${item.periodo || ""} ${item.data || ""} ${item.mese || ""}`.toLowerCase();
 
@@ -1070,6 +1091,76 @@ function answerAttivita(p, idx, ctx = {}) {
     };
   }
 
+  // 4b. GLO - Gruppo di Lavoro Operativo per l'inclusione (condivisione PEI)
+  const gloList = idx.glo || att.glo || idx.db?.glo?.incontri || [];
+  if (p.subType === "glo" || /\b(glo|pei)\b/i.test(p.queryText || "")) {
+    if (p.classi?.length) {
+      const clsId = p.classi[0].toUpperCase();
+      const match = gloList.find((g) => g.classe === clsId || g.classe_raw?.toUpperCase() === clsId);
+      if (match) {
+        return {
+          title: `GLO Classe ${clsId}`,
+          badge: "GLO • CONDIVISIONE PEI",
+          lines: [
+            {
+              when: `${match.giorno}`,
+              main: `Ore ${match.ora} • ${match.luogo}`,
+              sub: "Condivisione del Piano Educativo Individualizzato (PEI)",
+            },
+          ],
+          note: `${match.comunicato || "Comunicato n. 83 del 14/10/2026"} - Dirigente scolastica Manuela Muliner Biga.`,
+          speech: `Il GLO per la condivisione del PEI della ${clsId} si terrà ${match.giorno} alle ore ${match.ora} in un'aula della sede del Negrelli.`,
+          rooms: [],
+        };
+      }
+      return {
+        title: `Nessun GLO per la ${clsId}`,
+        badge: "GLO NON PREVISTO",
+        lines: [],
+        note: "Calendario convocazioni GLO (Comunicato n. 83 del 14/10/2026).",
+        speech: `Non risultano convocazioni GLO per la classe ${clsId} nel calendario del Comunicato 83.`,
+        rooms: [],
+      };
+    }
+
+    if (p.isProssimo) {
+      const upcoming = gloList.filter((g) => {
+        const d = parseActivityDate(g);
+        return d && d >= now;
+      });
+      const target = upcoming.length > 0 ? upcoming[0] : gloList[0];
+      const nextList = upcoming.length > 0 ? upcoming : gloList;
+      const lines = nextList.slice(0, 8).map((g) => ({
+        when: `${g.giorno.split(" ")[0]} ${g.data_iso ? g.data_iso.split("-")[2] : ""} ott`,
+        main: `Ore ${g.ora} • Classe ${g.classe}`,
+        sub: g.luogo,
+      }));
+      return {
+        title: `Prossimo GLO: ${target.classe}`,
+        badge: "PROSSIMO GLO",
+        lines,
+        note: "Convocazioni GLO per la condivisione dei PEI (Comunicato n. 83 del 14/10/2026).",
+        speech: `Il prossimo incontro GLO è per la classe ${target.classe}, in programma ${target.giorno} alle ore ${target.ora} in sede Negrelli.`,
+        rooms: [],
+      };
+    }
+
+    const lines = gloList.map((g) => ({
+      when: `${g.giorno.split(" ")[0]} ${g.data_iso ? g.data_iso.split("-")[2] : ""} ott ore ${g.ora}`,
+      main: `Classe ${g.classe} (PEI)`,
+      sub: `${g.luogo}`,
+    }));
+
+    return {
+      title: "Calendario Convocazione GLO",
+      badge: "GLO • CONDIVISIONE PEI",
+      lines,
+      note: "Calendario riassuntivo convocazione GLO per la condivisione dei PEI (Comunicato n. 83 del 14/10/2026).",
+      speech: "I GLO per la condivisione dei PEI si terranno dal 26 al 30 ottobre 2026 in sede Negrelli per 22 classi complessive.",
+      rooms: [],
+    };
+  }
+
   // 5. Mese specifico
   if (p.mese) {
     const meseNorm = p.mese.toLowerCase();
@@ -1079,6 +1170,17 @@ function answerAttivita(p, idx, ctx = {}) {
       ...listIst.map((i) => ({ ...i, when: i.data, main: i.attivita, sub: i.orario ? `Orario: ${i.orario}` : "" })),
       ...listSin.map((s) => ({ ...s, when: s.data, main: s.attivita, sub: "Sintesi collegiale" })),
     ];
+    if (meseNorm === "ottobre" && gloList.length) {
+      rawLines.push(
+        ...gloList.map((g) => ({
+          data_iso: g.data_iso,
+          ora: g.ora,
+          when: `${g.data_iso.split("-")[2]} ${g.giorno.split(" ")[0]}`,
+          main: `GLO ${g.classe} (condivisione PEI)`,
+          sub: `Ore ${g.ora} • ${g.luogo}`,
+        }))
+      );
+    }
     const lines = sortActivities(rawLines);
     return {
       title: `Attività di ${cap(p.mese)}`,
