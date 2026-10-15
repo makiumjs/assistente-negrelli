@@ -277,20 +277,6 @@ def load_floor_geometry(json_filename, block_keyword, xlim, ylim):
     def in_bounds(x, y):
         return (xlim[0] <= x <= xlim[1]) and (ylim[0] <= y <= ylim[1])
 
-    def is_furniture(seg):
-        xs = [p[0] for p in seg]
-        ys = [p[1] for p in seg]
-        w = max(xs) - min(xs)
-        h = max(ys) - min(ys)
-        is_closed = (math.hypot(seg[0][0] - seg[-1][0], seg[0][1] - seg[-1][1]) < 0.02) if len(seg) > 2 else False
-        # Elementi chiusi tipici di banchi, cattedre, tavoli e sedie (tra 0.18m e 2.0m)
-        if max(w, h) < 2.0 and min(w, h) > 0.18 and is_closed:
-            return True
-        # Sagome molto piccole (sedie, schienali, cestini < 0.7m)
-        if max(w, h) < 0.7:
-            return True
-        return False
-
     for o in ents:
         et = o.get("entity")
         if et == "LWPOLYLINE":
@@ -306,23 +292,8 @@ def load_floor_geometry(json_filename, block_keyword, xlim, ylim):
             if o.get("flag", 0) & 512:
                 seg.append(seg[0])
             c_idx = o.get("color", {}).get("index", 256)
-            if c_idx == 9 or is_furniture(seg):
-                continue  # Mobilio (tavoli e sedie) eliminato su richiesta
-
-            if block_keyword == "TERRA":
-                # Eliminazione linee di delimitazione Area Ristoro su richiesta
-                if any(math.hypot(p[0] - 17.0738, p[1] - 9.1871) < 0.1 for p in seg):
-                    continue  # Bancone Area Ristoro
-                if any(math.hypot(p[0] - 16.0977, p[1] - 9.8028) < 0.1 for p in seg):
-                    continue  # Scatola/perimetro Area Ristoro
-                if any(math.hypot(p[0] - 10.9711, p[1] - 11.2311) < 0.1 for p in seg):
-                    seg = [p for p in seg if p[0] <= 16.0]
-                    if len(seg) < 2:
-                        continue
-                if any(15.8 <= p[0] <= 16.3 and p[1] > 9.55 for p in seg):
-                    seg = [p for p in seg if p[1] <= 9.55]
-                    if len(seg) < 2:
-                        continue
+            if c_idx == 9:
+                continue  # Mobilio su colore CAD 9 isolato ed escluso
 
             if c_idx == 254:
                 walls_glass.append(seg)
@@ -334,8 +305,6 @@ def load_floor_geometry(json_filename, block_keyword, xlim, ylim):
             r = o.get("radius", 0)
             if not in_bounds(c[0], c[1]) or r > 15:
                 continue
-            if r < 0.7:
-                continue  # Archi di sedie / sanitari / simboli eliminati su richiesta
             sa = o.get("start_angle", 0.0)
             ea = o.get("end_angle", 0.0)
             if ea < sa:
@@ -348,7 +317,7 @@ def load_floor_geometry(json_filename, block_keyword, xlim, ylim):
             ]
             c_idx = o.get("color", {}).get("index", 256)
             if c_idx == 9:
-                continue  # Mobilio eliminato su richiesta
+                continue
             else:
                 walls_primary.append(seg)
 
@@ -357,19 +326,16 @@ def load_floor_geometry(json_filename, block_keyword, xlim, ylim):
             r = o.get("radius", 0)
             if not in_bounds(c[0], c[1]) or r > 10:
                 continue
-            if r < 0.8:
-                continue  # Sgabelli / sedie / arredi circolari eliminati su richiesta
+            c_idx = o.get("color", {}).get("index", 256)
+            if c_idx == 9:
+                continue
             steps = 24
             seg = [
                 (c[0] + r * math.cos(2 * math.pi * i / steps),
                  c[1] + r * math.sin(2 * math.pi * i / steps))
                 for i in range(steps + 1)
             ]
-            c_idx = o.get("color", {}).get("index", 256)
-            if c_idx == 9:
-                continue  # Mobilio eliminato su richiesta
-            else:
-                walls_primary.append(seg)
+            walls_primary.append(seg)
 
         elif et == "SOLID":
             c1 = o.get("corner1")

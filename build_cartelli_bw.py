@@ -119,18 +119,6 @@ def load_geom_from_svg(svg_path, xlim, ylim, scale=40.0):
     def to_cad(sx, sy):
         return (x0 + sx / scale, y1 - sy / scale)
 
-    def is_furniture(pts):
-        xs = [p[0] for p in pts]
-        ys = [p[1] for p in pts]
-        w = max(xs) - min(xs)
-        h = max(ys) - min(ys)
-        is_closed = (math.hypot(pts[0][0] - pts[-1][0], pts[0][1] - pts[-1][1]) < 0.02) if len(pts) > 2 else False
-        if max(w, h) < 2.0 and min(w, h) > 0.18 and is_closed:
-            return True
-        if max(w, h) < 0.7:
-            return True
-        return False
-
     walls_primary = []
     polys_fill = []
 
@@ -151,7 +139,7 @@ def load_geom_from_svg(svg_path, xlim, ylim, scale=40.0):
                         pts.append(to_cad(float(coords[0]), float(coords[1])))
                     except ValueError:
                         pass
-            if len(pts) >= 2 and not is_furniture(pts):
+            if len(pts) >= 2:
                 for k in range(len(pts) - 1):
                     walls_primary.append([pts[k], pts[k + 1]])
 
