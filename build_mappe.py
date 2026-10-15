@@ -118,8 +118,8 @@ CAT_STYLES = {
 # Coordinate (x, y) centrate geometricamente all'interno di ogni stanza
 ROOMS_PIANO_TERRA = [
     # Ingressi
-    {"code": "INGRESSO", "name": "INGRESSO PRINCIPALE", "sub": "VOI SIETE QUI • Atrio 029", "x": 16.0, "y": 12.3, "cat": "ingresso", "size": "lg"},
-    {"code": "037", "name": "ENTRATA PALESTRA", "sub": "Accesso Sportivo", "x": 12.1, "y": 12.3, "cat": "ingresso", "size": "sm"},
+    {"code": "INGRESSO", "name": "INGRESSO PRINCIPALE", "sub": "", "x": 8.2, "y": 8.7, "cat": "ingresso", "size": "lg"},
+    {"code": "037", "name": "ENTRATA PALESTRA", "sub": "", "x": 12.1, "y": 12.3, "cat": "ingresso", "size": "sm"},
 
     # Aule Didattiche Piano Terra (solo numero aula)
     {"code": "014", "name": "AULA 014", "sub": "", "x": 36.5, "y": 25.4, "cat": "aula", "size": "md"},
@@ -130,46 +130,44 @@ ROOMS_PIANO_TERRA = [
     {"code": "022", "name": "AULA 022", "sub": "", "x": 21.7, "y": 16.0, "cat": "aula", "size": "md"},
 
     # Laboratori & Officina Piano Terra
-    {"code": "018", "name": "LAB. LINUX", "sub": "Informatica • Cod. 018", "x": 33.1, "y": 26.8, "cat": "lab", "size": "md"},
-    {"code": "020", "name": "LAB. MULTIMEDIALE", "sub": "Sala Nord • Cod. 020", "x": 25.0, "y": 23.2, "cat": "lab", "size": "md"},
-    {"code": "021", "name": "LAB. MULTIMEDIALE", "sub": "Sala Sud • Cod. 021", "x": 23.4, "y": 20.4, "cat": "lab", "size": "md"},
-    {"code": "024", "name": "LAB 1", "sub": "Laboratorio • Cod. 024", "x": 41.1, "y": 11.4, "cat": "lab", "size": "md"},
-    {"code": "025", "name": "LAB 2", "sub": "Laboratorio • Cod. 025", "x": 35.8, "y": 11.5, "cat": "lab", "size": "md"},
-    {"code": "026", "name": "OFFICINA", "sub": "Meccanica & Macchine • 246 m²", "x": 38.3, "y": 6.2, "cat": "lab", "size": "lg"},
-    {"code": "030", "name": "LAB 5", "sub": "Cod. 030", "x": 22.5, "y": 18.2, "cat": "lab", "size": "sm"},
-    {"code": "031", "name": "LAB 4", "sub": "Cod. 031", "x": 26.0, "y": 25.3, "cat": "lab", "size": "sm"},
+    {"code": "018", "name": "LAB. LINUX", "sub": "", "x": 33.1, "y": 26.8, "cat": "lab", "size": "md"},
+    {"code": "020", "name": "LAB. MULTIMEDIALE", "sub": "", "x": 25.0, "y": 23.2, "cat": "lab", "size": "md"},
+    {"code": "021", "name": "LAB. MULTIMEDIALE", "sub": "", "x": 23.4, "y": 20.4, "cat": "lab", "size": "md"},
+    {"code": "024", "name": "LAB 1", "sub": "", "x": 41.1, "y": 11.4, "cat": "lab", "size": "md"},
+    {"code": "025", "name": "LAB 2", "sub": "", "x": 35.8, "y": 11.5, "cat": "lab", "size": "md"},
+    {"code": "026", "name": "OFFICINA", "sub": "", "x": 38.3, "y": 6.2, "cat": "lab", "size": "lg"},
+    {"code": "030", "name": "LAB 5", "sub": "", "x": 22.5, "y": 18.2, "cat": "lab", "size": "sm"},
+    {"code": "031", "name": "LAB 4", "sub": "", "x": 26.0, "y": 25.3, "cat": "lab", "size": "sm"},
 
-    # Biblioteca & Spazi Informali
-    {"code": "058", "name": "BIBLIOTECA", "sub": "Sala Lettura • 058", "x": 27.0, "y": 17.0, "cat": "informale", "size": "md"},
-    {"code": "059", "name": "BIBLIOTECA ALUNNI", "sub": "Sala Studio • 059", "x": 25.3, "y": 14.7, "cat": "informale", "size": "md"},
-    {"code": "032", "name": "SPAZIO INFORMALE", "sub": "Area Studio • 032", "x": 31.5, "y": 24.6, "cat": "informale", "size": "sm"},
-    {"code": "033", "name": "AGORÀ / STUDIO", "sub": "Spazio Informale • 033", "x": 28.0, "y": 19.3, "cat": "informale", "size": "md"},
+    # Biblioteca & Spazi Informali (058 e 059 uniti in unico label BIBLIOTECA)
+    {"code": "058-059", "name": "BIBLIOTECA", "sub": "", "x": 26.2, "y": 15.8, "cat": "informale", "size": "lg"},
+    {"code": "032", "name": "SPAZIO INFORMALE", "sub": "", "x": 31.5, "y": 24.6, "cat": "informale", "size": "sm"},
+    {"code": "033", "name": "AGORÀ / STUDIO", "sub": "", "x": 28.0, "y": 19.3, "cat": "informale", "size": "md"},
 
-    # Grandi Spazi Comuni & Sport
-    {"code": "004", "name": "PALESTRA", "sub": "Campo da Gioco • 752 m²", "x": 8.0, "y": 19.8, "cat": "comuni", "size": "lg"},
-    {"code": "005-006", "name": "SPOGLIATOI", "sub": "Palestra • 005 / 006", "x": 13.3, "y": 22.5, "cat": "comuni", "size": "sm"},
-    {"code": "028", "name": "AULA INSEGNANTI", "sub": "Docenti (ex Mensa) • 242 m²", "x": 17.2, "y": 6.0, "cat": "uffici", "size": "lg"},
-    {"code": "069", "name": "AREA RISTORO", "sub": "Caffetteria / Bar • 069", "x": 18.5, "y": 9.4, "cat": "comuni", "size": "md"},
+    # Grandi Spazi Comuni & Sport (solo titoli)
+    {"code": "004", "name": "PALESTRA", "sub": "", "x": 8.0, "y": 19.8, "cat": "comuni", "size": "lg"},
+    {"code": "005-006", "name": "SPOGLIATOI", "sub": "", "x": 13.3, "y": 22.5, "cat": "comuni", "size": "sm"},
+    {"code": "028", "name": "AULA INSEGNANTI", "sub": "", "x": 17.2, "y": 6.0, "cat": "uffici", "size": "lg"},
+    {"code": "069", "name": "AREA RISTORO", "sub": "", "x": 18.5, "y": 9.4, "cat": "comuni", "size": "md"},
 
-    # Sala Insegnanti, Uffici & Infermeria
-    {"code": "060", "name": "VICEPRESIDENZA", "sub": "Ufficio Vicepresidenza • Cod. 060", "x": 29.5, "y": 12.8, "cat": "uffici", "size": "md"},
-    {"code": "035", "name": "SEGRETERIA DIDATTICA", "sub": "Sportello Didattica • Cod. 035", "x": 29.7, "y": 16.1, "cat": "uffici", "size": "md"},
-    {"code": "070", "name": "ARCHIVIO", "sub": "Cod. 070", "x": 33.2, "y": 12.3, "cat": "uffici", "size": "sm"},
-    {"code": "009", "name": "INFERMERIA", "sub": "Primo Soccorso • 009", "x": 13.0, "y": 16.6, "cat": "uffici", "size": "sm"},
+    # Sala Insegnanti, Uffici & Infermeria (Archivio eliminato)
+    {"code": "060", "name": "VICEPRESIDENZA", "sub": "", "x": 29.5, "y": 12.8, "cat": "uffici", "size": "md"},
+    {"code": "035", "name": "SEGRETERIA DIDATTICA", "sub": "", "x": 29.7, "y": 16.1, "cat": "uffici", "size": "md"},
+    {"code": "009", "name": "INFERMERIA", "sub": "", "x": 13.0, "y": 16.6, "cat": "uffici", "size": "sm"},
 
-    # Scale & Ascensore
-    {"code": "ASC", "name": "ASCENSORE", "sub": "Cod. 046", "x": 28.5, "y": 23.7, "cat": "scale", "size": "sm"},
-    {"code": "SCALA C", "name": "SCALA CENTRALE", "sub": "Salita Piani 1° e 2°", "x": 29.5, "y": 21.1, "cat": "scale", "size": "sm"},
-    {"code": "047", "name": "SCALA NORD", "sub": "Cod. 047", "x": 30.9, "y": 27.6, "cat": "scale", "size": "sm"},
-    {"code": "051", "name": "SCALA EST", "sub": "Cod. 051", "x": 32.2, "y": 15.2, "cat": "scale", "size": "sm"},
-    {"code": "052", "name": "SCALA SUD", "sub": "Cod. 052", "x": 23.4, "y": 7.6, "cat": "scale", "size": "sm"},
-    {"code": "053", "name": "SCALA OFFICINA", "sub": "Cod. 053", "x": 38.5, "y": 12.3, "cat": "scale", "size": "sm"},
+    # Scale & Ascensore (tutte le scale rinominate in SCALA)
+    {"code": "ASC", "name": "ASCENSORE", "sub": "", "x": 28.5, "y": 23.7, "cat": "scale", "size": "sm"},
+    {"code": "SCALA", "name": "SCALA", "sub": "", "x": 29.5, "y": 21.1, "cat": "scale", "size": "xs"},
+    {"code": "SCALA", "name": "SCALA", "sub": "", "x": 30.9, "y": 27.6, "cat": "scale", "size": "xs"},
+    {"code": "SCALA", "name": "SCALA", "sub": "", "x": 32.2, "y": 15.2, "cat": "scale", "size": "xs"},
+    {"code": "SCALA", "name": "SCALA", "sub": "", "x": 23.4, "y": 7.6, "cat": "scale", "size": "xs"},
+    {"code": "SCALA", "name": "SCALA", "sub": "", "x": 38.5, "y": 12.3, "cat": "scale", "size": "xs"},
 
     # WC principali
-    {"code": "WC", "name": "WC NORD", "sub": "048-050", "x": 28.8, "y": 30.2, "cat": "wc", "size": "xs"},
-    {"code": "WC", "name": "WC CENTRO", "sub": "041 / 044", "x": 25.0, "y": 17.9, "cat": "wc", "size": "xs"},
-    {"code": "WC", "name": "WC BAR", "sub": "068", "x": 20.9, "y": 8.2, "cat": "wc", "size": "xs"},
-    {"code": "WC", "name": "WC OFFICINA", "sub": "002-003 / 054", "x": 35.6, "y": 9.3, "cat": "wc", "size": "xs"},
+    {"code": "WC", "name": "WC", "sub": "", "x": 28.8, "y": 30.2, "cat": "wc", "size": "xs"},
+    {"code": "WC", "name": "WC", "sub": "", "x": 25.0, "y": 17.9, "cat": "wc", "size": "xs"},
+    {"code": "WC", "name": "WC", "sub": "", "x": 20.9, "y": 8.2, "cat": "wc", "size": "xs"},
+    {"code": "WC", "name": "WC", "sub": "", "x": 35.6, "y": 9.3, "cat": "wc", "size": "xs"},
 ]
 
 ROOMS_PIANO_PRIMO = [
@@ -245,9 +243,9 @@ ROOMS_PIANO_SECONDO = [
 
     # Scale & Ascensore
     {"code": "ASC", "name": "ASCENSORE", "sub": "", "x": 12.0, "y": 14.6, "cat": "scale", "size": "sm"},
-    {"code": "SCALA N", "name": "SCALA NORD", "sub": "Lato Lab. Lingue 210", "x": 14.4, "y": 18.5, "cat": "scale", "size": "sm"},
-    {"code": "SCALA S", "name": "SCALA EST / SUD", "sub": "Lato Aule 204-209", "x": 15.5, "y": 6.4, "cat": "scale", "size": "sm"},
-    {"code": "SCALA C", "name": "SCALA CENTRALE", "sub": "Connettivo 215", "x": 11.5, "y": 8.8, "cat": "scale", "size": "sm"},
+    {"code": "SCALA", "name": "SCALA", "sub": "", "x": 14.4, "y": 18.5, "cat": "scale", "size": "xs"},
+    {"code": "SCALA", "name": "SCALA", "sub": "", "x": 15.5, "y": 6.4, "cat": "scale", "size": "xs"},
+    {"code": "SCALA", "name": "SCALA", "sub": "", "x": 11.5, "y": 8.8, "cat": "scale", "size": "xs"},
 
     # WC
     {"code": "WC", "name": "WC NORD", "sub": "216, 217, 220", "x": 12.6, "y": 20.8, "cat": "wc", "size": "xs"},
@@ -603,14 +601,13 @@ def build_single_floor_posters():
             ("035", "Segreteria Didattica"),
             ("069", "Area Ristoro / Bar"),
             ("009", "Infermeria"),
-            ("070", "Archivio"),
         ]),
         ("Sport, Studio & Accessi", "comuni", [
             ("004", "Palestra"),
             ("005-006", "Spogliatoi"),
             ("058-059", "Biblioteca"),
             ("032-033", "Agorà Studio"),
-            ("029", "Ingresso Principale"),
+            ("INGRESSO", "Ingresso Principale"),
             ("037", "Entrata Palestra"),
         ]),
     ]

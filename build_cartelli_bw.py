@@ -335,15 +335,17 @@ def add_sidebar_bw(fig, floor_title, sections):
         y -= y_step_item * 0.7
 
         for code_str, desc_str in items:
+            badge_fs = 5.2 if len(code_str) >= 7 else (5.9 if len(code_str) >= 5 else 6.8)
+            desc_x = 0.32 if len(code_str) >= 7 else (0.28 if len(code_str) >= 4 else 0.25)
             side_ax.text(
-                0.08, y, code_str,
-                fontsize=6.8, fontweight="heavy", color="#000000",
+                0.06, y, code_str,
+                fontsize=badge_fs, fontweight="heavy", color="#000000",
                 ha="left", va="center",
                 bbox=dict(boxstyle="round,pad=0.15", facecolor="#FFFFFF", edgecolor="#000000", linewidth=0.6),
                 transform=side_ax.transAxes
             )
             side_ax.text(
-                0.28, y, desc_str,
+                desc_x, y, desc_str,
                 fontsize=6.8,
                 fontweight="bold" if any(k in desc_str for k in ("Vicepresidenza", "Insegnanti", "Segreteria", "Dirigenza")) else "normal",
                 color="#000000",
@@ -420,14 +422,13 @@ def build_all_posters():
             ("035", "Segreteria Didattica"),
             ("069", "Area Ristoro / Bar"),
             ("009", "Infermeria"),
-            ("070", "Archivio"),
         ]),
         ("Sport, Studio & Accessi", [
             ("004", "Palestra"),
             ("005-006", "Spogliatoi"),
             ("058-059", "Biblioteca"),
             ("032-033", "Agorà Studio"),
-            ("029", "Ingresso Principale"),
+            ("INGRESSO", "Ingresso Principale"),
             ("037", "Entrata Palestra"),
         ]),
     ]
