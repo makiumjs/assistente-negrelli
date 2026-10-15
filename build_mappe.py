@@ -310,7 +310,23 @@ def load_floor_geometry(json_filename, block_keyword, xlim, ylim):
             c_idx = o.get("color", {}).get("index", 256)
             if c_idx == 9 or is_furniture(seg):
                 continue  # Mobilio (tavoli e sedie) eliminato su richiesta
-            elif c_idx == 254:
+
+            if block_keyword == "TERRA":
+                # Eliminazione linee di delimitazione Area Ristoro su richiesta
+                if any(math.hypot(p[0] - 17.0738, p[1] - 9.1871) < 0.1 for p in seg):
+                    continue  # Bancone Area Ristoro
+                if any(math.hypot(p[0] - 16.0977, p[1] - 9.8028) < 0.1 for p in seg):
+                    continue  # Scatola/perimetro Area Ristoro
+                if any(math.hypot(p[0] - 10.9711, p[1] - 11.2311) < 0.1 for p in seg):
+                    seg = [p for p in seg if p[0] <= 16.0]
+                    if len(seg) < 2:
+                        continue
+                if any(15.8 <= p[0] <= 16.3 and p[1] > 9.55 for p in seg):
+                    seg = [p for p in seg if p[1] <= 9.55]
+                    if len(seg) < 2:
+                        continue
+
+            if c_idx == 254:
                 walls_glass.append(seg)
             else:
                 walls_primary.append(seg)
