@@ -225,20 +225,19 @@ ROOMS_PIANO_SECONDO = [
     {"code": "209", "name": "AULA 209", "sub": "", "x": 15.6, "y": 8.6, "cat": "aula", "size": "md"},
     {"code": "224", "name": "AULA 224", "sub": "", "x": 5.2, "y": 6.8, "cat": "aula", "size": "md"},
 
-    # Laboratori Piano Secondo
-    {"code": "206", "name": "LAB. INFORMATICA", "sub": "Sala Sud • Cod. 206", "x": 6.9, "y": 11.2, "cat": "lab", "size": "md"},
-    {"code": "207", "name": "LAB. INFORMATICA", "sub": "Sala Nord • Cod. 207", "x": 8.4, "y": 14.0, "cat": "lab", "size": "md"},
-    {"code": "208", "name": "LAB. ELETTRONICA", "sub": "Elettrotecnica • Cod. 208", "x": 10.7, "y": 18.4, "cat": "lab", "size": "md"},
-    {"code": "210", "name": "LAB. LINGUE", "sub": "Linguistico • Cod. 210", "x": 16.6, "y": 17.6, "cat": "lab", "size": "md"},
-    {"code": "223", "name": "LAB. SISTEMI", "sub": "Sistemi & Reti • Cod. 223", "x": 8.1, "y": 5.2, "cat": "lab", "size": "lg"},
+    # Laboratori Piano Secondo (senza codici né sottotitoli)
+    {"code": "206", "name": "LAB. INFORMATICA", "sub": "", "x": 6.9, "y": 11.2, "cat": "lab", "size": "md"},
+    {"code": "207", "name": "LAB. INFORMATICA", "sub": "", "x": 8.4, "y": 14.0, "cat": "lab", "size": "md"},
+    {"code": "208", "name": "LAB. ELETTRONICA", "sub": "", "x": 10.7, "y": 18.4, "cat": "lab", "size": "md"},
+    {"code": "210", "name": "LAB. LINGUE", "sub": "", "x": 16.6, "y": 17.6, "cat": "lab", "size": "md"},
+    {"code": "223", "name": "LAB. SISTEMI", "sub": "", "x": 8.1, "y": 5.2, "cat": "lab", "size": "lg"},
 
-    # Aule & Spazi Informali
-    {"code": "213", "name": "AULA INFORMALE 213", "sub": "", "x": 6.0, "y": 9.0, "cat": "informale", "size": "md"},
-    {"code": "214", "name": "LAB / AULA 214", "sub": "Spazio Lab • 214", "x": 9.5, "y": 16.1, "cat": "informale", "size": "sm"},
-    {"code": "221", "name": "LAB / STUDIO 221", "sub": "Area Centrale • 221", "x": 10.3, "y": 11.4, "cat": "informale", "size": "sm"},
-    {"code": "211", "name": "SPAZIO INFORMALE 211", "sub": "Area Studio Sud", "x": 10.5, "y": 7.5, "cat": "informale", "size": "sm"},
-    {"code": "212", "name": "SPAZIO INFORMALE 212", "sub": "Area Studio Nord", "x": 14.9, "y": 15.6, "cat": "informale", "size": "sm"},
-    {"code": "225", "name": "SPAZIO STUDIO 225", "sub": "Cod. 225", "x": 10.6, "y": 3.5, "cat": "informale", "size": "xs"},
+    # Aule & Spazi Informali (senza codici nei label; eliminato Spazio Studio 225)
+    {"code": "213", "name": "AULA INFORMALE", "sub": "", "x": 6.0, "y": 9.0, "cat": "informale", "size": "md"},
+    {"code": "214", "name": "SPAZIO LAB", "sub": "", "x": 9.5, "y": 16.1, "cat": "informale", "size": "sm"},
+    {"code": "221", "name": "SPAZIO STUDIO", "sub": "", "x": 10.3, "y": 11.4, "cat": "informale", "size": "sm"},
+    {"code": "211", "name": "SPAZIO INFORMALE", "sub": "", "x": 10.5, "y": 7.5, "cat": "informale", "size": "sm"},
+    {"code": "212", "name": "SPAZIO INFORMALE", "sub": "", "x": 14.9, "y": 15.6, "cat": "informale", "size": "sm"},
 
     # Scale & Ascensore
     {"code": "ASC", "name": "ASCENSORE", "sub": "", "x": 12.0, "y": 14.6, "cat": "scale", "size": "sm"},
@@ -246,10 +245,10 @@ ROOMS_PIANO_SECONDO = [
     {"code": "SCALA", "name": "SCALA", "sub": "", "x": 15.5, "y": 6.4, "cat": "scale", "size": "xs"},
     {"code": "SCALA", "name": "SCALA", "sub": "", "x": 11.5, "y": 8.8, "cat": "scale", "size": "xs"},
 
-    # WC
-    {"code": "WC", "name": "WC NORD", "sub": "216, 217, 220", "x": 12.6, "y": 20.8, "cat": "wc", "size": "xs"},
-    {"code": "WC", "name": "WC CENTRO", "sub": "218", "x": 13.4, "y": 17.0, "cat": "wc", "size": "xs"},
-    {"code": "WC", "name": "WC SUD", "sub": "219", "x": 8.8, "y": 8.8, "cat": "wc", "size": "xs"},
+    # Servizi Igienici: WC Alunni a Nord, WC Docenti a Centro e Sud
+    {"code": "WC", "name": "WC ALUNNI", "sub": "", "x": 12.6, "y": 20.8, "cat": "wc", "size": "sm"},
+    {"code": "WC", "name": "WC DOCENTI", "sub": "", "x": 13.4, "y": 17.0, "cat": "wc", "size": "sm"},
+    {"code": "WC", "name": "WC DOCENTI", "sub": "", "x": 8.8, "y": 8.8, "cat": "wc", "size": "sm"},
 ]
 
 
@@ -694,23 +693,23 @@ def build_single_floor_posters():
             ("209", "Aula 209"),
             ("224", "Aula 224"),
         ]),
-        ("Laboratori Tecnologici", "lab", [
+        ("Laboratori", "lab", [
             ("206-207", "Lab. Informatica"),
             ("208", "Lab. Elettronica"),
             ("210", "Lab. Lingue"),
             ("223", "Lab. Sistemi e Reti"),
         ]),
         ("Aule & Spazi Informali", "informale", [
-            ("213", "Aula Informale 213"),
-            ("214", "Spazio Lab 214"),
-            ("221", "Spazio Lab 221"),
+            ("213", "Aula Informale"),
+            ("214", "Spazio Lab"),
+            ("221", "Spazio Studio"),
             ("211-212", "Spazi Informali"),
-            ("225", "Spazio Informale 225"),
         ]),
-        ("Accessi & Servizi", "scale", [
-            ("046", "Ascensore"),
-            ("215", "Scale"),
-            ("WC", "Servizi Igienici (WC)"),
+        ("Servizi & Accessi", "scale", [
+            ("WC", "WC Alunni"),
+            ("WC", "WC Docenti"),
+            ("SCALA", "Scale"),
+            ("ASC", "Ascensore"),
         ]),
     ]
     add_sidebar_directory(fig, "PIANO SECONDO", sections_2)

@@ -500,23 +500,23 @@ def build_all_posters():
             ("209", "Aula 209"),
             ("224", "Aula 224"),
         ]),
-        ("Laboratori Specialistici", [
+        ("Laboratori", [
             ("206-207", "Lab. Informatica"),
             ("208", "Lab. Elettronica"),
             ("210", "Lab. Lingue"),
             ("223", "Lab. Sistemi & Reti"),
         ]),
         ("Aule Informali & Studio", [
-            ("213", "Aula Informale 213"),
-            ("214", "Spazio Lab 214"),
-            ("221", "Spazio Lab 221"),
+            ("213", "Aula Informale"),
+            ("214", "Spazio Lab"),
+            ("221", "Spazio Studio"),
             ("211-212", "Spazi Informali"),
-            ("225", "Spazio Informale 225"),
         ]),
-        ("Accessi & Servizi", [
-            ("046", "Ascensore"),
-            ("215", "Scale"),
-            ("WC", "Servizi Igienici (WC)"),
+        ("Servizi & Accessi", [
+            ("WC", "WC Alunni"),
+            ("WC", "WC Docenti"),
+            ("SCALA", "Scale"),
+            ("ASC", "Ascensore"),
         ]),
     ]
     add_sidebar_bw(fig2, "SECONDO PIANO", sections_2)
