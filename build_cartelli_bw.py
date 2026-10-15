@@ -301,87 +301,58 @@ def add_poster_header_bw(fig, floor_num, title, subtitle):
 
 
 def add_legend_bw(fig):
-    """Disegna la legenda inferiore in bianco e nero."""
-    leg_ax = fig.add_axes([0.02, 0.02, 0.72, 0.052])
-    leg_ax.set_facecolor("#FFFFFF")
-    leg_ax.set_xticks([])
-    leg_ax.set_yticks([])
-    for s in leg_ax.spines.values():
-        s.set_color("#000000")
-        s.set_linewidth(1.0)
-
-    items = [
-        ("[ AULA ]", "Aule Didattiche (Bordo nero sottile)"),
-        ("[ LAB ]", "Laboratori / Officina (Bordo nero spesso)"),
-        ("[ INGRESSO ]", "Ingressi (Fondo nero, testo bianco)"),
-        ("[ UFFICI ]", "Uffici & Vicepresidenza (Fondo nero)"),
-        ("[ INFORMALE ]", "Spazi Studio (Fondo grigio chiaro)"),
-        ("[ WC ]", "Servizi Igienici (Cod. WC)"),
-    ]
-
-    for idx, (sym, desc) in enumerate(items):
-        col_i = idx % 3
-        row_i = idx // 3
-        x_pos = 0.02 + col_i * 0.33
-        y_pos = 0.72 if row_i == 0 else 0.28
-        leg_ax.text(
-            x_pos, y_pos, sym,
-            fontsize=7.8, fontweight="heavy", color="#000000",
-            ha="left", va="center", transform=leg_ax.transAxes
-        )
-        leg_ax.text(
-            x_pos + 0.08, y_pos, desc,
-            fontsize=7.2, fontweight="medium", color="#27272A",
-            ha="left", va="center", transform=leg_ax.transAxes
-        )
+    """Legenda inferiore rimossa su richiesta dell'utente per massimizzare la pianta."""
+    pass
 
 
 def add_sidebar_bw(fig, floor_title, sections):
-    """Disegna sulla destra del poster la rubrica rapida in bianco e nero con griglia allineata."""
-    side_ax = fig.add_axes([0.755, 0.02, 0.225, 0.868])
+    """Disegna sulla destra del poster la rubrica rapida in bianco e nero compatta (area ridotta del 75%)."""
+    total_items = sum(len(items) for _, items in sections)
+    num_secs = len(sections)
+    calc_h = max(0.22, min(0.60, 0.05 + num_secs * 0.032 + total_items * 0.024))
+    side_ax = fig.add_axes([0.842, 0.885 - calc_h, 0.142, calc_h])
     side_ax.set_facecolor("#FFFFFF")
     side_ax.set_xticks([])
     side_ax.set_yticks([])
     for s in side_ax.spines.values():
         s.set_color("#000000")
-        s.set_linewidth(1.4)
+        s.set_linewidth(1.0)
 
     side_ax.text(
-        0.5, 0.974, f"ELENCO LOCALI — {floor_title}",
-        fontsize=9.5, fontweight="heavy", color="#FFFFFF",
+        0.5, 0.94, f"ELENCO — {floor_title}",
+        fontsize=8.5, fontweight="heavy", color="#FFFFFF",
         ha="center", va="center",
-        bbox=dict(boxstyle="square,pad=0.40", facecolor="#000000", edgecolor="#000000"),
+        bbox=dict(boxstyle="square,pad=0.30", facecolor="#000000", edgecolor="#000000"),
         transform=side_ax.transAxes
     )
 
-    y = 0.932
+    y_step_item = 0.83 / max(1, (num_secs * 1.4 + total_items))
+    y = 0.84
     for sec_title, items in sections:
         side_ax.text(
-            0.04, y, sec_title.upper(),
-            fontsize=8.0, fontweight="heavy", color="#000000",
+            0.06, y, sec_title.upper(),
+            fontsize=7.2, fontweight="heavy", color="#000000",
             ha="left", va="center", transform=side_ax.transAxes
         )
-        y -= 0.012
-        side_ax.plot([0.04, 0.96], [y, y], color="#000000", linewidth=1.0, transform=side_ax.transAxes)
-        y -= 0.018
+        y -= y_step_item * 0.7
 
         for code_str, desc_str in items:
             side_ax.text(
-                0.04, y, code_str,
-                fontsize=7.0, fontweight="heavy", color="#000000",
+                0.08, y, code_str,
+                fontsize=6.8, fontweight="heavy", color="#000000",
                 ha="left", va="center",
-                bbox=dict(boxstyle="round,pad=0.18", facecolor="#FFFFFF", edgecolor="#000000", linewidth=0.8),
+                bbox=dict(boxstyle="round,pad=0.15", facecolor="#FFFFFF", edgecolor="#000000", linewidth=0.6),
                 transform=side_ax.transAxes
             )
             side_ax.text(
-                0.25, y, desc_str,
-                fontsize=7.0,
-                fontweight="bold" if any(k in desc_str for k in ("Vicepresidenza", "Insegnanti", "Segreteria", "Ristoro")) else "normal",
+                0.28, y, desc_str,
+                fontsize=6.8,
+                fontweight="bold" if any(k in desc_str for k in ("Vicepresidenza", "Insegnanti", "Segreteria", "Dirigenza")) else "normal",
                 color="#000000",
                 ha="left", va="center", transform=side_ax.transAxes
             )
-            y -= 0.0245
-        y -= 0.012
+            y -= y_step_item
+        y -= y_step_item * 0.4
 
 
 def save_poster(fig, basename):
@@ -421,8 +392,8 @@ def build_all_posters():
     # 1. CARTELLO PIANO TERRA
     # ----------------------------------------------------
     fig0 = plt.figure(figsize=A3_INCHES, dpi=300, facecolor="#FFFFFF")
-    ax0 = fig0.add_axes([0.02, 0.082, 0.72, 0.805])
-    draw_floor_bw(ax0, geom_0, rooms_0, (4.2, 43.2), (1.0, 32.3), scale_factor=0.92)
+    ax0 = fig0.add_axes([0.02, 0.02, 0.815, 0.868])
+    draw_floor_bw(ax0, geom_0, rooms_0, (4.2, 43.2), (1.0, 32.3), scale_factor=0.98)
     add_poster_header_bw(
         fig0, 0,
         "PIANO TERRA — INGRESSO, AULE, LABORATORI, PALESTRA E AULA INSEGNANTI",
@@ -431,35 +402,35 @@ def build_all_posters():
     add_legend_bw(fig0)
     sections_0 = [
         ("Aule Didattiche", [
-            ("014", "Aula didattica (Ala Nord-Est)"),
-            ("015", "Aula didattica (Ala Est)"),
-            ("016", "Aula didattica (Ala Est)"),
-            ("017", "Aula didattica (Ala Centro-Est)"),
-            ("019", "Aula didattica (Ala Nord-Ovest)"),
-            ("022", "Aula didattica (Ala Sud-Ovest)"),
+            ("014", "Aula 014"),
+            ("015", "Aula 015"),
+            ("016", "Aula 016"),
+            ("017", "Aula 017"),
+            ("019", "Aula 019"),
+            ("022", "Aula 022"),
         ]),
         ("Laboratori & Officina", [
-            ("018", "Lab. Linux (Ala Nord)"),
-            ("020-021", "Lab. Multimediale (Ala Ovest)"),
-            ("024-025", "Laboratori 1 e 2 (Blocco Est)"),
-            ("026", "Officina Meccanica (Blocco Est)"),
-            ("030-031", "Laboratori 4 e 5 (Ala Ovest)"),
+            ("018", "Lab. Linux"),
+            ("020-021", "Lab. Multimediale"),
+            ("024-025", "Laboratori 1 e 2"),
+            ("026", "Officina Meccanica"),
+            ("030-031", "Laboratori 4 e 5"),
         ]),
         ("Uffici, Docenti & Ristoro", [
-            ("028", "Aula Insegnanti (Ala Sud)"),
-            ("060", "Vicepresidenza (Centro-Sud)"),
-            ("035", "Segreteria Didattica (Centro-Est)"),
-            ("069", "Area Ristoro / Bar (Atrio Sud)"),
-            ("009", "Infermeria (Lato Palestra)"),
-            ("070", "Archivio (Lato Est)"),
+            ("028", "Aula Insegnanti"),
+            ("060", "Vicepresidenza"),
+            ("035", "Segreteria Didattica"),
+            ("069", "Area Ristoro / Bar"),
+            ("009", "Infermeria"),
+            ("070", "Archivio"),
         ]),
         ("Sport, Studio & Accessi", [
-            ("004", "Palestra (Blocco Ovest)"),
-            ("005-006", "Spogliatoi Palestra (Ovest)"),
-            ("058-059", "Biblioteca d'Istituto (Centro)"),
-            ("032-033", "Agorà Studio (Centro)"),
-            ("029", "Ingresso Principale (Atrio Sud)"),
-            ("037", "Entrata Palestra (Accesso Ovest)"),
+            ("004", "Palestra"),
+            ("005-006", "Spogliatoi"),
+            ("058-059", "Biblioteca"),
+            ("032-033", "Agorà Studio"),
+            ("029", "Ingresso Principale"),
+            ("037", "Entrata Palestra"),
         ]),
     ]
     add_sidebar_bw(fig0, "PIANO TERRA", sections_0)
@@ -469,44 +440,40 @@ def build_all_posters():
     # 2. CARTELLO PRIMO PIANO
     # ----------------------------------------------------
     fig1 = plt.figure(figsize=A3_INCHES, dpi=300, facecolor="#FFFFFF")
-    ax1 = fig1.add_axes([0.02, 0.082, 0.72, 0.805])
-    draw_floor_bw(ax1, geom_1, rooms_1, (4.2, 43.2), (1.0, 32.3), scale_factor=0.92)
+    ax1 = fig1.add_axes([0.02, 0.02, 0.815, 0.868])
+    draw_floor_bw(ax1, geom_1, rooms_1, (4.2, 43.2), (1.0, 32.3), scale_factor=0.98)
     add_poster_header_bw(
         fig1, 1,
-        "1° PIANO — AULE DIDATTICHE, LABORATORI, SEGRETERIA E VICEPRESIDENZA",
-        "Aule 110–134  •  Lab. Costruzioni (118), Chimica (125), Biologia (126), Disegno (129), Fisica (135)"
+        "1° PIANO — AULE DIDATTICHE, LABORATORI, DIRIGENZA E UFFICI",
+        "Aule 110–134  •  Lab. CAD (116), Automazione (117), Costruzioni (118), Chimica (125), Biologia (126), Disegno (129), Fisica (135)"
     )
     add_legend_bw(fig1)
     sections_1 = [
         ("Aule Didattiche", [
-            ("110", "Aula didattica (Ala Nord-Est)"),
-            ("111", "Aula didattica (Ala Est)"),
-            ("112", "Aula didattica (Ala Est)"),
-            ("113", "Aula didattica (Ala Centro-Est)"),
-            ("114", "Aula didattica (Ala Sud-Est)"),
-            ("115", "Aula didattica (Ala Sud)"),
-            ("119", "Aula didattica (Ala Nord)"),
-            ("134", "Aula didattica (Ala Sud-Ovest)"),
+            ("110", "Aula 110"),
+            ("111", "Aula 111"),
+            ("112", "Aula 112"),
+            ("113", "Aula 113"),
+            ("114", "Aula 114"),
+            ("115", "Aula 115"),
+            ("119", "Aula 119"),
+            ("134", "Aula 134"),
         ]),
-        ("Grandi Laboratori", [
-            ("116-117", "Lab. CAD-Automaz. (Ovest)"),
-            ("118", "Lab. Costruzioni (Nord-Ovest)"),
-            ("125", "Lab. Chimica (Blocco Est)"),
-            ("126", "Lab. Biologia (Blocco Est)"),
-            ("129", "Lab. Disegno (Corpo Centro)"),
-            ("135", "Lab. Fisica (Centro-Sud)"),
+        ("Laboratori", [
+            ("116", "Lab. CAD"),
+            ("117", "Lab. Automazione"),
+            ("118", "Lab. Costruzioni"),
+            ("125", "Lab. Chimica"),
+            ("126", "Lab. Biologia"),
+            ("129", "Lab. Disegno"),
+            ("135", "Lab. Fisica"),
         ]),
-        ("Aule Informali & Studio", [
-            ("128", "Aula Informale (Centro-Nord)"),
-            ("130", "Aula Informale (Ala Ovest)"),
-            ("131", "Aula Informale (Ala Ovest)"),
-            ("137", "Spazio Studio Connettivo"),
+        ("Uffici", [
+            ("UFFICI", "Dirigenza e Uffici"),
         ]),
-        ("Dirigenza, Uffici & Accessi", [
-            ("104-106", "Uffici & Segreteria (Sud-Ovest)"),
-            ("107", "Ufficio Vicepresidenza (Sud-Ovest)"),
-            ("046", "Ascensore Centrale (Tutti i piani)"),
-            ("SCALE", "Scale Principali (Nord, Centro, Est)"),
+        ("Servizi Igienici", [
+            ("WC", "WC Docenti"),
+            ("WC", "WC Alunni"),
         ]),
     ]
     add_sidebar_bw(fig1, "PRIMO PIANO", sections_1)
@@ -516,8 +483,8 @@ def build_all_posters():
     # 3. CARTELLO SECONDO PIANO
     # ----------------------------------------------------
     fig2 = plt.figure(figsize=A3_INCHES, dpi=300, facecolor="#FFFFFF")
-    ax2 = fig2.add_axes([0.02, 0.082, 0.72, 0.805])
-    draw_floor_bw(ax2, geom_2, rooms_2, (4.0, 22.8), (1.0, 22.9), scale_factor=0.95)
+    ax2 = fig2.add_axes([0.02, 0.02, 0.815, 0.868])
+    draw_floor_bw(ax2, geom_2, rooms_2, (4.0, 22.8), (1.0, 22.9), scale_factor=1.12)
     add_poster_header_bw(
         fig2, 2,
         "2° PIANO — AULE DIDATTICHE, INFORMATICA, ELETTRONICA, SISTEMI E LINGUE",
@@ -526,33 +493,31 @@ def build_all_posters():
     add_legend_bw(fig2)
     sections_2 = [
         ("Aule Didattiche", [
-            ("201", "Aula didattica (Ala Nord-Est)"),
-            ("202", "Aula didattica (Ala Est)"),
-            ("203", "Aula didattica (Ala Est)"),
-            ("204", "Aula didattica (Ala Sud-Est)"),
-            ("205", "Aula didattica (Ala Sud)"),
-            ("209", "Aula didattica (Ala Centro-Est)"),
-            ("224", "Aula didattica (Ala Sud-Ovest)"),
+            ("201", "Aula 201"),
+            ("202", "Aula 202"),
+            ("203", "Aula 203"),
+            ("204", "Aula 204"),
+            ("205", "Aula 205"),
+            ("209", "Aula 209"),
+            ("224", "Aula 224"),
         ]),
         ("Laboratori Specialistici", [
-            ("206", "Lab. Informatica Sud (Ala Ovest)"),
-            ("207", "Lab. Informatica Nord (Ala Ovest)"),
-            ("208", "Lab. Elettronica (Nord-Ovest)"),
-            ("210", "Lab. Lingue (Ala Nord)"),
-            ("223", "Lab. Sistemi & Reti (Ala Sud)"),
+            ("206-207", "Lab. Informatica"),
+            ("208", "Lab. Elettronica"),
+            ("210", "Lab. Lingue"),
+            ("223", "Lab. Sistemi & Reti"),
         ]),
         ("Aule Informali & Studio", [
-            ("213", "Aula Informale (Ala Ovest)"),
-            ("214", "Laboratorio / Aula (Ala Ovest)"),
-            ("221", "Laboratorio / Studio (Centro)"),
-            ("211-212", "Spazi Studio (Nord & Sud)"),
-            ("225", "Spazio Studio (Ala Sud)"),
+            ("213", "Aula Informale 213"),
+            ("214", "Spazio Lab 214"),
+            ("221", "Spazio Lab 221"),
+            ("211-212", "Spazi Informali"),
+            ("225", "Spazio Informale 225"),
         ]),
-        ("Connettivo & Servizi", [
-            ("046", "Ascensore Centrale (Tutti i piani)"),
-            ("215", "Scala Centrale / Connettivo"),
-            ("SCALE", "Scale Nord e Sud di Sicurezza"),
-            ("WC", "Servizi Igienici (Nord, Centro, Sud)"),
+        ("Accessi & Servizi", [
+            ("046", "Ascensore"),
+            ("215", "Scale"),
+            ("WC", "Servizi Igienici (WC)"),
         ]),
     ]
     add_sidebar_bw(fig2, "SECONDO PIANO", sections_2)
@@ -646,35 +611,34 @@ def build_all_posters():
             ("Biblioteca", "PIANO TERRA", "Locali 058 – 059"),
         ]),
         ("3. LABORATORI & OFFICINA", [
-            ("Lab. Linux 018", "PIANO TERRA", "Locale 018 (Ala Nord)"),
-            ("Lab. Multimediale", "PIANO TERRA", "Locali 020 – 021 (Ovest)"),
-            ("Lab 1 & Lab 2", "PIANO TERRA", "Locali 024 – 025 (Est)"),
-            ("Officina Meccanica", "PIANO TERRA", "Locale 026 (Blocco Est)"),
-            ("Lab 4 & Lab 5", "PIANO TERRA", "Locali 031 e 030 (Ovest)"),
-            ("Lab. CAD-Automaz.", "1° PIANO", "Locali 116 – 117 (Ovest)"),
-            ("Lab. Costruzioni", "1° PIANO", "Locale 118 (Nord-Ovest)"),
-            ("Lab. Chimica", "1° PIANO", "Locale 125 (Blocco Est)"),
-            ("Lab. Biologia", "1° PIANO", "Locale 126 (Blocco Est)"),
-            ("Lab. Disegno", "1° PIANO", "Locale 129 (Centro)"),
-            ("Lab. Fisica", "1° PIANO", "Locale 135 (Centro-Sud)"),
-            ("Lab. Informatica", "2° PIANO", "Locali 206 – 207 (Ovest)"),
-            ("Lab. Elettronica", "2° PIANO", "Locale 208 (Nord-Ovest)"),
-            ("Lab. Lingue", "2° PIANO", "Locale 210 (Ala Nord)"),
-            ("Lab. Sistemi", "2° PIANO", "Locale 223 (Ala Sud)"),
+            ("Lab. Linux 018", "PIANO TERRA", "Locale 018"),
+            ("Lab. Multimediale", "PIANO TERRA", "Locali 020 – 021"),
+            ("Lab 1 & Lab 2", "PIANO TERRA", "Locali 024 – 025"),
+            ("Officina Meccanica", "PIANO TERRA", "Locale 026"),
+            ("Lab 4 & Lab 5", "PIANO TERRA", "Locali 030, 031"),
+            ("Lab. CAD-Automaz.", "1° PIANO", "Locali 116 – 117"),
+            ("Lab. Costruzioni", "1° PIANO", "Locale 118"),
+            ("Lab. Chimica", "1° PIANO", "Locale 125"),
+            ("Lab. Biologia", "1° PIANO", "Locale 126"),
+            ("Lab. Disegno", "1° PIANO", "Locale 129"),
+            ("Lab. Fisica", "1° PIANO", "Locale 135"),
+            ("Lab. Informatica", "2° PIANO", "Locali 206 – 207"),
+            ("Lab. Elettronica", "2° PIANO", "Locale 208"),
+            ("Lab. Lingue", "2° PIANO", "Locale 210"),
+            ("Lab. Sistemi", "2° PIANO", "Locale 223"),
         ]),
         ("4. UFFICI, DOCENTI & RISTORO", [
-            ("Ingresso / Atrio", "PIANO TERRA", "Locali 029 / 036 (Sud-Ovest)"),
-            ("Aula Insegnanti", "PIANO TERRA", "Locale 028 (ex Mensa)"),
-            ("Vicepresidenza", "PIANO TERRA", "Locale 060 (Centro-Sud)"),
-            ("Segreteria Didattica", "PIANO TERRA", "Locale 035 (Centro-Est)"),
-            ("Area Ristoro / Bar", "PIANO TERRA", "Locale 069 (Atrio Sud)"),
-            ("Palestra & Spogliatoi", "PIANO TERRA", "Locali 004 – 008 (Ovest)"),
-            ("Infermeria", "PIANO TERRA", "Locale 009 (Lato Palestra)"),
-            ("Segreteria / Dirigenza", "1° PIANO", "Locali 104, 105, 106, 138"),
-            ("Uff. Vicepresidenza", "1° PIANO", "Locale 107 (Ala Sud-Ovest)"),
-            ("Ascensore Centrale", "TUTTI I PIANI", "Locale 046 (Collega 0, 1, 2)"),
-            ("Scale Principali", "TUTTI I PIANI", "Scala Centrale, Nord, Est, Sud"),
-            ("Servizi Igienici (WC)", "TUTTI I PIANI", "Presenti in ogni ala"),
+            ("Ingresso / Atrio", "PIANO TERRA", "Locali 029 / 036"),
+            ("Aula Insegnanti", "PIANO TERRA", "Locale 028"),
+            ("Vicepresidenza", "PIANO TERRA", "Locale 060"),
+            ("Segreteria Didattica", "PIANO TERRA", "Locale 035"),
+            ("Area Ristoro / Bar", "PIANO TERRA", "Locale 069"),
+            ("Palestra & Spogliatoi", "PIANO TERRA", "Locali 004 – 008"),
+            ("Infermeria", "PIANO TERRA", "Locale 009"),
+            ("Dirigenza e Uffici", "1° PIANO", "Locali 104, 105, 106, 138"),
+            ("Ascensore", "TUTTI I PIANI", "Centro Edificio"),
+            ("Scale Principali", "TUTTI I PIANI", "Scale di Piano"),
+            ("WC Docenti e Alunni", "TUTTI I PIANI", "Servizi Igienici"),
         ]),
     ]
 
