@@ -245,9 +245,8 @@ ROOMS_PIANO_SECONDO = [
     {"code": "SCALA", "name": "SCALA", "sub": "", "x": 15.5, "y": 6.4, "cat": "scale", "size": "xs"},
     {"code": "SCALA", "name": "SCALA", "sub": "", "x": 11.5, "y": 8.8, "cat": "scale", "size": "xs"},
 
-    # Servizi Igienici: WC Alunni a Nord, WC Docenti a Centro e Sud
+    # Servizi Igienici: WC Alunni a Nord, WC Docenti a Sud (eliminato WC CENTRO)
     {"code": "WC", "name": "WC ALUNNI", "sub": "", "x": 12.6, "y": 20.8, "cat": "wc", "size": "sm"},
-    {"code": "WC", "name": "WC DOCENTI", "sub": "", "x": 13.4, "y": 17.0, "cat": "wc", "size": "sm"},
     {"code": "WC", "name": "WC DOCENTI", "sub": "", "x": 8.8, "y": 8.8, "cat": "wc", "size": "sm"},
 ]
 
