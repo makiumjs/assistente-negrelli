@@ -414,7 +414,7 @@ def build_all_posters():
             ("020-021", "Lab. Multimediale"),
             ("024-025", "Laboratori 1 e 2"),
             ("026", "Officina Meccanica"),
-            ("030-031", "Laboratori 4 e 5"),
+            ("031", "Lab. 4"),
         ]),
         ("Uffici, Docenti & Ristoro", [
             ("028", "Aula Insegnanti"),

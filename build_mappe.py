@@ -136,7 +136,6 @@ ROOMS_PIANO_TERRA = [
     {"code": "024", "name": "LAB 1", "sub": "", "x": 41.1, "y": 11.4, "cat": "lab", "size": "md"},
     {"code": "025", "name": "LAB 2", "sub": "", "x": 35.8, "y": 11.5, "cat": "lab", "size": "md"},
     {"code": "026", "name": "OFFICINA", "sub": "", "x": 38.3, "y": 6.2, "cat": "lab", "size": "lg"},
-    {"code": "030", "name": "LAB 5", "sub": "", "x": 22.5, "y": 18.2, "cat": "lab", "size": "sm"},
     {"code": "031", "name": "LAB 4", "sub": "", "x": 26.0, "y": 25.3, "cat": "lab", "size": "sm"},
 
     # Biblioteca & Spazi Informali (058 e 059 uniti in unico label BIBLIOTECA)
@@ -593,7 +592,7 @@ def build_single_floor_posters():
             ("020-021", "Lab. Multimediale"),
             ("024-025", "Laboratori 1 e 2"),
             ("026", "Officina Meccanica"),
-            ("030-031", "Laboratori 4 e 5"),
+            ("031", "Lab. 4"),
         ]),
         ("Uffici, Docenti & Ristoro", "uffici", [
             ("028", "Aula Insegnanti"),

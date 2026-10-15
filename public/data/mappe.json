@@ -388,27 +388,7 @@
           "scheduleKey": null
         },
         {
-          "id": "f0_14_030",
-          "code": "030",
-          "name": "LAB 5",
-          "sub": "",
-          "cat": "lab",
-          "catLabel": "Laboratori & Officina",
-          "color": "#6D28D9",
-          "fillColor": "#EDE9FE",
-          "borderColor": "#5B21B6",
-          "size": "sm",
-          "floor": 0,
-          "floorLabel": "Piano Terra",
-          "wing": "Ala Ovest",
-          "x": 22.5,
-          "y": 18.2,
-          "svgX": 732.0,
-          "svgY": 564.0,
-          "scheduleKey": null
-        },
-        {
-          "id": "f0_15_031",
+          "id": "f0_14_031",
           "code": "031",
           "name": "LAB 4",
           "sub": "",
@@ -428,7 +408,7 @@
           "scheduleKey": null
         },
         {
-          "id": "f0_16_058-059",
+          "id": "f0_15_058-059",
           "code": "058-059",
           "name": "BIBLIOTECA",
           "sub": "",
@@ -448,7 +428,7 @@
           "scheduleKey": null
         },
         {
-          "id": "f0_17_032",
+          "id": "f0_16_032",
           "code": "032",
           "name": "SPAZIO INFORMALE",
           "sub": "",
@@ -468,7 +448,7 @@
           "scheduleKey": null
         },
         {
-          "id": "f0_18_033",
+          "id": "f0_17_033",
           "code": "033",
           "name": "AGORÀ / STUDIO",
           "sub": "",
@@ -488,7 +468,7 @@
           "scheduleKey": null
         },
         {
-          "id": "f0_19_004",
+          "id": "f0_18_004",
           "code": "004",
           "name": "PALESTRA",
           "sub": "",
@@ -508,7 +488,7 @@
           "scheduleKey": "Palestra"
         },
         {
-          "id": "f0_20_005-006",
+          "id": "f0_19_005-006",
           "code": "005-006",
           "name": "SPOGLIATOI",
           "sub": "",
@@ -528,7 +508,7 @@
           "scheduleKey": null
         },
         {
-          "id": "f0_21_028",
+          "id": "f0_20_028",
           "code": "028",
           "name": "AULA INSEGNANTI",
           "sub": "",
@@ -548,7 +528,7 @@
           "scheduleKey": null
         },
         {
-          "id": "f0_22_069",
+          "id": "f0_21_069",
           "code": "069",
           "name": "AREA RISTORO",
           "sub": "",
@@ -568,7 +548,7 @@
           "scheduleKey": null
         },
         {
-          "id": "f0_23_060",
+          "id": "f0_22_060",
           "code": "060",
           "name": "VICEPRESIDENZA",
           "sub": "",
@@ -588,7 +568,7 @@
           "scheduleKey": null
         },
         {
-          "id": "f0_24_035",
+          "id": "f0_23_035",
           "code": "035",
           "name": "SEGRETERIA DIDATTICA",
           "sub": "",
@@ -608,7 +588,7 @@
           "scheduleKey": null
         },
         {
-          "id": "f0_25_009",
+          "id": "f0_24_009",
           "code": "009",
           "name": "INFERMERIA",
           "sub": "",
@@ -628,7 +608,7 @@
           "scheduleKey": null
         },
         {
-          "id": "f0_26_ASC",
+          "id": "f0_25_ASC",
           "code": "ASC",
           "name": "ASCENSORE",
           "sub": "",
@@ -648,7 +628,7 @@
           "scheduleKey": null
         },
         {
-          "id": "f0_27_SCALA",
+          "id": "f0_26_SCALA",
           "code": "SCALA",
           "name": "SCALA",
           "sub": "",
@@ -668,7 +648,7 @@
           "scheduleKey": null
         },
         {
-          "id": "f0_28_SCALA",
+          "id": "f0_27_SCALA",
           "code": "SCALA",
           "name": "SCALA",
           "sub": "",
@@ -688,7 +668,7 @@
           "scheduleKey": null
         },
         {
-          "id": "f0_29_SCALA",
+          "id": "f0_28_SCALA",
           "code": "SCALA",
           "name": "SCALA",
           "sub": "",
@@ -708,7 +688,7 @@
           "scheduleKey": null
         },
         {
-          "id": "f0_30_SCALA",
+          "id": "f0_29_SCALA",
           "code": "SCALA",
           "name": "SCALA",
           "sub": "",
@@ -728,7 +708,7 @@
           "scheduleKey": null
         },
         {
-          "id": "f0_31_SCALA",
+          "id": "f0_30_SCALA",
           "code": "SCALA",
           "name": "SCALA",
           "sub": "",
@@ -748,7 +728,7 @@
           "scheduleKey": null
         },
         {
-          "id": "f0_32_WC",
+          "id": "f0_31_WC",
           "code": "WC",
           "name": "WC",
           "sub": "",
@@ -768,7 +748,7 @@
           "scheduleKey": null
         },
         {
-          "id": "f0_33_WC",
+          "id": "f0_32_WC",
           "code": "WC",
           "name": "WC",
           "sub": "",
@@ -788,7 +768,7 @@
           "scheduleKey": null
         },
         {
-          "id": "f0_34_WC",
+          "id": "f0_33_WC",
           "code": "WC",
           "name": "WC",
           "sub": "",
@@ -808,7 +788,7 @@
           "scheduleKey": null
         },
         {
-          "id": "f0_35_WC",
+          "id": "f0_34_WC",
           "code": "WC",
           "name": "WC",
           "sub": "",
