@@ -119,6 +119,18 @@ def load_geom_from_svg(svg_path, xlim, ylim, scale=40.0):
     def to_cad(sx, sy):
         return (x0 + sx / scale, y1 - sy / scale)
 
+    def is_furniture(pts):
+        xs = [p[0] for p in pts]
+        ys = [p[1] for p in pts]
+        w = max(xs) - min(xs)
+        h = max(ys) - min(ys)
+        is_closed = (math.hypot(pts[0][0] - pts[-1][0], pts[0][1] - pts[-1][1]) < 0.02) if len(pts) > 2 else False
+        if max(w, h) < 2.0 and min(w, h) > 0.18 and is_closed:
+            return True
+        if max(w, h) < 0.7:
+            return True
+        return False
+
     walls_primary = []
     polys_fill = []
 
@@ -139,7 +151,7 @@ def load_geom_from_svg(svg_path, xlim, ylim, scale=40.0):
                         pts.append(to_cad(float(coords[0]), float(coords[1])))
                     except ValueError:
                         pass
-            if len(pts) >= 2:
+            if len(pts) >= 2 and not is_furniture(pts):
                 for k in range(len(pts) - 1):
                     walls_primary.append([pts[k], pts[k + 1]])
 
@@ -191,25 +203,11 @@ def draw_floor_bw(ax, geom, rooms, xlim, ylim, scale_factor=1.0):
             PolyCollection(geom["polys_fill"], facecolors="#18181B", edgecolors="none", zorder=3)
         )
 
-    # Disegna cartellini delle stanze in bianco e nero
+    # Disegna cartellini delle stanze in bianco e nero (senza cerchi posteriori su richiesta)
     for r in rooms:
         st = BW_STYLES.get(r["cat"], BW_STYLES["aula"])
         x, y = r["x"], r["y"]
         sz = r.get("size", "md")
-
-        # Alone circolare sottile tratteggiato intorno alle aule didattiche e uffici
-        rad_map = {"lg": 1.55, "md": 1.0, "sm": 0.68, "xs": 0.48}
-        rad = rad_map.get(sz, 1.0)
-        if xlim[1] - xlim[0] < 25:
-            rad *= 0.68
-
-        if r["cat"] not in ("vuoto", "scale", "wc"):
-            circle = mpatches.Circle(
-                (x, y), radius=rad,
-                facecolor="#FAFAFA", edgecolor="#A1A1AA",
-                linewidth=0.6 * scale_factor, linestyle=":", zorder=4
-            )
-            ax.add_patch(circle)
 
         # Dimensioni font
         fs_map = {

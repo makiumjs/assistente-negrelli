@@ -214,7 +214,7 @@ ROOMS_PIANO_PRIMO = [
 
     # Vuoti su Piano Terra (per orientamento visivo)
     {"code": "P.T.", "name": "VUOTO SU PALESTRA", "sub": "", "x": 8.0, "y": 19.8, "cat": "vuoto", "size": "sm"},
-    {"code": "P.T.", "name": "VUOTO SU MENSA", "sub": "", "x": 16.5, "y": 5.5, "cat": "vuoto", "size": "sm"},
+    {"code": "P.T.", "name": "VUOTO SU DOCENTI", "sub": "", "x": 16.5, "y": 5.5, "cat": "vuoto", "size": "sm"},
     {"code": "P.T.", "name": "VUOTO SU OFFICINA", "sub": "", "x": 38.3, "y": 6.2, "cat": "vuoto", "size": "sm"},
 ]
 
@@ -282,6 +282,20 @@ def load_floor_geometry(json_filename, block_keyword, xlim, ylim):
     def in_bounds(x, y):
         return (xlim[0] <= x <= xlim[1]) and (ylim[0] <= y <= ylim[1])
 
+    def is_furniture(seg):
+        xs = [p[0] for p in seg]
+        ys = [p[1] for p in seg]
+        w = max(xs) - min(xs)
+        h = max(ys) - min(ys)
+        is_closed = (math.hypot(seg[0][0] - seg[-1][0], seg[0][1] - seg[-1][1]) < 0.02) if len(seg) > 2 else False
+        # Elementi chiusi tipici di banchi, cattedre, tavoli e sedie (tra 0.18m e 2.0m)
+        if max(w, h) < 2.0 and min(w, h) > 0.18 and is_closed:
+            return True
+        # Sagome molto piccole (sedie, schienali, cestini < 0.7m)
+        if max(w, h) < 0.7:
+            return True
+        return False
+
     for o in ents:
         et = o.get("entity")
         if et == "LWPOLYLINE":
@@ -297,8 +311,8 @@ def load_floor_geometry(json_filename, block_keyword, xlim, ylim):
             if o.get("flag", 0) & 512:
                 seg.append(seg[0])
             c_idx = o.get("color", {}).get("index", 256)
-            if c_idx == 9:
-                continue  # Mobilio eliminato su richiesta
+            if c_idx == 9 or is_furniture(seg):
+                continue  # Mobilio (tavoli e sedie) eliminato su richiesta
             elif c_idx == 254:
                 walls_glass.append(seg)
             else:
@@ -309,6 +323,8 @@ def load_floor_geometry(json_filename, block_keyword, xlim, ylim):
             r = o.get("radius", 0)
             if not in_bounds(c[0], c[1]) or r > 15:
                 continue
+            if r < 0.7:
+                continue  # Archi di sedie / sanitari / simboli eliminati su richiesta
             sa = o.get("start_angle", 0.0)
             ea = o.get("end_angle", 0.0)
             if ea < sa:
@@ -330,6 +346,8 @@ def load_floor_geometry(json_filename, block_keyword, xlim, ylim):
             r = o.get("radius", 0)
             if not in_bounds(c[0], c[1]) or r > 10:
                 continue
+            if r < 0.8:
+                continue  # Sgabelli / sedie / arredi circolari eliminati su richiesta
             steps = 24
             seg = [
                 (c[0] + r * math.cos(2 * math.pi * i / steps),
@@ -401,19 +419,7 @@ def draw_floor_on_ax(ax, geom, rooms, xlim, ylim, scale_factor=1.0):
         x, y = r["x"], r["y"]
         sz = r.get("size", "md")
 
-        # Alone circolare semitrasparente sotto il badge per evidenziare il locale
-        rad_map = {"lg": 1.65, "md": 1.05, "sm": 0.72, "xs": 0.50}
-        rad = rad_map.get(sz, 1.0)
-        if xlim[1] - xlim[0] < 25:  # Piano Secondo ha scala locale più stretta
-            rad *= 0.68
-
-        if r["cat"] != "vuoto":
-            circle = mpatches.Circle(
-                (x, y), radius=rad,
-                facecolor=st["sub_bg"], edgecolor=st["bg"],
-                linewidth=0.8 * scale_factor, alpha=0.55, zorder=5
-            )
-            ax.add_patch(circle)
+        # Cerchi dietro ai label rimossi su richiesta dell'utente
 
         # Font sizes calibrati sulla gerarchia visiva
         fs_map = {
