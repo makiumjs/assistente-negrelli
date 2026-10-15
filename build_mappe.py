@@ -450,13 +450,14 @@ def draw_floor_on_ax(ax, geom, rooms, xlim, ylim, scale_factor=1.0):
 
         bbox_props = dict(
             boxstyle="round,pad=0.28,rounding_size=0.35",
-            facecolor=st["bg"] if r["cat"] != "vuoto" else "#F8FAFC",
-            edgecolor=st["border"],
-            linewidth=(1.6 if r["cat"] == "ingresso" else 1.0) * scale_factor,
-            alpha=0.96 if r["cat"] != "vuoto" else 0.85,
+            facecolor="#FFFFFF",
+            edgecolor="#000000" if r["cat"] != "vuoto" else "#94A3B8",
+            linewidth=(1.4 if r["cat"] == "ingresso" else 1.0) * scale_factor,
+            linestyle="--" if r["cat"] == "vuoto" else "-",
+            alpha=1.0,
         )
 
-        txt_color = st["text"] if r["cat"] != "vuoto" else "#475569"
+        txt_color = "#000000"
         ax.text(
             x, y, label_text,
             fontsize=fs_main if "\n" not in label_text else fs_main * 0.92,
@@ -622,6 +623,7 @@ def build_single_floor_posters():
             ("032-033", "Agorà Studio"),
             ("INGRESSO", "Ingresso Principale"),
             ("037", "Entrata Palestra"),
+            ("SCALA", "Scale"),
         ]),
     ]
     add_sidebar_directory(fig, "PIANO TERRA", sections_0)

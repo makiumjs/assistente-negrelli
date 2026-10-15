@@ -31,55 +31,55 @@ plt.rcParams['axes.edgecolor'] = '#000000'
 plt.rcParams['axes.linewidth'] = 1.0
 
 
-# Stile Bianco e Nero ad alto contrasto ottimizzato per stampa laser e plotter
+# Stile Bianco e Nero ad alto contrasto: tutti sfondo bianco (#FFFFFF) e font nero (#000000)
 BW_STYLES = {
     "aula": {
         "bg": "#FFFFFF",
         "border": "#000000",
         "text": "#000000",
-        "linewidth": 1.2,
+        "linewidth": 1.0,
         "label": "Aule Didattiche",
-        "sub_text": "#333333"
+        "sub_text": "#000000"
     },
     "lab": {
         "bg": "#FFFFFF",
         "border": "#000000",
         "text": "#000000",
-        "linewidth": 2.0,
+        "linewidth": 1.2,
         "label": "Laboratori & Officina",
-        "sub_text": "#333333"
+        "sub_text": "#000000"
     },
     "informale": {
-        "bg": "#F4F4F5",
+        "bg": "#FFFFFF",
         "border": "#000000",
         "text": "#000000",
         "linewidth": 1.0,
         "label": "Aule Informali & Biblioteca",
-        "sub_text": "#444444"
+        "sub_text": "#000000"
     },
     "comuni": {
         "bg": "#FFFFFF",
         "border": "#000000",
         "text": "#000000",
-        "linewidth": 1.8,
+        "linewidth": 1.2,
         "label": "Palestra, Area Ristoro & Bar",
-        "sub_text": "#333333"
+        "sub_text": "#000000"
     },
     "uffici": {
-        "bg": "#000000",
+        "bg": "#FFFFFF",
         "border": "#000000",
-        "text": "#FFFFFF",
-        "linewidth": 1.5,
+        "text": "#000000",
+        "linewidth": 1.0,
         "label": "Docenti, Vicepresidenza & Segreteria",
-        "sub_text": "#E4E4E7"
+        "sub_text": "#000000"
     },
     "scale": {
-        "bg": "#27272A",
+        "bg": "#FFFFFF",
         "border": "#000000",
-        "text": "#FFFFFF",
-        "linewidth": 1.2,
+        "text": "#000000",
+        "linewidth": 1.0,
         "label": "Scale & Ascensore",
-        "sub_text": "#D4D4D8"
+        "sub_text": "#000000"
     },
     "wc": {
         "bg": "#FFFFFF",
@@ -87,20 +87,20 @@ BW_STYLES = {
         "text": "#000000",
         "linewidth": 1.0,
         "label": "Servizi Igienici (WC)",
-        "sub_text": "#555555"
+        "sub_text": "#000000"
     },
     "ingresso": {
-        "bg": "#000000",
+        "bg": "#FFFFFF",
         "border": "#000000",
-        "text": "#FFFFFF",
-        "linewidth": 2.2,
+        "text": "#000000",
+        "linewidth": 1.4,
         "label": "Ingresso Principale (Voi Siete Qui)",
-        "sub_text": "#FFFFFF"
+        "sub_text": "#000000"
     },
     "vuoto": {
         "bg": "#FFFFFF",
         "border": "#71717A",
-        "text": "#52525B",
+        "text": "#000000",
         "linewidth": 0.8,
         "label": "Doppia Altezza (Piano Sottostante)",
         "sub_text": "#71717A"
@@ -224,17 +224,16 @@ def draw_floor_bw(ax, geom, rooms, xlim, ylim, scale_factor=1.0):
         elif r.get("sub") and sz in ("lg", "md"):
             label_text = f"{r['name']}\n{r['sub']}"
 
-        # Bbox in bianco e nero
-        is_inverted = st["bg"] == "#000000" or st["bg"] == "#27272A"
+        # Bbox in bianco e nero: tutti i label a sfondo bianco con font nero
         bbox_props = dict(
             boxstyle="round,pad=0.26,rounding_size=0.30",
-            facecolor=st["bg"] if r["cat"] != "vuoto" else "#FFFFFF",
+            facecolor="#FFFFFF",
             edgecolor=st["border"] if r["cat"] != "vuoto" else "#71717A",
             linewidth=st["linewidth"] * scale_factor,
             linestyle="--" if r["cat"] == "vuoto" else "-",
         )
 
-        txt_color = st["text"]
+        txt_color = "#000000"
         ax.text(
             x, y, label_text,
             fontsize=fs_main if "\n" not in label_text else fs_main * 0.92,
@@ -430,6 +429,7 @@ def build_all_posters():
             ("032-033", "Agorà Studio"),
             ("INGRESSO", "Ingresso Principale"),
             ("037", "Entrata Palestra"),
+            ("SCALA", "Scale"),
         ]),
     ]
     add_sidebar_bw(fig0, "PIANO TERRA", sections_0)
