@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Assistente Orario ITIS Negrelli</title>
+  <!-- Google Identity Services SDK -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     :root {
       /* Palette Ufficiale Negrelli: Bianco Ceramica, Verde Acqua e Texture Legno Rovere */
@@ -772,6 +774,275 @@
         font-size: 13px;
       }
     }
+
+    /* ==========================================================================
+       PRIVACY WALL & AUTH GATE (Google Workspace SSO)
+       ========================================================================== */
+    #privacy-wall-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100dvh;
+      z-index: 99999;
+      background: radial-gradient(circle at 50% 30%, rgba(13, 148, 136, 0.22), rgba(15, 23, 42, 0.88) 75%);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
+      opacity: 1;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    #privacy-wall-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .privacy-card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 32px 28px;
+      max-width: 440px;
+      width: 100%;
+      box-shadow: 0 24px 60px -12px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(13, 148, 136, 0.25);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .privacy-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--teal-primary), var(--teal-accent), var(--wood-light));
+    }
+
+    .privacy-badge-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--teal-surface), #ffffff);
+      border: 1.5px solid var(--teal-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 12px rgba(13, 148, 136, 0.12);
+    }
+
+    .privacy-school-tag {
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--teal-primary);
+      margin-bottom: 4px;
+    }
+
+    .privacy-title {
+      margin: 0 0 4px 0;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.3px;
+    }
+
+    .privacy-sub {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-sub);
+      margin-bottom: 20px;
+    }
+
+    .privacy-notice {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      text-align: left;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .privacy-notice-icon {
+      font-size: 20px;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .privacy-notice p {
+      margin: 0;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--text-muted);
+    }
+
+    .privacy-notice strong {
+      color: var(--text-main);
+    }
+
+    .privacy-notice code {
+      background: rgba(13, 148, 136, 0.1);
+      color: var(--teal-hover);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .auth-error-box {
+      width: 100%;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+      font-size: 12.5px;
+      line-height: 1.45;
+      color: #991b1b;
+      text-align: left;
+      box-sizing: border-box;
+      animation: shakeAuth 0.35s ease;
+    }
+
+    @keyframes shakeAuth {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    .auth-btn-wrapper {
+      margin-top: 4px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      min-height: 44px;
+    }
+
+    .privacy-footer-note {
+      font-size: 11px;
+      color: var(--text-sub);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Floating User Badge (dopo il login) */
+    #auth-user-badge {
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      z-index: 30;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(13, 148, 136, 0.25);
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.1);
+      backdrop-filter: blur(12px);
+      border-radius: 30px;
+      padding: 4px 12px 4px 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+    }
+
+    #auth-user-badge:hover {
+      box-shadow: 0 6px 20px rgba(13, 148, 136, 0.2);
+    }
+
+    .auth-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid var(--teal-primary);
+      background: var(--teal-surface);
+    }
+
+    .auth-info {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      line-height: 1.2;
+    }
+
+    .auth-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-main);
+      max-width: 140px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .auth-role {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .auth-role.superadmin {
+      color: #b45309;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .auth-role.user {
+      color: var(--teal-primary);
+    }
+
+    .auth-logout-btn {
+      border: none;
+      background: #f1f5f9;
+      color: var(--text-muted);
+      border-radius: 14px;
+      padding: 4px 9px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-left: 2px;
+      transition: all 0.15s ease;
+    }
+
+    .auth-logout-btn:hover {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    @media (max-width: 768px) {
+      #auth-user-badge {
+        top: 10px;
+        right: 12px;
+        padding: 3px 8px 3px 4px;
+        gap: 6px;
+      }
+      .auth-name {
+        max-width: 90px;
+        font-size: 11px;
+      }
+      .auth-avatar {
+        width: 26px;
+        height: 26px;
+      }
+    }
   </style>
 
   <script type="importmap">
@@ -784,6 +1055,55 @@
   </script>
 </head>
 <body>
+
+  <!-- ==========================================================================
+       PRIVACY WALL OVERLAY (Muro della Privacy Istituzionale)
+       ========================================================================== -->
+  <div id="privacy-wall-overlay" role="dialog" aria-modal="true" aria-labelledby="privacy-wall-title">
+    <div class="privacy-card">
+      <div class="privacy-badge-icon" aria-hidden="true">🏛️</div>
+      <div class="privacy-school-tag">Polo Scolastico di Feltre</div>
+      <h1 id="privacy-wall-title" class="privacy-title">Assistente Negrelli</h1>
+      <div class="privacy-sub">I.T.T. «L. Negrelli» • I.T.G. «E. Forcellini»</div>
+
+      <div class="privacy-notice">
+        <div class="privacy-notice-icon" aria-hidden="true">🔒</div>
+        <p>
+          <strong>Accesso Riservato</strong><br />
+          Per la tutela della privacy e la riservatezza di orari docenti, classi e planimetrie interne, l'accesso è consentito <strong>esclusivamente con account istituzionale</strong>:
+          <br /><code id="allowed-domain-label">@istitutosuperiorefeltre.it</code>
+        </p>
+      </div>
+
+      <!-- Box Messaggi Errore / Dinieghi -->
+      <div id="auth-error-box" class="auth-error-box" style="display:none;" role="alert"></div>
+
+      <!-- Container Pulsante Ufficiale Google Sign-In -->
+      <div class="auth-btn-wrapper">
+        <div id="g-signin-container"></div>
+      </div>
+
+      <!-- Nota di sicurezza e supporto per bypass sviluppo locale -->
+      <div class="privacy-footer-note">
+        <span>🛡️ Accesso sicuro Google Workspace for Education</span>
+      </div>
+      <div id="dev-bypass-container" style="display:none; margin-top: 14px;">
+        <button id="dev-bypass-btn" type="button" style="background: none; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 4px 10px; font-size: 11px; color: #64748b; cursor: pointer;">
+          Accedi come Super Admin (Test Locale)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chip Utente Connesso (Visualizzato in alto a destra) -->
+  <div id="auth-user-badge" style="display:none;" aria-label="Profilo utente connesso">
+    <img id="auth-user-avatar" class="auth-avatar" alt="Avatar Google" src="" />
+    <div class="auth-info">
+      <div class="auth-name" id="auth-user-name">Caricamento...</div>
+      <div class="auth-role" id="auth-user-role"></div>
+    </div>
+    <button id="auth-logout-btn" type="button" class="auth-logout-btn" title="Disconnetti account" aria-label="Disconnetti">Esci</button>
+  </div>
 
   <div id="main-container">
     <div id="avatar-panel">
@@ -1925,7 +2245,248 @@
       }
     }
 
-    init();
+    // ==========================================================================
+    // SISTEMA AUTENTICAZIONE GOOGLE WORKSPACE & CONTROLLO ACCESSI (RBAC)
+    // ==========================================================================
+    const GOOGLE_CLIENT_ID = "495052549999-vesj8t87da5jj92ges7ks86bn4a3vtjd.apps.googleusercontent.com";
+    const ALLOWED_DOMAIN = "istitutosuperiorefeltre.it";
+    const SUPER_ADMIN_EMAIL = "marco.cassarino@istitutosuperiorefeltre.it";
+    const AUTH_STORAGE_KEY = "negrelli_auth_session_v1";
+
+    let currentUserSession = null;
+    let appInitialized = false;
+
+    const privacyOverlay = document.getElementById('privacy-wall-overlay');
+    const authErrorBox = document.getElementById('auth-error-box');
+    const authUserBadge = document.getElementById('auth-user-badge');
+    const authUserAvatar = document.getElementById('auth-user-avatar');
+    const authUserName = document.getElementById('auth-user-name');
+    const authUserRole = document.getElementById('auth-user-role');
+    const authLogoutBtn = document.getElementById('auth-logout-btn');
+    const devBypassContainer = document.getElementById('dev-bypass-container');
+    const devBypassBtn = document.getElementById('dev-bypass-btn');
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function parseJwt(token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+      } catch (err) {
+        console.error("Errore decodifica JWT Google:", err);
+        return null;
+      }
+    }
+
+    function showAuthError(htmlMsg) {
+      if (!authErrorBox) return;
+      authErrorBox.innerHTML = htmlMsg;
+      authErrorBox.style.display = 'block';
+    }
+
+    function clearAuthError() {
+      if (!authErrorBox) return;
+      authErrorBox.innerHTML = '';
+      authErrorBox.style.display = 'none';
+    }
+
+    function unlockApp(session) {
+      currentUserSession = session;
+      clearAuthError();
+
+      // Nasconde il Privacy Wall con transizione fluida
+      if (privacyOverlay) {
+        privacyOverlay.classList.add('hidden');
+      }
+
+      // Mostra e popola il chip profilo in alto
+      if (authUserBadge) {
+        authUserBadge.style.display = 'flex';
+        if (session.picture && authUserAvatar) {
+          authUserAvatar.src = session.picture;
+          authUserAvatar.style.display = 'block';
+        } else if (authUserAvatar) {
+          authUserAvatar.style.display = 'none';
+        }
+
+        if (authUserName) {
+          authUserName.textContent = session.name || session.email;
+          authUserName.title = session.email;
+        }
+
+        if (authUserRole) {
+          if (session.isSuperAdmin) {
+            authUserRole.className = 'auth-role superadmin';
+            authUserRole.innerHTML = '👑 Super Admin';
+          } else {
+            authUserRole.className = 'auth-role user';
+            authUserRole.textContent = 'Account Scolastico';
+          }
+        }
+      }
+
+      // Carica i dati e avvia il 3D solo a verifica avvenuta
+      if (!appInitialized) {
+        appInitialized = true;
+        init();
+      }
+    }
+
+    function handleLogout() {
+      try {
+        localStorage.removeItem(AUTH_STORAGE_KEY);
+      } catch (e) {}
+      currentUserSession = null;
+
+      if (authUserBadge) authUserBadge.style.display = 'none';
+      if (privacyOverlay) privacyOverlay.classList.remove('hidden');
+      clearAuthError();
+
+      if (window.google && google.accounts && google.accounts.id) {
+        google.accounts.id.disableAutoSelect();
+      }
+      renderGoogleButton();
+    }
+
+    function handleGoogleCredentialResponse(response) {
+      if (!response || !response.credential) {
+        showAuthError("Risposta di autenticazione non valida da Google.");
+        return;
+      }
+
+      const payload = parseJwt(response.credential);
+      if (!payload || !payload.email) {
+        showAuthError("Impossibile leggere l'indirizzo email dall'account Google.");
+        return;
+      }
+
+      const email = payload.email.trim().toLowerCase();
+      const isSuperAdmin = (email === SUPER_ADMIN_EMAIL.toLowerCase());
+      const isSchoolDomain = email.endsWith('@' + ALLOWED_DOMAIN.toLowerCase());
+
+      // Blocco per account esterni non autorizzati (es. @gmail.com)
+      if (!isSuperAdmin && !isSchoolDomain) {
+        showAuthError(`
+          <strong>Accesso non autorizzato</strong><br />
+          L'indirizzo <em>${escapeHtml(email)}</em> non è abilitato.<br />
+          È obbligatorio accedere con la propria casella istituzionale <strong>@${ALLOWED_DOMAIN}</strong>.
+        `);
+        if (window.google && google.accounts && google.accounts.id) {
+          google.accounts.id.disableAutoSelect();
+        }
+        return;
+      }
+
+      // Accesso autorizzato
+      const session = {
+        email: email,
+        name: payload.name || email.split('@')[0],
+        picture: payload.picture || '',
+        role: isSuperAdmin ? 'superadmin' : 'user',
+        isSuperAdmin: isSuperAdmin,
+        loginTime: Date.now()
+      };
+
+      try {
+        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(session));
+      } catch (e) {}
+
+      unlockApp(session);
+    }
+
+    function renderGoogleButton() {
+      const container = document.getElementById('g-signin-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (window.google && google.accounts && google.accounts.id) {
+        try {
+          google.accounts.id.initialize({
+            client_id: GOOGLE_CLIENT_ID,
+            callback: handleGoogleCredentialResponse,
+            auto_select: false,
+            cancel_on_tap_outside: false
+          });
+
+          google.accounts.id.renderButton(container, {
+            theme: 'outline',
+            size: 'large',
+            type: 'standard',
+            shape: 'pill',
+            text: 'signin_with',
+            logo_alignment: 'left',
+            width: 280
+          });
+        } catch (err) {
+          console.warn("Errore inizializzazione Google Identity Services:", err);
+        }
+      } else {
+        setTimeout(renderGoogleButton, 150);
+      }
+    }
+
+    function startAuthCheck() {
+      // Abilita bypass locale su localhost o protocollo file:
+      const isLocalHost = ['localhost', '127.0.0.1'].includes(window.location.hostname) || window.location.protocol === 'file:';
+      if (isLocalHost && devBypassContainer && devBypassBtn) {
+        devBypassContainer.style.display = 'block';
+        devBypassBtn.addEventListener('click', () => {
+          const devSession = {
+            email: SUPER_ADMIN_EMAIL,
+            name: "Marco Cassarino",
+            picture: "",
+            role: "superadmin",
+            isSuperAdmin: true,
+            loginTime: Date.now()
+          };
+          try {
+            localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(devSession));
+          } catch (e) {}
+          unlockApp(devSession);
+        });
+      }
+
+      if (authLogoutBtn) {
+        authLogoutBtn.addEventListener('click', handleLogout);
+      }
+
+      // Verifica sessione esistente salvata
+      try {
+        const stored = localStorage.getItem(AUTH_STORAGE_KEY);
+        if (stored) {
+          const sess = JSON.parse(stored);
+          if (sess && sess.email) {
+            const email = sess.email.toLowerCase();
+            const validSuperAdmin = (email === SUPER_ADMIN_EMAIL.toLowerCase());
+            const validDomain = email.endsWith('@' + ALLOWED_DOMAIN.toLowerCase());
+            if (validSuperAdmin || validDomain) {
+              unlockApp(sess);
+              return;
+            }
+          }
+        }
+      } catch (e) {
+        console.warn("Sessione archiviata non valida:", e);
+      }
+
+      // Se non autenticato, prepara il pulsante Google
+      renderGoogleButton();
+    }
+
+    // Avvio dell'autenticazione all'apertura della pagina
+    startAuthCheck();
   </script>
 </body>
 </html>
