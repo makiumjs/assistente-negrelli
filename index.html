@@ -3,6 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Content Security Policy (Blindatura anti-supply chain & XSS) -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/client;
+    style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style;
+    frame-src https://accounts.google.com/gsi/;
+    connect-src 'self' https://accounts.google.com/gsi/;
+    img-src 'self' data: https://*.googleusercontent.com;
+    font-src 'self' data:;
+    object-src 'none';
+    base-uri 'self';
+  " />
   <title>Assistente Orario ITIS Negrelli</title>
   <!-- Google Identity Services SDK -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -1048,8 +1060,7 @@
   <script type="importmap">
     {
       "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        "three": "./public/js/vendor/three.module.js"
       }
     }
   </script>
