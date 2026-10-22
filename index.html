@@ -1059,7 +1059,7 @@
   <!-- ==========================================================================
        PRIVACY WALL OVERLAY (Muro della Privacy Istituzionale)
        ========================================================================== -->
-  <div id="privacy-wall-overlay" role="dialog" aria-modal="true" aria-labelledby="privacy-wall-title">
+  <div id="privacy-wall-overlay" class="hidden" role="dialog" aria-modal="true" aria-labelledby="privacy-wall-title">
     <div class="privacy-card">
       <div class="privacy-badge-icon" aria-hidden="true">🏛️</div>
       <div class="privacy-school-tag">Polo Scolastico di Feltre</div>
@@ -2248,6 +2248,9 @@
     // ==========================================================================
     // SISTEMA AUTENTICAZIONE GOOGLE WORKSPACE & CONTROLLO ACCESSI (RBAC)
     // ==========================================================================
+    // Interruttore Muro della Privacy: imposta su TRUE quando vuoi riattivarlo
+    const AUTH_ENABLED = false;
+
     const GOOGLE_CLIENT_ID = "495052549999-vesj8t87da5jj92ges7ks86bn4a3vtjd.apps.googleusercontent.com";
     const ALLOWED_DOMAIN = "istitutosuperiorefeltre.it";
     const SUPER_ADMIN_EMAIL = "marco.cassarino@istitutosuperiorefeltre.it";
@@ -2438,6 +2441,22 @@
     }
 
     function startAuthCheck() {
+      // Modalità Modifiche / Sviluppo (Auth temporaneamente disattivata)
+      if (!AUTH_ENABLED) {
+        if (privacyOverlay) privacyOverlay.classList.add('hidden');
+        if (authUserBadge) authUserBadge.style.display = 'none';
+        if (!appInitialized) {
+          appInitialized = true;
+          init();
+        }
+        return;
+      }
+
+      // Se il Muro è attivo, rimuove la classe hidden iniziale
+      if (privacyOverlay) {
+        privacyOverlay.classList.remove('hidden');
+      }
+
       // Abilita bypass locale su localhost o protocollo file:
       const isLocalHost = ['localhost', '127.0.0.1'].includes(window.location.hostname) || window.location.protocol === 'file:';
       if (isLocalHost && devBypassContainer && devBypassBtn) {
