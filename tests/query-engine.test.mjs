@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
-import { buildIndex, parseQuery, answer } from "../public/js/query-engine.js";
+import { buildIndex, parseQuery, answer, resolveRoomLocation } from "../public/js/query-engine.js";
 
 const db = JSON.parse(readFileSync(new URL("../public/data/orario_completo.json", import.meta.url)));
 const idx = buildIndex(db);
@@ -360,6 +360,49 @@ assert.equal(r.p.space.code, "107");
 assert.equal(r.p.space.floor, 1);
 assert.ok(r.a.speech.includes("1° piano"));
 console.log("✓ Dov'è Ufficio Vicepresidenza (Locale 107):", r.a.speech);
+
+console.log("\n=== 11. Test Risoluzione Locali & Servizi Speciali (Systematic Debugging) ===");
+// Ascensore
+r = ask("dov'è l'ascensore");
+assert.equal(r.p.intent, "spazio_mappa");
+assert.equal(r.a.rooms[0], "ASC");
+const ascLoc = resolveRoomLocation(r.a.rooms[0]);
+assert.ok(ascLoc);
+assert.equal(ascLoc.code, "ASC");
+assert.equal(ascLoc.floor, 0);
+console.log("✓ Ascensore risolto:", ascLoc.name, "-> Piano", ascLoc.floor);
+
+// Bagni / WC
+r = ask("dov'è il bagno");
+assert.equal(r.p.intent, "spazio_mappa");
+assert.equal(r.a.rooms[0], "WC");
+const wcLoc = resolveRoomLocation(r.a.rooms[0]);
+assert.ok(wcLoc);
+assert.equal(wcLoc.code, "WC");
+console.log("✓ Servizi Igienici (WC) risolti:", wcLoc.name);
+
+// Scale
+r = ask("dove sono le scale");
+assert.equal(r.p.intent, "spazio_mappa");
+assert.equal(r.a.rooms[0], "SCALA");
+const scalaLoc = resolveRoomLocation(r.a.rooms[0]);
+assert.ok(scalaLoc);
+assert.equal(scalaLoc.code, "SCALA");
+console.log("✓ Scale risolte:", scalaLoc.name);
+
+// Aula Pot-Disp
+const potLoc = resolveRoomLocation("Aula Pot-Disp");
+assert.ok(potLoc);
+assert.equal(potLoc.code, "028");
+console.log("✓ Aula Pot-Disp risolta su Locale 028 (Aula Insegnanti)");
+
+// Nuovi locali aggiunti a MAP_DIRECTORY
+for (const code of ["037", "137", "211", "212", "214", "221"]) {
+  const loc = resolveRoomLocation(code);
+  assert.ok(loc, `Locale ${code} deve essere risolto da MAP_DIRECTORY`);
+  assert.equal(loc.code, code);
+}
+console.log("✓ Tutti i locali 037, 137, 211, 212, 214, 221 verificati con successo");
 
 console.log("\n TUTTI I TEST SONO PASSATI CON SUCCESSO! ");
 

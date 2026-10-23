@@ -264,33 +264,34 @@ export function findExplicitDate(q) {
 export const MAP_DIRECTORY = [
   // Piano Terra (0)
   { code: "INGRESSO", name: "Ingresso Principale / Atrio", floor: 0, floorLabel: "PIANO TERRA", wing: "Corpo Sud-Ovest (Locale 029)", keywords: ["ingresso", "entrata", "atrio", "portineria", "accoglienza"] },
-  { code: "004", name: "Palestra", floor: 0, floorLabel: "PIANO TERRA", wing: "Blocco Ovest (Locale 004)", keywords: ["palestra", "campo da gioco", "educazione fisica", "scienze motorie"] },
-  { code: "005-006", name: "Spogliatoi Palestra", floor: 0, floorLabel: "PIANO TERRA", wing: "Blocco Ovest (Locali 005-008)", keywords: ["spogliatoio", "spogliatoi"] },
-  { code: "009", name: "Infermeria", floor: 0, floorLabel: "PIANO TERRA", wing: "Blocco Ovest, lato Palestra (Locale 009)", keywords: ["infermeria", "primo soccorso", " pronto soccorso", "medicheria"] },
+  { code: "037", name: "Entrata Palestra", floor: 0, floorLabel: "PIANO TERRA", wing: "Blocco Ovest, Accesso Palestra (Locale 037)", keywords: ["037", "entrata palestra", "accesso palestra", "ingresso palestra"] },
+  { code: "004", name: "Palestra", floor: 0, floorLabel: "PIANO TERRA", wing: "Blocco Ovest (Locale 004)", keywords: ["004", "palestra", "campo da gioco", "educazione fisica", "scienze motorie"] },
+  { code: "005-006", name: "Spogliatoi Palestra", floor: 0, floorLabel: "PIANO TERRA", wing: "Blocco Ovest (Locali 005-008)", keywords: ["005", "006", "005-006", "spogliatoio", "spogliatoi"] },
+  { code: "009", name: "Infermeria", floor: 0, floorLabel: "PIANO TERRA", wing: "Blocco Ovest, lato Palestra (Locale 009)", keywords: ["009", "infermeria", "primo soccorso", "pronto soccorso", "medicheria"] },
   { code: "014", name: "Aula 014", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Nord-Est", keywords: ["014"] },
   { code: "015", name: "Aula 015", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Est", keywords: ["015"] },
   { code: "016", name: "Aula 016", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Est", keywords: ["016"] },
   { code: "017", name: "Aula 017", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Centro-Est", keywords: ["017"] },
   { code: "018", name: "Lab. Linux 018", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Nord (Locale 018)", keywords: ["018", "lab linux", "laboratorio linux"] },
   { code: "019", name: "Aula 019", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Nord-Ovest", keywords: ["019"] },
-  { code: "020", name: "Lab. Multimediale 020-021", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Ovest (Locali 020-021)", keywords: ["020", "021", "multimediale", "lab multimediale"] },
+  { code: "020-021", name: "Lab. Multimediale 020-021", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Ovest (Locali 020-021)", keywords: ["020", "021", "020-021", "multimediale", "lab multimediale"] },
   { code: "022", name: "Aula 022", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Sud-Ovest", keywords: ["022"] },
   { code: "024", name: "Lab 1 (Cod. 024)", floor: 0, floorLabel: "PIANO TERRA", wing: "Blocco Est, lato Officina (Locale 024)", keywords: ["024", "lab 1", "laboratorio 1"] },
   { code: "025", name: "Lab 2 (Cod. 025)", floor: 0, floorLabel: "PIANO TERRA", wing: "Blocco Est, lato Officina (Locale 025)", keywords: ["025", "lab 2", "laboratorio 2"] },
   { code: "026", name: "Officina Meccanica", floor: 0, floorLabel: "PIANO TERRA", wing: "Blocco Est (Locale 026 • 246 m²)", keywords: ["026", "officina", "officina meccanica", "macchine utensili", "torneria"] },
-  { code: "028", name: "Aula Insegnanti", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Sud (Locale 028 • ex Mensa)", keywords: ["028", "aula insegnanti", "sala insegnanti", "sala docenti", "sala professori", "aula docenti", "docenti", "mensa"] },
+  { code: "028", name: "Aula Insegnanti", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Sud (Locale 028 • ex Mensa)", keywords: ["028", "aula insegnanti", "sala insegnanti", "sala docenti", "sala professori", "aula docenti", "docenti", "mensa", "pot disp", "disposizione"] },
   { code: "030", name: "Lab 5 (Cod. 030)", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Ovest (Locale 030)", keywords: ["030", "lab 5", "laboratorio 5"] },
   { code: "031", name: "Lab 4 (Cod. 031)", floor: 0, floorLabel: "PIANO TERRA", wing: "Ala Nord-Ovest (Locale 031)", keywords: ["031", "lab 4", "laboratorio 4"] },
-  { code: "033", name: "Agorà / Spazio Studio", floor: 0, floorLabel: "PIANO TERRA", wing: "Corpo Centrale (Locali 032-033)", keywords: ["032", "033", "agora", "spazio studio"] },
+  { code: "033", name: "Agorà / Spazio Studio", floor: 0, floorLabel: "PIANO TERRA", wing: "Corpo Centrale (Locali 032-033)", keywords: ["032", "033", "032-033", "agora", "spazio studio"] },
   { code: "035", name: "Segreteria Didattica", floor: 0, floorLabel: "PIANO TERRA", wing: "Corpo Centrale-Est (Locale 035)", keywords: ["035", "segreteria didattica", "didattica", "accoglienza", "sportello didattica"] },
-  { code: "058", name: "Biblioteca d'Istituto", floor: 0, floorLabel: "PIANO TERRA", wing: "Corpo Centrale (Locali 058-059)", keywords: ["058", "059", "biblioteca", "sala lettura"] },
+  { code: "058-059", name: "Biblioteca d'Istituto", floor: 0, floorLabel: "PIANO TERRA", wing: "Corpo Centrale (Locali 058-059)", keywords: ["058", "059", "058-059", "biblioteca", "sala lettura"] },
   { code: "060", name: "Vicepresidenza", floor: 0, floorLabel: "PIANO TERRA", wing: "Corpo Centrale-Sud (Locale 060)", keywords: ["060", "vicepresidenza", "ufficio vicepresidenza", "vicepresidenza terra"] },
   { code: "069", name: "Area Ristoro / Bar", floor: 0, floorLabel: "PIANO TERRA", wing: "Atrio Sud, vicino all'Ingresso (Locale 069)", keywords: ["069", "area ristoro", "ristoro", "bar", "caffetteria", "macchinette"] },
   { code: "070", name: "Archivio", floor: 0, floorLabel: "PIANO TERRA", wing: "Lato Est (Locale 070)", keywords: ["070", "archivio"] },
-  { code: "ASC", name: "Ascensore Centrale", floor: 0, floorLabel: "PIANO TERRA", wing: "Corpo Centrale (Locale 046 — collega Piani 0, 1 e 2)", keywords: ["046", "ascensore"] },
+  { code: "ASC", name: "Ascensore Centrale", floor: 0, floorLabel: "PIANO TERRA", wing: "Corpo Centrale (Locale 046 — collega Piani 0, 1 e 2)", keywords: ["asc", "046", "ascensore"] },
 
   // Primo Piano (1)
-  { code: "104-106", name: "Segreteria & Uffici Dirigenza", floor: 1, floorLabel: "1° PIANO", wing: "Ala Sud-Ovest (Locali 104, 105, 106, 138)", keywords: ["104", "105", "106", "138", "segreteria", "uffici", "ufficio", "presidenza", "dirigenza"] },
+  { code: "104-106", name: "Segreteria & Uffici Dirigenza", floor: 1, floorLabel: "1° PIANO", wing: "Ala Sud-Ovest (Locali 104, 105, 106, 138)", keywords: ["104", "105", "106", "138", "104-106", "uffici", "segreteria", "ufficio", "presidenza", "dirigenza"] },
   { code: "107", name: "Ufficio Vicepresidenza", floor: 1, floorLabel: "1° PIANO", wing: "Ala Sud-Ovest (Locale 107)", keywords: ["107", "ufficio vicepresidenza", "vicepresidenza primo piano", "vicepresidenza 107"] },
   { code: "110", name: "Aula 110", floor: 1, floorLabel: "1° PIANO", wing: "Ala Nord-Est", keywords: ["110"] },
   { code: "111", name: "Aula 111", floor: 1, floorLabel: "1° PIANO", wing: "Ala Est", keywords: ["111"] },
@@ -298,7 +299,7 @@ export const MAP_DIRECTORY = [
   { code: "113", name: "Aula 113", floor: 1, floorLabel: "1° PIANO", wing: "Ala Centro-Est", keywords: ["113"] },
   { code: "114", name: "Aula 114", floor: 1, floorLabel: "1° PIANO", wing: "Ala Sud-Est", keywords: ["114"] },
   { code: "115", name: "Aula 115", floor: 1, floorLabel: "1° PIANO", wing: "Ala Sud", keywords: ["115"] },
-  { code: "116", name: "Lab. CAD-Automazione 116-117", floor: 1, floorLabel: "1° PIANO", wing: "Ala Ovest (Locali 116-117)", keywords: ["116", "117", "cad", "automazione"] },
+  { code: "116-117", name: "Lab. CAD-Automazione 116-117", floor: 1, floorLabel: "1° PIANO", wing: "Ala Ovest (Locali 116-117)", keywords: ["116", "117", "116-117", "cad", "automazione"] },
   { code: "118", name: "Lab. Costruzioni 118", floor: 1, floorLabel: "1° PIANO", wing: "Ala Nord-Ovest (Locale 118)", keywords: ["118", "costruzioni"] },
   { code: "119", name: "Aula 119", floor: 1, floorLabel: "1° PIANO", wing: "Ala Nord", keywords: ["119"] },
   { code: "125", name: "Lab. Chimica 125", floor: 1, floorLabel: "1° PIANO", wing: "Blocco Est (Locale 125)", keywords: ["125", "chimica"] },
@@ -309,6 +310,7 @@ export const MAP_DIRECTORY = [
   { code: "131", name: "Aula Informale 131", floor: 1, floorLabel: "1° PIANO", wing: "Ala Ovest (Locale 131)", keywords: ["131"] },
   { code: "134", name: "Aula 134", floor: 1, floorLabel: "1° PIANO", wing: "Ala Sud-Ovest (Locale 134)", keywords: ["134"] },
   { code: "135", name: "Lab. Fisica 135", floor: 1, floorLabel: "1° PIANO", wing: "Corpo Centrale-Sud (Locale 135)", keywords: ["135", "fisica"] },
+  { code: "137", name: "Spazio Informale 137", floor: 1, floorLabel: "1° PIANO", wing: "Corpo Connettivo Centrale (Locale 137)", keywords: ["137", "informale 137", "spazio 137"] },
 
   // Secondo Piano (2)
   { code: "201", name: "Aula 201", floor: 2, floorLabel: "2° PIANO", wing: "Ala Nord-Est", keywords: ["201"] },
@@ -316,30 +318,60 @@ export const MAP_DIRECTORY = [
   { code: "203", name: "Aula 203", floor: 2, floorLabel: "2° PIANO", wing: "Ala Est", keywords: ["203"] },
   { code: "204", name: "Aula 204", floor: 2, floorLabel: "2° PIANO", wing: "Ala Sud-Est", keywords: ["204"] },
   { code: "205", name: "Aula 205", floor: 2, floorLabel: "2° PIANO", wing: "Ala Sud", keywords: ["205"] },
-  { code: "206", name: "Lab. Informatica 206-207", floor: 2, floorLabel: "2° PIANO", wing: "Ala Ovest (Locali 206-207)", keywords: ["206", "207", "lab informatica", "laboratorio informatica"] },
+  { code: "206-207", name: "Lab. Informatica 206-207", floor: 2, floorLabel: "2° PIANO", wing: "Ala Ovest (Locali 206-207)", keywords: ["206", "207", "206-207", "lab informatica", "laboratorio informatica"] },
   { code: "208", name: "Lab. Elettronica 208", floor: 2, floorLabel: "2° PIANO", wing: "Ala Nord-Ovest (Locale 208)", keywords: ["208", "elettronica", "elettrotecnica"] },
   { code: "209", name: "Aula 209", floor: 2, floorLabel: "2° PIANO", wing: "Ala Centro-Est", keywords: ["209"] },
   { code: "210", name: "Lab. Lingue 210", floor: 2, floorLabel: "2° PIANO", wing: "Ala Nord (Locale 210)", keywords: ["210", "lingue", "linguistico"] },
+  { code: "211", name: "Spazio Informale 211", floor: 2, floorLabel: "2° PIANO", wing: "Ala Ovest (Locale 211)", keywords: ["211", "informale 211"] },
+  { code: "212", name: "Spazio Informale 212", floor: 2, floorLabel: "2° PIANO", wing: "Ala Ovest (Locale 212)", keywords: ["212", "informale 212"] },
   { code: "213", name: "Aula Informale 213", floor: 2, floorLabel: "2° PIANO", wing: "Ala Ovest (Locale 213)", keywords: ["213"] },
+  { code: "214", name: "Spazio Lab 214", floor: 2, floorLabel: "2° PIANO", wing: "Ala Ovest (Locale 214)", keywords: ["214", "lab 214", "spazio lab"] },
+  { code: "221", name: "Spazio Studio 221", floor: 2, floorLabel: "2° PIANO", wing: "Corpo Centrale (Locale 221)", keywords: ["221", "studio 221", "spazio studio 221"] },
   { code: "223", name: "Lab. Sistemi 223", floor: 2, floorLabel: "2° PIANO", wing: "Ala Sud (Locale 223)", keywords: ["223", "sistemi"] },
   { code: "224", name: "Aula 224", floor: 2, floorLabel: "2° PIANO", wing: "Ala Sud-Ovest (Locale 224)", keywords: ["224"] },
+
+  // Servizi Comuni
+  { code: "WC", name: "Servizi Igienici (WC)", floor: 0, floorLabel: "TUTTI I PIANI", wing: "Dislocati su tutti i piani (Blocco Ovest, Est e Centrale)", keywords: ["wc", "bagno", "bagni", "toilette", "servizi igienici", "servizi"] },
+  { code: "SCALA", name: "Scale Principali", floor: 0, floorLabel: "TUTTI I PIANI", wing: "Corpo Centrale, Ala Nord, Ala Est e Ala Ovest", keywords: ["scala", "scale", "gradini"] },
 ];
 
 export function resolveRoomLocation(roomStr) {
   if (!roomStr) return null;
-  const norm = normalize(roomStr);
-  const numMatch = roomStr.match(/\b(\d{3})\b/);
+  const raw = String(roomStr).trim();
+  const norm = normalize(raw);
+
+  // 1. Match diretto su codice locale esatto (case-insensitive) o keyword esatta
+  const directHit = MAP_DIRECTORY.find((m) =>
+    m.code.toUpperCase() === raw.toUpperCase() ||
+    m.code.toLowerCase() === norm ||
+    m.keywords.includes(norm)
+  );
+  if (directHit) return directHit;
+
+  // 2. Alias aule orario scolastico
+  if (/\b(pot-disp|potenziamento|disposizione)\b/i.test(raw) || norm.includes("pot disp")) {
+    const docentiHit = MAP_DIRECTORY.find((m) => m.code === "028");
+    if (docentiHit) return docentiHit;
+  }
+  if (/rizzarda/i.test(raw)) {
+    return { code: "RIZZARDA", name: "Sede Esterna Rizzarda", floor: -1, floorLabel: "SEDE ESTERNA", wing: "Succursale Rizzarda" };
+  }
+  if (/palestra/i.test(raw) && !/entrata|spogliatoi/i.test(raw)) {
+    return MAP_DIRECTORY.find((m) => m.code === "004");
+  }
+
+  // 3. Estrazione codice numerico a 3 cifre
+  const numMatch = raw.match(/\b(\d{3})\b/);
   if (numMatch) {
     const num = numMatch[1];
     const hit = MAP_DIRECTORY.find((m) => m.code === num || m.keywords.includes(num));
     if (hit) return hit;
     const f = num[0] === "1" ? 1 : num[0] === "2" ? 2 : 0;
     const fl = f === 1 ? "1° PIANO" : f === 2 ? "2° PIANO" : "PIANO TERRA";
-    return { code: num, name: roomStr, floor: f, floorLabel: fl, wing: "Edificio Principale" };
+    return { code: num, name: raw, floor: f, floorLabel: fl, wing: "Edificio Principale" };
   }
-  if (/palestra/i.test(roomStr)) {
-    return MAP_DIRECTORY.find((m) => m.code === "004");
-  }
+
+  // 4. Scansione parole chiave nel testo normalizzato
   for (const item of MAP_DIRECTORY) {
     if (item.keywords.some((kw) => new RegExp(`(^|\\s)${kw}(\\s|$)`).test(norm))) {
       return item;
@@ -364,7 +396,7 @@ function findMapSpace(qNorm) {
 
   for (const item of MAP_DIRECTORY) {
     for (const kw of item.keywords) {
-      if (kw.length >= 3 && !/^\d{3}$/.test(kw) && new RegExp(`(^|\\s)${kw}(\\s|$)`).test(qNorm)) {
+      if ((kw.length >= 3 || kw === "wc") && !/^\d{3}$/.test(kw) && new RegExp(`(^|\\s)${kw}(\\s|$)`).test(qNorm)) {
         let score = kw.length;
         if (mentionsPiano1 && item.floor === 1) score += 50;
         if (mentionsPiano2 && item.floor === 2) score += 50;
@@ -553,9 +585,14 @@ export function parseQuery(text, idx, ctx = {}) {
     return { ...base, intent: "docente", docente: docs[0], isSelf: me.length === 1 && me[0].id === docs[0].id };
   }
   if (classi.length) return { ...base, intent: "classe", classi };
-  if (rooms.length) return { ...base, intent: "aula", rooms };
 
   const mapSpace = findMapSpace(q0);
+  if (isWhere && mapSpace && mapSpace.keywords.some((kw) => kw.includes(" ") && q0.includes(kw))) {
+    return { ...base, intent: "spazio_mappa", space: mapSpace };
+  }
+
+  if (rooms.length) return { ...base, intent: "aula", rooms };
+
   if (mapSpace) return { ...base, intent: "spazio_mappa", space: mapSpace };
 
   const me = ctx.me ? scoreDocenti(normalize(ctx.me), idx) : [];

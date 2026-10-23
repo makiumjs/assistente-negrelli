@@ -1391,11 +1391,45 @@
     }, { passive: false });
 
     function expandHighlightCodes(codes) {
-      const out = new Set(codes);
-      if (out.has('020') || out.has('021')) { out.add('020'); out.add('021'); }
-      if (out.has('116') || out.has('117')) { out.add('116'); out.add('117'); }
-      if (out.has('206') || out.has('207')) { out.add('206'); out.add('207'); }
-      if (out.has('058') || out.has('059')) { out.add('058'); out.add('059'); }
+      const out = new Set();
+      (codes || []).forEach(c => {
+        if (!c) return;
+        const norm = String(c).trim().toUpperCase();
+        out.add(norm);
+        if (norm === '020' || norm === '021' || norm === '020-021') {
+          out.add('020'); out.add('021'); out.add('020-021');
+        }
+        if (norm === '116' || norm === '117' || norm === '116-117') {
+          out.add('116'); out.add('117'); out.add('116-117');
+        }
+        if (norm === '206' || norm === '207' || norm === '206-207') {
+          out.add('206'); out.add('207'); out.add('206-207');
+        }
+        if (norm === '058' || norm === '059' || norm === '058-059') {
+          out.add('058'); out.add('059'); out.add('058-059');
+        }
+        if (norm === '005' || norm === '006' || norm === '005-006') {
+          out.add('005'); out.add('006'); out.add('005-006');
+        }
+        if (norm === '032' || norm === '033' || norm === '032-033') {
+          out.add('032'); out.add('033'); out.add('032-033');
+        }
+        if (norm === '211' || norm === '212' || norm === '211-212') {
+          out.add('211'); out.add('212'); out.add('211-212');
+        }
+        if (['104', '105', '106', '138', '104-106', 'UFFICI'].includes(norm)) {
+          out.add('104'); out.add('105'); out.add('106'); out.add('138'); out.add('104-106'); out.add('UFFICI');
+        }
+        if (norm === 'ASC' || norm === '046') {
+          out.add('ASC'); out.add('046');
+        }
+        if (norm === '004' || norm === 'PALESTRA') {
+          out.add('004'); out.add('PALESTRA');
+        }
+        if (norm === 'SCALA' || norm === 'SCALE' || norm === '052') {
+          out.add('SCALA'); out.add('SCALA N'); out.add('SCALA E'); out.add('SCALA L'); out.add('052');
+        }
+      });
       return [...out];
     }
 
@@ -1431,7 +1465,8 @@
 
       floorObj.rooms.forEach(r => {
         if (r.cat === 'vuoto') return;
-        const isSelected = highlightedCodes.includes(r.code);
+        const isSelected = highlightedCodes.includes(r.code) ||
+          highlightedCodes.some(c => c === r.code || (c.includes('-') && c.split('-').includes(r.code)) || (r.code.includes('-') && r.code.split('-').includes(c)));
 
         const g = document.createElementNS(ns, "g");
         g.setAttribute("class", `room-pin${isSelected ? " selected" : ""}`);
