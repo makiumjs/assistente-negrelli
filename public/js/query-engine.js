@@ -511,6 +511,14 @@ export function parseQuery(text, idx, ctx = {}) {
   const isWhere = /\b(dove|dov e|che piano|quale piano|mappa|posizione|ubicazione|raggiung|in che aula|quale aula|che aula)\b/.test(q0);
   const base = { day, hour, realtime, raw: text, now, isProssimo, targetDateStr: targetDateYMD, sospensione, isWhere, qNorm: q0 };
 
+  // Controllo per Richiesta Aiuto / Domande Possibili
+  const isHelp =
+    /\b(quali\s+(?:sono\s+le\s+)?domande(?:\s+posso\s+farti)?|domande\s+possibili|cosa\s+posso\s+(?:chiederti|chiedere|domandarti|fare)|cosa\s+sai\s+fare|cosa\s+puoi\s+fare|esempi\s+(?:di\s+)?domande|aiuto|help|istruzioni|come\s+funziona|come\s+ti\s+uso)\b/i.test(q0);
+
+  if (isHelp) {
+    return { ...base, intent: "aiuto", queryText: q0 };
+  }
+
   // Controllo per le Attività (Collegi docenti, Consigli di classe, Scrutini, Colloqui, ecc.)
   const isAttivita = /\b(attivita|impegni|collegio|collegi|consiglio|consigli|cdc|scrutini|scrutinio|colloqui|colloquio|glo|pdp|pei|dipartimenti|dipartimento|esami|idoneita|debito|debiti|convocazion[ei]|odg|ordine del giorno)\b/.test(q0);
 
@@ -1035,6 +1043,60 @@ function answerSpazioMappa(p) {
     note: `Locale individuato sulle planimetrie ufficiali dell'istituto (${sp.floorLabel}).`,
     speech: `${sp.name} si trova al ${sp.floorLabel.toLowerCase()}, ${sp.wing}.`,
     rooms: [sp.code],
+  };
+}
+
+function answerAiuto(p) {
+  return {
+    title: "Guida alle Domande Possibili",
+    badge: "GUIDA • COMANDI DISPONIBILI",
+    lines: [
+      {
+        when: "Consigli CdC",
+        main: "Quando è il consiglio di classe della 4ITA?",
+        sub: "Anche: «Consigli di classe a novembre», «ODG consigli di classe», «Consiglio 1A»",
+        query: "quando è il consiglio di classe della 4ITA",
+      },
+      {
+        when: "Docenti",
+        main: "Cosa fa Curtolo domani alla terza ora?",
+        sub: "Anche: «Cosa ho oggi?» (salva il tuo cognome con 👤), «Cassarino lunedì ha disposizione?»",
+        query: "cosa fa Curtolo domani alla terza ora",
+      },
+      {
+        when: "Classi",
+        main: "Dove si trova la 4ITA alla terza ora?",
+        sub: "Anche: «Orario 3MM mercoledì», «Chi ha la 4EE adesso?»",
+        query: "dove si trova la 4ITA alla terza ora",
+      },
+      {
+        when: "Aule Libere",
+        main: "Quali laboratori sono liberi mercoledì alla 2ª ora?",
+        sub: "Anche: «Chi c'è in palestra martedì?», «Quali aule sono libere lunedì?»",
+        query: "quali laboratori sono liberi mercoledì alla 2ª ora",
+      },
+      {
+        when: "Mappa Piani",
+        main: "Dov'è il laboratorio di chimica?",
+        sub: "Anche: «Dov'è l'ufficio vicepresidenza?», «Dov'è la biblioteca?», «Dov'è l'ascensore?»",
+        query: "dov'è il laboratorio di chimica",
+      },
+      {
+        when: "Calendario",
+        main: "Quando iniziano le vacanze di Natale?",
+        sub: "Anche: «Qual è il prossimo ponte?», «Quando finisce la scuola?», «Carnevale»",
+        query: "quando iniziano le vacanze di Natale",
+      },
+      {
+        when: "Collegiali",
+        main: "Quando è il prossimo collegio docenti?",
+        sub: "Anche: «Quando ci sono i colloqui generali?», «Quando era il GLO della 4ITA?»",
+        query: "quando è il prossimo collegio docenti",
+      },
+    ],
+    note: "Tocca o clicca direttamente su una delle domande sopra per visualizzare subito la risposta.",
+    speech: "Ecco le principali domande che puoi pormi: puoi chiedermi l'orario di lezioni e docenti, le aule libere, la posizione degli spazi con la mappa dei piani, il calendario scolastico con ponti e vacanze, o le convocazioni dei consigli di classe.",
+    rooms: [],
   };
 }
 
@@ -1766,6 +1828,8 @@ export function answer(p, idx, ctx = {}) {
   }
 
   switch (p.intent) {
+    case "aiuto":
+      return answerAiuto(p);
     case "docente":
       return answerDocente(p, idx);
     case "classe":

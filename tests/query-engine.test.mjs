@@ -458,5 +458,18 @@ assert.ok(aNov.speech.includes("ordine del giorno dei consigli di classe"));
 assert.ok(aNov.speech.includes("PDP e PEI"));
 console.log("✓ Ordine del Giorno CdC:", aNov.speech);
 
+console.log("\n=== 13. Test Guida alle Domande Possibili (Help) ===");
+for (const helpQ of ["quali domande posso farti?", "domande possibili", "cosa posso chiederti", "cosa posso chiedere?", "esempi di domande", "cosa sai fare?"]) {
+  const rHelp = ask(helpQ);
+  assert.equal(rHelp.p.intent, "aiuto", `Query "${helpQ}" deve avere intent "aiuto"`);
+  assert.equal(rHelp.a.title, "Guida alle Domande Possibili");
+  assert.equal(rHelp.a.badge, "GUIDA • COMANDI DISPONIBILI");
+  assert.ok(rHelp.a.lines.length >= 7);
+  assert.ok(rHelp.a.lines.some((l) => l.when === "Consigli CdC"));
+  assert.ok(rHelp.a.lines.some((l) => l.when === "Mappa Piani"));
+  assert.ok(rHelp.a.lines.every((l) => Boolean(l.query)));
+}
+console.log("✓ Guida alle domande verificata con successo per tutte le varianti");
+
 console.log("\n TUTTI I TEST SONO PASSATI CON SUCCESSO! ");
 

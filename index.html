@@ -544,6 +544,23 @@
       border-color: var(--teal-primary);
     }
 
+    .row.clickable-query {
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      transition: background 0.15s ease, transform 0.1s ease;
+      touch-action: manipulation;
+    }
+
+    .row.clickable-query:hover {
+      background: rgba(13, 148, 136, 0.08);
+      transform: translateX(2px);
+    }
+
+    .row.clickable-query:focus-visible {
+      outline: 2px solid var(--teal-primary);
+      outline-offset: 2px;
+    }
+
     .row .main {
       font-size: 15px;
       font-weight: 600;
@@ -1768,6 +1785,23 @@
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
               triggerMapSwitch(e);
+            }
+          });
+        } else if (l.query) {
+          row.classList.add('clickable-query');
+          row.setAttribute('role', 'button');
+          row.setAttribute('tabindex', '0');
+          row.title = `Tappa per chiedere: "${l.query}"`;
+          const runQuery = (e) => {
+            e.stopPropagation();
+            inputField.value = l.query;
+            handleQuery(l.query);
+          };
+          row.addEventListener('click', runQuery);
+          row.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              runQuery(e);
             }
           });
         }
