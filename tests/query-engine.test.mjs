@@ -404,5 +404,59 @@ for (const code of ["037", "137", "211", "212", "214", "221"]) {
 }
 console.log("✓ Tutti i locali 037, 137, 211, 212, 214, 221 verificati con successo");
 
+console.log("\n=== 12. Test Convocazioni Consigli di Classe Novembre 2026 (Comunicato n. 124) ===");
+const novNow = new Date("2026-11-06T10:00:00"); // 6 novembre 2026
+
+// 1. Prossimo CdC 4ITA a novembre
+let pNov = parseQuery("prossimo consiglio di classe della 4ITA", idx, { now: novNow });
+let aNov = answer(pNov, idx, { now: novNow });
+assert.equal(pNov.intent, "attivita");
+assert.equal(pNov.subType, "consigli_classe");
+assert.equal(aNov.title, "Prossimo Consiglio di Classe 4ITA");
+assert.ok(aNov.speech.includes("Giovedì 19 novembre 2026 alle 16:00"));
+assert.ok(aNov.speech.includes("genitori e studenti"));
+assert.ok(aNov.note.includes("Comunicato n. 124"));
+console.log("✓ CdC 4ITA Novembre:", aNov.speech);
+
+// 2. CdC Sezione Colotti (1A)
+pNov = parseQuery("prossimo consiglio di classe 1A", idx, { now: novNow });
+aNov = answer(pNov, idx, { now: novNow });
+assert.equal(aNov.title, "Prossimo Consiglio di Classe 1A");
+assert.ok(aNov.speech.includes("Lunedì 9 novembre 2026 alle 14:30"));
+assert.ok(aNov.speech.includes("Lim"));
+console.log("✓ CdC 1A (Colotti):", aNov.speech);
+
+// 3. CdC Sezione Rizzarda (5IAMI)
+pNov = parseQuery("prossimo consiglio di classe 5IAMI", idx, { now: novNow });
+aNov = answer(pNov, idx, { now: novNow });
+assert.equal(aNov.title, "Prossimo Consiglio di Classe 5IAMI");
+assert.ok(aNov.speech.includes("Mercoledì 11 novembre 2026 alle 17:30"));
+assert.ok(aNov.speech.includes("LIM 1"));
+console.log("✓ CdC 5IAMI (Rizzarda):", aNov.speech);
+
+// 4. CdC Corso Serale Negrelli (5CMS)
+pNov = parseQuery("prossimo consiglio di classe 5CMS", idx, { now: novNow });
+aNov = answer(pNov, idx, { now: novNow });
+assert.equal(aNov.title, "Prossimo Consiglio di Classe 5CMS");
+assert.ok(aNov.speech.includes("Martedì 24 novembre 2026 alle 16:00"));
+console.log("✓ CdC 5CMS (Serale Negrelli):", aNov.speech);
+
+// 5. Panoramica calendario novembre (senza classe)
+pNov = parseQuery("quando sono i consigli di classe a novembre", idx, { now: novNow });
+aNov = answer(pNov, idx, { now: novNow });
+assert.equal(aNov.badge, "COMUNICATO N. 124");
+assert.equal(aNov.lines.length, 11);
+assert.ok(aNov.speech.includes("dal 9 al 24 novembre"));
+assert.ok(aNov.speech.includes("genitori e studenti"));
+console.log("✓ Panoramica CdC Novembre:", aNov.speech);
+
+// 6. Ordine del giorno Consigli di Classe
+pNov = parseQuery("ordine del giorno consigli di classe", idx, { now: novNow });
+aNov = answer(pNov, idx, { now: novNow });
+assert.equal(aNov.title, "Ordine del Giorno Consigli di Classe");
+assert.ok(aNov.speech.includes("ordine del giorno dei consigli di classe"));
+assert.ok(aNov.speech.includes("PDP e PEI"));
+console.log("✓ Ordine del Giorno CdC:", aNov.speech);
+
 console.log("\n TUTTI I TEST SONO PASSATI CON SUCCESSO! ");
 

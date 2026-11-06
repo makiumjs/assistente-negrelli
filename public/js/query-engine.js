@@ -512,14 +512,14 @@ export function parseQuery(text, idx, ctx = {}) {
   const base = { day, hour, realtime, raw: text, now, isProssimo, targetDateStr: targetDateYMD, sospensione, isWhere, qNorm: q0 };
 
   // Controllo per le Attività (Collegi docenti, Consigli di classe, Scrutini, Colloqui, ecc.)
-  const isAttivita = /\b(attivita|impegni|collegio|collegi|consiglio|consigli|cdc|scrutini|scrutinio|colloqui|colloquio|glo|pdp|pei|dipartimenti|dipartimento|esami|idoneita|debito|debiti)\b/.test(q0);
+  const isAttivita = /\b(attivita|impegni|collegio|collegi|consiglio|consigli|cdc|scrutini|scrutinio|colloqui|colloquio|glo|pdp|pei|dipartimenti|dipartimento|esami|idoneita|debito|debiti|convocazion[ei]|odg|ordine del giorno)\b/.test(q0);
 
   if (isAttivita) {
     const isCollegio = /\b(collegio|collegi)\b/.test(q0);
     const isColloqui = /\b(colloqui|colloquio)\b/.test(q0);
     const isScrutini = /\b(scrutini|scrutinio)\b/.test(q0);
     const isGlo = /\b(glo|pei)\b/.test(q0);
-    const isConsigli = /\b(consiglio|consigli|cdc)\b/.test(q0);
+    const isConsigli = /\b(consiglio|consigli|cdc|convocazion[ei]|odg|ordine del giorno)\b/.test(q0);
     const isDipartimenti = /\b(dipartimenti|dipartimento)\b/.test(q0);
     const monthMatch = q0.match(/\b(settembre|ottobre|novembre|dicembre|gennaio|febbraio|marzo|aprile|maggio|giugno)\b/);
     const mese = monthMatch ? monthMatch[1] : null;
@@ -1128,18 +1128,23 @@ function answerAttivita(p, idx, ctx = {}) {
         const lines = nextList.map((m) => ({
           when: m.giorno || m.periodo,
           main: `Ore ${m.ora} • ${m.aula || "Lab. Multimediale"}`,
-          sub: m.periodo ? `${m.periodo}` : "",
+          sub: `${m.sezione ? "Sez. " + m.sezione + " • " : ""}${m.periodo ? m.periodo : ""}${m.comunicato ? " (" + m.comunicato.split(" del")[0] + ")" : ""}`,
         }));
         const targetWhere = target.aula ? ` in ${target.aula}` : "";
         const title = isScrutiniOnly ? `Prossimo Scrutinio ${clsId}` : `Prossimo Consiglio di Classe ${clsId}`;
+        const isNov = /novembre/i.test(target.periodo || "") || /novembre/i.test(target.giorno || "");
+        const extraNote = isNov ? " Negli ultimi 15' il consiglio è aperto alla rappresentanza di genitori e studenti." : "";
+        const extraSpeech = isNov ? " Gli ultimi 15 minuti sono aperti ai rappresentanti di genitori e studenti." : "";
         const speech = isScrutiniOnly
           ? `Il prossimo scrutinio per la ${clsId} è in programma ${target.giorno || target.periodo} alle ore ${target.ora}${targetWhere}.`
-          : `Il prossimo consiglio di classe per la ${clsId} si terrà ${target.giorno || target.periodo} alle ${target.ora}${targetWhere}.`;
+          : `Il prossimo consiglio di classe per la ${clsId} si terrà ${target.giorno || target.periodo} alle ${target.ora}${targetWhere}.${extraSpeech}`;
         return {
           title,
           badge: "PROSSIMA ATTIVITÀ",
           lines,
-          note: `Calendario dal Piano Annuale delle Attività 2026/27 per la classe ${clsId}.`,
+          note: target.comunicato
+            ? `${target.comunicato} per la classe ${clsId}.${extraNote}`
+            : `Calendario dal Piano Annuale delle Attività 2026/27 per la classe ${clsId}.${extraNote}`,
           speech,
           rooms: nextList.map((m) => m.aula).filter(Boolean),
         };
@@ -1149,17 +1154,75 @@ function answerAttivita(p, idx, ctx = {}) {
       const lines = matches.map((m) => ({
         when: m.giorno || m.periodo,
         main: `Ore ${m.ora} • ${m.aula || "Lab. Multimediale"}`,
-        sub: m.periodo ? `${m.periodo}` : "",
+        sub: `${m.sezione ? "Sez. " + m.sezione + " • " : ""}${m.periodo ? m.periodo : ""}${m.comunicato ? " (" + m.comunicato.split(" del")[0] + ")" : ""}`,
       }));
 
       const spokenDates = matches.slice(0, 4).map((m) => `${m.giorno || m.periodo} alle ${m.ora}`).join(", ");
+      const hasNov = matches.some((m) => /novembre/i.test(m.periodo || "") || /novembre/i.test(m.giorno || ""));
       return {
         title,
         badge: "CALENDARIO ATTIVITÀ",
         lines,
-        note: `Calendario dal Piano Annuale delle Attività 2026/27 per la classe ${clsId}.`,
+        note: hasNov
+          ? `Calendario ufficiale (incluso Comunicato n. 124 del 04/11/2026 per novembre). Negli ultimi 15' aperto a genitori e studenti.`
+          : `Calendario dal Piano Annuale delle Attività 2026/27 per la classe ${clsId}.`,
         speech: `I consigli di classe in programma per la ${clsId} sono: ${spokenDates}${matches.length > 4 ? " e altri successivi." : "."}`,
         rooms: matches.map((m) => m.aula).filter(Boolean),
+      };
+    }
+  }
+
+  // 1b. Consigli di classe generali (senza classe: per ordine del giorno, sede o mese)
+  if (p.subType === "consigli_classe" && (!p.classi || p.classi.length === 0)) {
+    const isOdg = /\b(odg|ordine del giorno)\b/i.test(p.queryText || "");
+    if (isOdg) {
+      return {
+        title: "Ordine del Giorno Consigli di Classe",
+        badge: "COMUNICATO N. 124 • NOVEMBRE 2026",
+        lines: [
+          { when: "Punti 1-4", main: "Andamento didattico-disciplinare & Percorsi orientamento (≥30h)", sub: "Approvazione verbale precedente e attività integrative" },
+          { when: "Punti 5-8", main: "Delibera PDP (DSA) & Delibera PEI (L. 104/92)", sub: "Designazione Tutor e prima condivisione P.F.I. (solo sez. Rizzarda)" },
+          { when: "Punti 9-12", main: "PFP Studente-Atleta, provvedimenti disciplinari, FSL (triennio)", sub: "Varie ed eventuali" },
+          { when: "Ultimi 15'", main: "Apertura a Rappresentanti Genitori e Studenti", sub: "Andamento generale didattico-disciplinare e offerte formative" },
+        ],
+        note: "Comunicato n. 124 del 04/11/2026 - Dirigente scolastica Manuela Muliner Biga.",
+        speech: "L'ordine del giorno dei consigli di classe di novembre prevede l'andamento didattico-disciplinare, l'orientamento, la delibera di PDP e PEI, e negli ultimi 15 minuti l'apertura ai rappresentanti di genitori e studenti.",
+        rooms: ["Lab. Multimediale", "Lim"],
+      };
+    }
+
+    let novConsigli = consigli.filter((c) => c.periodo === "Novembre 2026" || /novembre/i.test(c.giorno || ""));
+
+    if (/\b(colotti)\b/i.test(p.queryText || "")) {
+      novConsigli = novConsigli.filter((c) => /colotti/i.test(c.sezione || ""));
+    } else if (/\b(rizzarda)\b/i.test(p.queryText || "")) {
+      novConsigli = novConsigli.filter((c) => /rizzarda/i.test(c.sezione || ""));
+    } else if (/\b(negrelli|forcellini)\b/i.test(p.queryText || "")) {
+      novConsigli = novConsigli.filter((c) => /negrelli/i.test(c.sezione || ""));
+    }
+
+    if (novConsigli.length > 0) {
+      novConsigli = sortActivities(novConsigli);
+      const grouped = {};
+      novConsigli.forEach((c) => {
+        const k = c.giorno || c.data_iso;
+        if (!grouped[k]) grouped[k] = { giorno: c.giorno, sezione: c.sezione, aula: c.aula, items: [] };
+        grouped[k].items.push(c);
+      });
+
+      const lines = Object.values(grouped).map((g) => ({
+        when: g.giorno,
+        main: `Sezione ${g.sezione} • ${g.items.map((it) => it.classe_raw).join(", ")}`,
+        sub: `Dalle ${g.items[0].ora} alle ${g.items[g.items.length - 1].ora} • ${g.aula || "Lab. Multimediale"}`,
+      }));
+
+      return {
+        title: "Consigli di Classe Novembre 2026",
+        badge: "COMUNICATO N. 124",
+        lines,
+        note: "Comunicato n. 124 del 04/11/2026. Gli ultimi 15 minuti di ciascun consiglio sono aperti ai rappresentanti di genitori e studenti.",
+        speech: "I consigli di classe di novembre si terranno dal 9 al 24 novembre: il 9 e 10 per la sede Colotti, l'11 e 12 per la sede Rizzarda, e dal 13 al 24 per la sede Negrelli. Gli ultimi 15 minuti sono aperti ai rappresentanti di genitori e studenti.",
+        rooms: ["Lab. Multimediale", "Lim"],
       };
     }
   }
@@ -1366,6 +1429,26 @@ function answerAttivita(p, idx, ctx = {}) {
           sub: `Ore ${g.ora} • ${g.luogo}`,
         }))
       );
+    }
+    if (meseNorm === "novembre") {
+      const novConsigli = consigli.filter((c) => c.periodo === "Novembre 2026" || /novembre/i.test(c.giorno || ""));
+      if (novConsigli.length) {
+        const grouped = {};
+        novConsigli.forEach((c) => {
+          const k = c.giorno || c.data_iso;
+          if (!grouped[k]) grouped[k] = { giorno: c.giorno, data_iso: c.data_iso, ora: c.ora, sezione: c.sezione, aula: c.aula, count: 0 };
+          grouped[k].count++;
+        });
+        rawLines.push(
+          ...Object.values(grouped).map((g) => ({
+            data_iso: g.data_iso,
+            ora: g.ora,
+            when: g.giorno,
+            main: `Consigli di Classe (Sez. ${g.sezione})`,
+            sub: `${g.count} classi • ${g.aula || "Lab. Multimediale"} (Comunicato n. 124)`,
+          }))
+        );
+      }
     }
     const lines = sortActivities(rawLines);
     return {

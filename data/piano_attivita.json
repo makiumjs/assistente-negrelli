@@ -382,96 +382,6 @@
     {
       "sezione": "Colotti",
       "periodo": "Ottobre 2026",
-      "giorno": "Lunedì 9 novembre 2026",
-      "ora": "14:30",
-      "classe_raw": "1A",
-      "classi": [
-        "1A"
-      ],
-      "aula": "Lim"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Ottobre 2026",
-      "giorno": "Lunedì 9 novembre 2026",
-      "ora": "15;30",
-      "classe_raw": "2A",
-      "classi": [
-        "2A"
-      ],
-      "aula": "Lim"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Ottobre 2026",
-      "giorno": "Lunedì 9 novembre 2026",
-      "ora": "16:30",
-      "classe_raw": "1B",
-      "classi": [
-        "1B"
-      ],
-      "aula": "Lim"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Ottobre 2026",
-      "giorno": "Lunedì 9 novembre 2026",
-      "ora": "17:30",
-      "classe_raw": "2B",
-      "classi": [
-        "2B"
-      ],
-      "aula": "Lim"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Ottobre 2026",
-      "giorno": "Martedì 10 novembre 2026",
-      "ora": "14:30",
-      "classe_raw": "3AAFM",
-      "classi": [
-        "3AAFM"
-      ],
-      "aula": "Lim"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Ottobre 2026",
-      "giorno": "Martedì 10 novembre 2026",
-      "ora": "15;30",
-      "classe_raw": "3BRIM",
-      "classi": [
-        "3BRIM"
-      ],
-      "aula": "Lim"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Ottobre 2026",
-      "giorno": "Martedì 10 novembre 2026",
-      "ora": "16:30",
-      "classe_raw": "4AFM-RIM",
-      "classi": [
-        "4AFM",
-        "4RIM"
-      ],
-      "aula": "Lim"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Ottobre 2026",
-      "giorno": "Martedì 10 novembre 2026",
-      "ora": "17:30",
-      "classe_raw": "5AFM-RIM",
-      "classi": [
-        "5AFM",
-        "5RIM"
-      ],
-      "aula": "Lim"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Ottobre 2026",
       "giorno": "Lunedì 11 gennaio 2027",
       "ora": "14:30",
       "classe_raw": "3AAFM",
@@ -1179,363 +1089,6 @@
       "periodo": "Ottobre 2026",
       "giorno": "Lunedì 12 ottobre 2026",
       "ora": "16:30",
-      "classe_raw": "3-4 MS",
-      "classi": [
-        "3MS",
-        "4MS"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Venerdì 13 novembre 2026",
-      "ora": "14.00",
-      "classe_raw": "1BTA",
-      "classi": [
-        "1BTA"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Venerdì 13 novembre 2026",
-      "ora": "15:00",
-      "classe_raw": "2BTA",
-      "classi": [
-        "2BTA"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Venerdì 13 novembre 2026",
-      "ora": "16:00",
-      "classe_raw": "1BTB",
-      "classi": [
-        "1BTB"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Venerdì 13 novembre 2026",
-      "ora": "17:00",
-      "classe_raw": "2BTB",
-      "classi": [
-        "2BTB"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Venerdì 13 novembre 2026",
-      "ora": "18:00",
-      "classe_raw": "3BSB-AM",
-      "classi": [
-        "3BSB",
-        "3AM"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Lunedì 16 novembre 2026",
-      "ora": "14.00",
-      "classe_raw": "2CAT",
-      "classi": [
-        "2CAT"
-      ],
-      "aula": ""
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Lunedì 16 novembre 2026",
-      "ora": "15:00",
-      "classe_raw": "1ITA",
-      "classi": [
-        "1ITA"
-      ],
-      "aula": ""
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Lunedì 16 novembre 2026",
-      "ora": "16:00",
-      "classe_raw": "2ITA",
-      "classi": [
-        "2ITA"
-      ],
-      "aula": ""
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Lunedì 16 novembre 2026",
-      "ora": "17:00",
-      "classe_raw": "1ITE",
-      "classi": [
-        "1ITE"
-      ],
-      "aula": ""
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Lunedì 16 novembre 2026",
-      "ora": "18:00",
-      "classe_raw": "2ITB",
-      "classi": [
-        "2ITB"
-      ],
-      "aula": ""
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Martedì 17 novembre 2026",
-      "ora": "14.00",
-      "classe_raw": "1MMA",
-      "classi": [
-        "1MMA"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Martedì 17 novembre 2026",
-      "ora": "15:00",
-      "classe_raw": "1MMC",
-      "classi": [
-        "1MMC"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Martedì 17 novembre 2026",
-      "ora": "16:00",
-      "classe_raw": "2MMA",
-      "classi": [
-        "2MMA"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Martedì 17 novembre 2026",
-      "ora": "17:00",
-      "classe_raw": "2MME",
-      "classi": [
-        "2MME"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Martedì 17 novembre 2026",
-      "ora": "18:00",
-      "classe_raw": "3MM",
-      "classi": [
-        "3MM"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Mercoledì 18 novembre\n2026",
-      "ora": "14.00",
-      "classe_raw": "4MM",
-      "classi": [
-        "4MM"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Mercoledì 18 novembre\n2026",
-      "ora": "15:00",
-      "classe_raw": "5MM",
-      "classi": [
-        "5MM"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Mercoledì 18 novembre\n2026",
-      "ora": "16:00",
-      "classe_raw": "3BSA",
-      "classi": [
-        "3BSA"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Mercoledì 18 novembre\n2026",
-      "ora": "17:00",
-      "classe_raw": "4BS-AM",
-      "classi": [
-        "4BS",
-        "4AM"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Mercoledì 18 novembre\n2026",
-      "ora": "18:00",
-      "classe_raw": "5BS-AM",
-      "classi": [
-        "5BS",
-        "5AM"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Giovedì 19 novembre 2026",
-      "ora": "14.00",
-      "classe_raw": "3CAT",
-      "classi": [
-        "3CAT"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Giovedì 19 novembre 2026",
-      "ora": "15:00",
-      "classe_raw": "3ITA",
-      "classi": [
-        "3ITA"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Giovedì 19 novembre 2026",
-      "ora": "16:00",
-      "classe_raw": "4ITA",
-      "classi": [
-        "4ITA"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Giovedì 19 novembre 2026",
-      "ora": "17:00",
-      "classe_raw": "5ITA",
-      "classi": [
-        "5ITA"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Venerdì 20 novembre 2026",
-      "ora": "14.00",
-      "classe_raw": "3ITE",
-      "classi": [
-        "3ITE"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Venerdì 20 novembre 2026",
-      "ora": "15:00",
-      "classe_raw": "4ITB",
-      "classi": [
-        "4ITB"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Venerdì 20 novembre 2026",
-      "ora": "16:00",
-      "classe_raw": "5ITB",
-      "classi": [
-        "5ITB"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Venerdì 20 novembre 2026",
-      "ora": "17:00",
-      "classe_raw": "4EEC",
-      "classi": [
-        "4EEC"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Venerdì 20 novembre 2026",
-      "ora": "18:00",
-      "classe_raw": "5EEC",
-      "classi": [
-        "5EEC"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Lunedì 23 novembre 2026",
-      "ora": "15.00",
-      "classe_raw": "3-4 CS",
-      "classi": [
-        "3CS",
-        "4CS"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Lunedì 23 novembre 2026",
-      "ora": "16:00",
-      "classe_raw": "5CMS",
-      "classi": [
-        "5CMS"
-      ],
-      "aula": "Lab. Multimediale"
-    },
-    {
-      "sezione": "Colotti",
-      "periodo": "Novembre 2026",
-      "giorno": "Lunedì 23 novembre 2026",
-      "ora": "17:00",
       "classe_raw": "3-4 MS",
       "classi": [
         "3MS",
@@ -3061,94 +2614,6 @@
     {
       "sezione": "Rizzarda",
       "periodo": "Ottobre 2026",
-      "giorno": "Mercoledì 11 novembre\n2026",
-      "ora": "14:30",
-      "classe_raw": "1IASS",
-      "classi": [
-        "1IASS"
-      ],
-      "aula": "LIM 1"
-    },
-    {
-      "sezione": "Rizzarda",
-      "periodo": "Ottobre 2026",
-      "giorno": "Mercoledì 11 novembre\n2026",
-      "ora": "15:30",
-      "classe_raw": "2IAMI",
-      "classi": [
-        "2IAMI"
-      ],
-      "aula": "LIM 1"
-    },
-    {
-      "sezione": "Rizzarda",
-      "periodo": "Ottobre 2026",
-      "giorno": "Mercoledì 11 novembre\n2026",
-      "ora": "16:30",
-      "classe_raw": "4IAMI",
-      "classi": [
-        "4IAMI"
-      ],
-      "aula": "LIM 1"
-    },
-    {
-      "sezione": "Rizzarda",
-      "periodo": "Ottobre 2026",
-      "giorno": "Mercoledì 11 novembre\n2026",
-      "ora": "17:30",
-      "classe_raw": "5IAMI",
-      "classi": [
-        "5IAMI"
-      ],
-      "aula": "LIM 1"
-    },
-    {
-      "sezione": "Rizzarda",
-      "periodo": "Ottobre 2026",
-      "giorno": "Giovedì 12 novembre 2026",
-      "ora": "14:30",
-      "classe_raw": "2SSAS",
-      "classi": [
-        "2SSAS"
-      ],
-      "aula": "LIM1"
-    },
-    {
-      "sezione": "Rizzarda",
-      "periodo": "Ottobre 2026",
-      "giorno": "Giovedì 12 novembre 2026",
-      "ora": "15:30",
-      "classe_raw": "3IASS",
-      "classi": [
-        "3IASS"
-      ],
-      "aula": "LIM 1"
-    },
-    {
-      "sezione": "Rizzarda",
-      "periodo": "Ottobre 2026",
-      "giorno": "Giovedì 12 novembre 2026",
-      "ora": "16:30",
-      "classe_raw": "4SSAS",
-      "classi": [
-        "4SSAS"
-      ],
-      "aula": "LIM 1"
-    },
-    {
-      "sezione": "Rizzarda",
-      "periodo": "Ottobre 2026",
-      "giorno": "Giovedì 12 novembre 2026",
-      "ora": "17:30",
-      "classe_raw": "5SSAS",
-      "classi": [
-        "5SSAS"
-      ],
-      "aula": "LIM 1"
-    },
-    {
-      "sezione": "Rizzarda",
-      "periodo": "Ottobre 2026",
       "giorno": "Giovedì 7 gennaio 2027",
       "ora": "14:30",
       "classe_raw": "2IAMI",
@@ -3497,6 +2962,685 @@
         "4SSAS"
       ],
       "aula": "Lab. Multimediale"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Lunedì 9 novembre 2026",
+      "data_iso": "2026-11-09",
+      "ora": "14:30",
+      "classe_raw": "1A",
+      "classi": [
+        "1A"
+      ],
+      "aula": "Lim",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Lunedì 9 novembre 2026",
+      "data_iso": "2026-11-09",
+      "ora": "15:30",
+      "classe_raw": "2A",
+      "classi": [
+        "2A"
+      ],
+      "aula": "Lim",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Lunedì 9 novembre 2026",
+      "data_iso": "2026-11-09",
+      "ora": "16:30",
+      "classe_raw": "1B",
+      "classi": [
+        "1B"
+      ],
+      "aula": "Lim",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Lunedì 9 novembre 2026",
+      "data_iso": "2026-11-09",
+      "ora": "17:30",
+      "classe_raw": "2B",
+      "classi": [
+        "2B"
+      ],
+      "aula": "Lim",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Martedì 10 novembre 2026",
+      "data_iso": "2026-11-10",
+      "ora": "14:30",
+      "classe_raw": "3AAFM",
+      "classi": [
+        "3AAFM"
+      ],
+      "aula": "Lim",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Martedì 10 novembre 2026",
+      "data_iso": "2026-11-10",
+      "ora": "15:30",
+      "classe_raw": "3BRIM",
+      "classi": [
+        "3BRIM"
+      ],
+      "aula": "Lim",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Martedì 10 novembre 2026",
+      "data_iso": "2026-11-10",
+      "ora": "16:30",
+      "classe_raw": "4AFM-RIM",
+      "classi": [
+        "4AFM",
+        "4RIM"
+      ],
+      "aula": "Lim",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Colotti",
+      "periodo": "Novembre 2026",
+      "giorno": "Martedì 10 novembre 2026",
+      "data_iso": "2026-11-10",
+      "ora": "17:30",
+      "classe_raw": "5AFM-RIM",
+      "classi": [
+        "5AFM",
+        "5RIM"
+      ],
+      "aula": "Lim",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Novembre 2026",
+      "giorno": "Mercoledì 11 novembre 2026",
+      "data_iso": "2026-11-11",
+      "ora": "14:30",
+      "classe_raw": "1IASS",
+      "classi": [
+        "1IASS"
+      ],
+      "aula": "LIM 1",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Novembre 2026",
+      "giorno": "Mercoledì 11 novembre 2026",
+      "data_iso": "2026-11-11",
+      "ora": "15:30",
+      "classe_raw": "2IAMI",
+      "classi": [
+        "2IAMI"
+      ],
+      "aula": "LIM 1",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Novembre 2026",
+      "giorno": "Mercoledì 11 novembre 2026",
+      "data_iso": "2026-11-11",
+      "ora": "16:30",
+      "classe_raw": "4IAMI",
+      "classi": [
+        "4IAMI"
+      ],
+      "aula": "LIM 1",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Novembre 2026",
+      "giorno": "Mercoledì 11 novembre 2026",
+      "data_iso": "2026-11-11",
+      "ora": "17:30",
+      "classe_raw": "5IAMI",
+      "classi": [
+        "5IAMI"
+      ],
+      "aula": "LIM 1",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Novembre 2026",
+      "giorno": "Giovedì 12 novembre 2026",
+      "data_iso": "2026-11-12",
+      "ora": "14:30",
+      "classe_raw": "2SSAS",
+      "classi": [
+        "2SSAS"
+      ],
+      "aula": "LIM1",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Novembre 2026",
+      "giorno": "Giovedì 12 novembre 2026",
+      "data_iso": "2026-11-12",
+      "ora": "15:30",
+      "classe_raw": "3IASS",
+      "classi": [
+        "3IASS"
+      ],
+      "aula": "LIM 1",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Novembre 2026",
+      "giorno": "Giovedì 12 novembre 2026",
+      "data_iso": "2026-11-12",
+      "ora": "16:30",
+      "classe_raw": "4SSAS",
+      "classi": [
+        "4SSAS"
+      ],
+      "aula": "LIM 1",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Rizzarda",
+      "periodo": "Novembre 2026",
+      "giorno": "Giovedì 12 novembre 2026",
+      "data_iso": "2026-11-12",
+      "ora": "17:30",
+      "classe_raw": "5SSAS",
+      "classi": [
+        "5SSAS"
+      ],
+      "aula": "LIM 1",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Venerdì 13 novembre 2026",
+      "data_iso": "2026-11-13",
+      "ora": "14:00",
+      "classe_raw": "1BTA",
+      "classi": [
+        "1BTA"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Venerdì 13 novembre 2026",
+      "data_iso": "2026-11-13",
+      "ora": "15:00",
+      "classe_raw": "2BTA",
+      "classi": [
+        "2BTA"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Venerdì 13 novembre 2026",
+      "data_iso": "2026-11-13",
+      "ora": "16:00",
+      "classe_raw": "1BTB",
+      "classi": [
+        "1BTB"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Venerdì 13 novembre 2026",
+      "data_iso": "2026-11-13",
+      "ora": "17:00",
+      "classe_raw": "2BTB",
+      "classi": [
+        "2BTB"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Venerdì 13 novembre 2026",
+      "data_iso": "2026-11-13",
+      "ora": "18:00",
+      "classe_raw": "3BSB-AM",
+      "classi": [
+        "3BSB",
+        "3AM"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Lunedì 16 novembre 2026",
+      "data_iso": "2026-11-16",
+      "ora": "14:00",
+      "classe_raw": "2CAT",
+      "classi": [
+        "2CAT"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Lunedì 16 novembre 2026",
+      "data_iso": "2026-11-16",
+      "ora": "15:00",
+      "classe_raw": "1ITA",
+      "classi": [
+        "1ITA"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Lunedì 16 novembre 2026",
+      "data_iso": "2026-11-16",
+      "ora": "16:00",
+      "classe_raw": "2ITA",
+      "classi": [
+        "2ITA"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Lunedì 16 novembre 2026",
+      "data_iso": "2026-11-16",
+      "ora": "17:00",
+      "classe_raw": "1ITE",
+      "classi": [
+        "1ITE"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Lunedì 16 novembre 2026",
+      "data_iso": "2026-11-16",
+      "ora": "18:00",
+      "classe_raw": "2ITB",
+      "classi": [
+        "2ITB"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Martedì 17 novembre 2026",
+      "data_iso": "2026-11-17",
+      "ora": "14:00",
+      "classe_raw": "1MMA",
+      "classi": [
+        "1MMA"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Martedì 17 novembre 2026",
+      "data_iso": "2026-11-17",
+      "ora": "15:00",
+      "classe_raw": "1MMC",
+      "classi": [
+        "1MMC"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Martedì 17 novembre 2026",
+      "data_iso": "2026-11-17",
+      "ora": "16:00",
+      "classe_raw": "2MMA",
+      "classi": [
+        "2MMA"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Martedì 17 novembre 2026",
+      "data_iso": "2026-11-17",
+      "ora": "17:00",
+      "classe_raw": "2MME",
+      "classi": [
+        "2MME"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Martedì 17 novembre 2026",
+      "data_iso": "2026-11-17",
+      "ora": "18:00",
+      "classe_raw": "3MM",
+      "classi": [
+        "3MM"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Mercoledì 18 novembre 2026",
+      "data_iso": "2026-11-18",
+      "ora": "14:00",
+      "classe_raw": "4MM",
+      "classi": [
+        "4MM"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Mercoledì 18 novembre 2026",
+      "data_iso": "2026-11-18",
+      "ora": "15:00",
+      "classe_raw": "5MM",
+      "classi": [
+        "5MM"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Mercoledì 18 novembre 2026",
+      "data_iso": "2026-11-18",
+      "ora": "16:00",
+      "classe_raw": "3BSA",
+      "classi": [
+        "3BSA"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Mercoledì 18 novembre 2026",
+      "data_iso": "2026-11-18",
+      "ora": "17:00",
+      "classe_raw": "4BS-AM",
+      "classi": [
+        "4BS",
+        "4AM"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Mercoledì 18 novembre 2026",
+      "data_iso": "2026-11-18",
+      "ora": "18:00",
+      "classe_raw": "5BS-AM",
+      "classi": [
+        "5BS",
+        "5AM"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Giovedì 19 novembre 2026",
+      "data_iso": "2026-11-19",
+      "ora": "14:00",
+      "classe_raw": "3CAT",
+      "classi": [
+        "3CAT"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Giovedì 19 novembre 2026",
+      "data_iso": "2026-11-19",
+      "ora": "15:00",
+      "classe_raw": "3ITA",
+      "classi": [
+        "3ITA"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Giovedì 19 novembre 2026",
+      "data_iso": "2026-11-19",
+      "ora": "16:00",
+      "classe_raw": "4ITA",
+      "classi": [
+        "4ITA"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Giovedì 19 novembre 2026",
+      "data_iso": "2026-11-19",
+      "ora": "17:00",
+      "classe_raw": "5ITA",
+      "classi": [
+        "5ITA"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Venerdì 20 novembre 2026",
+      "data_iso": "2026-11-20",
+      "ora": "14:00",
+      "classe_raw": "3ITE",
+      "classi": [
+        "3ITE"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Venerdì 20 novembre 2026",
+      "data_iso": "2026-11-20",
+      "ora": "15:00",
+      "classe_raw": "4ITB",
+      "classi": [
+        "4ITB"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Venerdì 20 novembre 2026",
+      "data_iso": "2026-11-20",
+      "ora": "16:00",
+      "classe_raw": "5ITB",
+      "classi": [
+        "5ITB"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Venerdì 20 novembre 2026",
+      "data_iso": "2026-11-20",
+      "ora": "17:00",
+      "classe_raw": "4EEC",
+      "classi": [
+        "4EEC"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Venerdì 20 novembre 2026",
+      "data_iso": "2026-11-20",
+      "ora": "18:00",
+      "classe_raw": "5EEC",
+      "classi": [
+        "5EEC"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Martedì 24 novembre 2026",
+      "data_iso": "2026-11-24",
+      "ora": "15:00",
+      "classe_raw": "3-4 CS",
+      "classi": [
+        "3CS",
+        "4CS"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Martedì 24 novembre 2026",
+      "data_iso": "2026-11-24",
+      "ora": "16:00",
+      "classe_raw": "5CMS",
+      "classi": [
+        "5CMS"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
+    },
+    {
+      "sezione": "Negrelli-Forcellini",
+      "periodo": "Novembre 2026",
+      "giorno": "Martedì 24 novembre 2026",
+      "data_iso": "2026-11-24",
+      "ora": "17:00",
+      "classe_raw": "3-4 MS",
+      "classi": [
+        "3MS",
+        "4MS"
+      ],
+      "aula": "Lab. Multimediale",
+      "comunicato": "Comunicato n. 124 del 04/11/2026",
+      "nota_apertura": "Ultimi 15' aperti alla Rappresentanza di Genitori e Studenti"
     }
   ],
   "colloqui_generali": [
@@ -3556,5 +3700,32 @@
       "sede": "Rizzarda",
       "classi": "tutte"
     }
-  ]
+  ],
+  "cdc_novembre": {
+    "istituto": "Istituto Superiore di Feltre",
+    "comunicato": "Comunicato n. 124 del 04/11/2026",
+    "oggetto": "Avviso di convocazione dei Consigli di classe novembre 2026",
+    "periodo": "9 - 24 novembre 2026",
+    "dirigente": "Manuela Muliner Biga",
+    "nota_apertura": "Si fa presente che gli ultimi 15' il Consiglio di Classe sarà aperto alla Rappresentanza di Genitori e Studenti.",
+    "odg_docenti": [
+      "1. Approvazione verbale seduta precedente (se non già approvato)",
+      "2. Andamento didattico-disciplinare",
+      "3. Prima programmazione dei percorsi modulari di orientamento per le classi del biennio e del triennio (almeno 30 ore per anno scolastico)",
+      "4. Attività integrative dell'offerta formativa",
+      "5. Delibera PDP per alunni con DSA",
+      "6. Designazione “Tutor” studenti – solo per le classi del Professionale “Rizzarda”",
+      "7. Prima condivisione P.F.I. per le classi del Professionale \"C. Rizzarda\" - solo per le classi del Professionale “Rizzarda”",
+      "8. Delibera PEI Studenti con certificazione L. 104/92",
+      "9. Eventuale predisposizione PFP alunni progetto Studente-Atleta",
+      "10. Proposte eventuali provvedimenti disciplinari",
+      "11. Programmazione FSL (solo classi triennio)",
+      "12. Varie ed eventuali"
+    ],
+    "odg_genitori_studenti": [
+      "1. Andamento generale didattico disciplinare",
+      "2. Attività integrative dell'offerta formativa",
+      "3. Varie ed eventuali"
+    ]
+  }
 }

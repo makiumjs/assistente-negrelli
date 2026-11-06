@@ -212,11 +212,29 @@ def parse_attivita_pdf(pdf_path=None):
         consigli = parse_consigli_dettaglio(pdf)
         colloqui = parse_colloqui(pdf.pages[13])
 
+    # Integrazione ufficiale Comunicato n. 124 (Convocazione Consigli di classe novembre 2026)
+    cdc_meta = {}
+    try:
+        from parse_cdc_novembre import parse_cdc_novembre_pdf
+        cdc_nov = parse_cdc_novembre_pdf()
+        nov_incontri = cdc_nov.get("incontri", [])
+        cdc_meta = cdc_nov.get("meta", {})
+        if nov_incontri:
+            # Rimuove ogni convocazione provvisoria di novembre dal vecchio PDF e inserisce quelle ufficiali del Comunicato 124
+            altri_consigli = [
+                c for c in consigli
+                if "novembre" not in c.get("giorno", "").lower() and c.get("periodo") != "Novembre 2026"
+            ]
+            consigli = altri_consigli + nov_incontri
+    except Exception as e:
+        print(f"  ⚠ Avviso integrazione CdC Novembre: {e}")
+
     return {
         "attivita_istituto": istituto,
         "attivita_classe_sintesi": sintesi,
         "consigli_classe_dettaglio": consigli,
-        "colloqui_generali": colloqui
+        "colloqui_generali": colloqui,
+        "cdc_novembre": cdc_meta
     }
 
 if __name__ == "__main__":
