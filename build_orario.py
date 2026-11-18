@@ -15,6 +15,7 @@ import pdfplumber
 from parse_attivita import parse_attivita_pdf
 from parse_calendario import parse_calendario_pdf
 from parse_glo import parse_glo_pdf
+from parse_sorveglianze import parse_sorveglianze_pdf
 
 def find_pdf_path(filename):
     candidates = [
@@ -80,9 +81,21 @@ TABLE_SETTINGS = {
 }
 
 RE_AULA = re.compile(
-    r"\b(aula|lab|spazio|palestra|rizzarda|l\s*chimica|l\.\s*biologia|cad|costr|disegno|fisica|sistemi)\b",
+    r"\b(aula|lab|spazio|palestra|rizzarda|colotti|atrio|l\s*chimica|l\.\s*biologia|cad|costr|disegno|fisica|sistemi)\b",
     re.I,
 )
+
+CLASSI_ARTICOLATE_MAP = {
+    "1ITE": ("1EE", "1ITB"),
+    "1MMC": ("1CAT", "1MMB"),
+    "2MME": ("2EE", "2MMB"),
+    "3BSAM": ("3AMB", "3BSB"),
+    "3ITE": ("3EE", "3ITB"),
+    "4BSAM": ("4AM", "4BS"),
+    "4EEC": ("4CAT", "4EE"),
+    "5BSAM": ("5AM", "5BS"),
+    "5EEC": ("5CAT", "5EE"),
+}
 
 
 # ---------------------------------------------------------------- normalizzazione
@@ -150,8 +163,13 @@ def extract_grid_tables(pdf_path):
                 if not t.rows or not t.rows[0].cells or not t.rows[0].cells[0]:
                     continue
                 h_cell = t.rows[0].cells[0]
-                h_txt = clean.crop(h_cell).extract_text() or ""
+                h_crop = clean.crop(h_cell)
+                h_big = h_crop.filter(lambda obj: obj.get("object_type") != "char" or obj.get("size", 0) >= 10)
+                h_txt = h_big.extract_text() or h_crop.extract_text() or ""
                 lines = [l.strip() for l in h_txt.split("\n") if "orario dal" in l.lower()]
+                if not lines:
+                    h_txt = h_crop.extract_text() or ""
+                    lines = [l.strip() for l in h_txt.split("\n") if "orario dal" in l.lower()]
                 if not lines:
                     continue
                 header_raw = lines[0]
@@ -168,20 +186,30 @@ def extract_grid_tables(pdf_path):
                 v_start = v_lines[1]
                 v_step = (v_lines[-1] - v_start) / 6.0
 
-                unique_cells = set()
-                for r in t.rows:
-                    for c in r.cells:
-                        if c:
-                            unique_cells.add(c)
+                unique_cells = [
+                    c for c in set(c for r in t.rows for c in r.cells if c)
+                    if c[0] >= v_start - 5
+                    and c[1] >= h_start - 5
+                    and (c[2] - c[0]) >= 0.4 * v_step
+                    and (c[3] - c[1]) >= 0.8 * h_step
+                ]
+
+                def encloses(a, b):
+                    return (
+                        a != b
+                        and a[0] <= b[0] + 1
+                        and a[1] <= b[1] + 1
+                        and a[2] >= b[2] - 1
+                        and a[3] >= b[3] - 1
+                    )
+
+                real_cells = [c for c in unique_cells if not any(encloses(c, b) for b in unique_cells)]
 
                 grid = {g: {} for g in GIORNI}
-                for cell in sorted(unique_cells, key=lambda c: (c[1], c[0])):
+                for cell in sorted(real_cells, key=lambda c: (c[1], c[0])):
                     x0, y0, x1, y1 = cell
-                    if x0 < v_start - 5:
-                        continue  # colonna numeri ore
-                    if y0 < h_start - 5:
-                        continue  # riga di intestazione
-                    col_idx = int(round((x0 - v_start) / v_step))
+                    cx = (x0 + x1) / 2.0
+                    col_idx = int((cx - v_start) / v_step)
                     if not (0 <= col_idx < len(GIORNI)):
                         continue
                     giorno = GIORNI[col_idx]
@@ -281,7 +309,21 @@ def parse_docenti(report):
 
         for giorno, ore in grid.items():
             for ora, cell_text in ore.items():
-                is_disp = "DISPOSIZIONE" in cell_text.upper() or "POTENZIAMENTO" in cell_text.upper()
+                upper = cell_text.upper()
+
+                # 1) Ore di recupero (Q1 settimane dispari, Q2 settimane pari, oppure settimanale)
+                if "RECUPER" in upper:
+                    sett = "Q1" if re.search(r"\bQ1\b", upper) else ("Q2" if re.search(r"\bQ2\b", upper) else "tutte")
+                    sched[giorno][ora] = {
+                        "tipo": "recupero",
+                        "settimana": sett,
+                        "materia": "Recupero",
+                        "aula": None,
+                    }
+                    continue
+
+                # 2) Ore di disposizione / potenziamento
+                is_disp = "DISPOSIZIONE" in upper or "POTENZIAMENTO" in upper
                 if is_disp:
                     aula = ""
                     for l in cell_text.split("\n"):
@@ -289,7 +331,7 @@ def parse_docenti(report):
                             aula = l.strip()
                     sched[giorno][ora] = {
                         "tipo": "disposizione",
-                        "aula": norm_aula(aula) or None,
+                        "aula": norm_aula(aula) or "Aula Pot-Disp",
                     }
                     continue
 
@@ -297,25 +339,63 @@ def parse_docenti(report):
                 if not lines:
                     continue
 
+                # 3) Celle speciali mono-riga (Rizzarda, Colotti, Alfabet)
+                if len(lines) == 1:
+                    val = lines[0]
+                    if re.fullmatch(r"rizzarda", val, re.I):
+                        sched[giorno][ora] = {
+                            "tipo": "lezione",
+                            "materia": "Rizzarda",
+                            "classi": [],
+                            "aula": "Rizzarda",
+                            "copresenza": [],
+                        }
+                        continue
+                    if re.fullmatch(r"colotti", val, re.I):
+                        sched[giorno][ora] = {
+                            "tipo": "lezione",
+                            "materia": "Colotti",
+                            "classi": [],
+                            "aula": "Colotti",
+                            "copresenza": [],
+                        }
+                        continue
+                    if re.fullmatch(r"alfabet", val, re.I):
+                        sched[giorno][ora] = {
+                            "tipo": "lezione",
+                            "materia": "Alfabetizzazione",
+                            "classi": [],
+                            "aula": None,
+                            "copresenza": [],
+                        }
+                        continue
+
                 materia = lines[0]
-                aula = ""
+                aule_found = []
                 classi_found = []
-                copresenza = ""
+                copresenze = []
 
                 for l in lines[1:]:
                     if RE_AULA.search(l):
-                        aula = l
-                    elif re.search(r"\b[1-5]\s*[a-z]{2,4}\b", l, re.I) or "[" in l:
+                        for part in l.split(","):
+                            p_norm = norm_aula(part)
+                            if p_norm and p_norm not in aule_found:
+                                aule_found.append(p_norm)
+                    elif re.search(r"\b[1-5]\s*[a-z]{2,4}\b", l, re.I):
                         classi_found = parse_classi_list(l)
                     else:
-                        copresenza = l
+                        for part in l.split(","):
+                            c_clean = clean_name(part)
+                            if c_clean and c_clean not in copresenze:
+                                copresenze.append(c_clean)
 
                 sched[giorno][ora] = {
                     "tipo": "lezione",
                     "materia": materia,
                     "classi": classi_found,
-                    "aula": norm_aula(aula) or None,
-                    "copresenza": clean_name(copresenza) if copresenza else None,
+                    "aula": ", ".join(aule_found) if aule_found else None,
+                    "aule": aule_found,
+                    "copresenza": copresenze,
                 }
 
     return out, periodo
@@ -336,12 +416,20 @@ def risolvi_docenti(classi_raw, docenti_raw, report):
     """
     reali = [n for n in docenti_raw if not RE_CODICE.match(n)]
 
-    def canon(raw):
+    def canon(raw, materia=""):
+        if clean_name(raw) == "Meneguz":
+            return "Meneguz (Chimica)" if "chimica" in (materia or "").lower() else "Meneguz (Scienze)"
         k = compatto(raw)
         esatti = [n for n in reali if compatto(n) == k]
         if esatti:
             return esatti[0]
-        cand = [n for n in reali if k.startswith(compatto(n)) or compatto(n).startswith(k)]
+        # Match anche su nomi sostituiti tra parentesi es. "Curtolo" -> "Malè (Curtolo)"
+        cand = [
+            n for n in reali
+            if k.startswith(compatto(n))
+            or compatto(n).startswith(k)
+            or (len(k) >= 4 and k in compatto(n))
+        ]
         if len(cand) == 1:
             return cand[0]
         if len(cand) > 1:
@@ -356,7 +444,7 @@ def risolvi_docenti(classi_raw, docenti_raw, report):
         total_slots = 0
         for g, ore in sched.items():
             for ora, s in ore.items():
-                if s["tipo"] == "disposizione":
+                if s["tipo"] in ("disposizione", "recupero"):
                     continue
                 total_slots += 1
                 # Se un altro docente non anonimo insegna nella stessa classe/ora con la stessa materia
@@ -366,7 +454,7 @@ def risolvi_docenti(classi_raw, docenti_raw, report):
                             osl = d_sched.get(g, {}).get(ora)
                             if osl and osl.get("tipo") == "lezione":
                                 if cls_name in osl.get("classi", []):
-                                    voti[canon(d_other)] += 1
+                                    voti[canon(d_other, osl.get("materia", ""))] += 1
 
         best = max(voti, key=voti.get) if voti else None
         # Risolvi come alias solo se la maggioranza copre almeno l'80% di TUTTI gli slot della cattedra
@@ -390,48 +478,55 @@ def risolvi_docenti(classi_raw, docenti_raw, report):
 
 
 def riconcilia(classi_raw, docenti_raw, report):
+    """
+    Costruisce docenti e classi direttamente dall'orario docenti aggiornato (mod1a),
+    ricostruendo poi le 9 classi articolate composite da CLASSI_ARTICOLATE_MAP
+    così da evitare dati obsoleti dal vecchio Orario-Classi.pdf.
+    """
     docenti_raw, canon = risolvi_docenti(classi_raw, docenti_raw, report)
 
     classi = {}
-    for cid, sched in classi_raw.items():
-        classi[cid] = {g: {} for g in GIORNI}
-        for g, ore in sched.items():
-            for ora, s in ore.items():
-                docenti_iniziali = []
-                for d in s.get("docenti", []):
-                    d_clean = clean_name(d)
-                    if d_clean == "Meneguz":
-                        d_clean = "Meneguz (Chimica)" if "chimica" in s["materia"].lower() else "Meneguz (Scienze)"
-                    docenti_iniziali.append(canon(d_clean))
-                classi[cid][g][ora] = {
-                    "materia": s["materia"],
-                    "docenti": docenti_iniziali,
-                    "aula": s["aula"],
-                    "articolazione": s.get("articolazione", ""),
-                }
-
     docenti = {n: {g: {} for g in GIORNI} for n in docenti_raw}
 
-    # 1) Elabora gli slot dei docenti e arricchiscili con i dati delle classi
+    # 1) Elabora gli slot dei docenti e popola le classi individuali aggiornate
     for nome, sched in docenti_raw.items():
         for g, ore in sched.items():
             for ora, s in ore.items():
-                if s["tipo"] == "disposizione":
+                if s["tipo"] == "recupero":
                     docenti[nome][g][ora] = {
-                        "tipo": "disposizione",
-                        "aula": s.get("aula"),
+                        "tipo": "recupero",
+                        "settimana": s.get("settimana", "tutte"),
+                        "materia": "Recupero",
+                        "aula": None,
                     }
                     continue
 
+                if s["tipo"] == "disposizione":
+                    docenti[nome][g][ora] = {
+                        "tipo": "disposizione",
+                        "aula": s.get("aula") or "Aula Pot-Disp",
+                    }
+                    continue
+
+                materia_finale = s.get("materia")
+                aula_finale = s.get("aula")
+                raw_copr = s.get("copresenza") or []
+                if isinstance(raw_copr, str):
+                    raw_copr = [raw_copr]
+                copresenze = []
+                for c_name in raw_copr:
+                    c_canon = canon(c_name, materia_finale)
+                    if c_canon and c_canon != nome and c_canon not in copresenze:
+                        copresenze.append(c_canon)
+
                 classi_target = s.get("classi", [])
                 if not classi_target:
-                    # Nessuna classe specificata nello slot
                     docenti[nome][g][ora] = {
                         "tipo": "lezione",
                         "classe": None,
-                        "materia": s.get("materia"),
-                        "aula": s.get("aula"),
-                        "copresenza": [s["copresenza"]] if s.get("copresenza") else [],
+                        "materia": materia_finale,
+                        "aula": aula_finale,
+                        "copresenza": copresenze,
                         "fonte": "docenti",
                     }
                     continue
@@ -441,45 +536,29 @@ def riconcilia(classi_raw, docenti_raw, report):
                 if altre_classi:
                     report["classi_articolate"].append(f"{nome} {g} ora {ora}: {prima_classe} + {altre_classi}")
 
-                # Collega il docente a ciascuna classe coinvolta
-                materia_classe = None
-                aula_classe = None
+                art_label = ",".join(f"[{c.lower()}]" for c in classi_target) if len(classi_target) > 1 else ""
 
                 for cid in classi_target:
                     if cid not in classi:
-                        report["docenti_classe_inesistente"].append(f"{nome} {g} ora {ora}: {cid}")
                         classi[cid] = {gg: {} for gg in GIORNI}
 
                     cs = classi[cid][g].get(ora)
                     if cs is None:
-                        report["docenti_slot_assente_in_classi"].append(f"{nome} {g} ora {ora}: {cid}")
+                        docs_init = [nome] + [c for c in copresenze if c != nome]
                         classi[cid][g][ora] = {
-                            "materia": s.get("materia"),
-                            "docenti": [nome],
-                            "aula": s.get("aula"),
-                            "articolazione": "",
+                            "materia": materia_finale,
+                            "docenti": docs_init,
+                            "aula": aula_finale,
+                            "articolazione": art_label,
                         }
                     else:
                         if nome not in cs["docenti"]:
                             cs["docenti"].append(nome)
-                        if s.get("copresenza"):
-                            copr_canon = canon(s["copresenza"])
-                            if copr_canon not in cs["docenti"]:
-                                cs["docenti"].append(copr_canon)
-
-                        if materia_classe is None:
-                            materia_classe = cs["materia"]
-                        if aula_classe is None and cs["aula"]:
-                            aula_classe = cs["aula"]
-
-                        if s.get("aula") and cs.get("aula") and s["aula"].lower() != cs["aula"].lower():
-                            report["conflitti_aula"].append(
-                                f"{nome} {g} ora {ora} {cid}: docenti='{s['aula']}' classi='{cs['aula']}'"
-                            )
-
-                aula_finale = aula_classe or s.get("aula")
-                materia_finale = s.get("materia") or materia_classe
-                copresenze = [s["copresenza"]] if s.get("copresenza") else []
+                        for c_canon in copresenze:
+                            if c_canon not in cs["docenti"]:
+                                cs["docenti"].append(c_canon)
+                        if not cs["aula"] and aula_finale:
+                            cs["aula"] = aula_finale
 
                 docenti[nome][g][ora] = {
                     "tipo": "lezione",
@@ -488,54 +567,89 @@ def riconcilia(classi_raw, docenti_raw, report):
                     "materia": materia_finale,
                     "aula": aula_finale,
                     "copresenza": copresenze,
-                    "fonte": "docenti+classi",
+                    "fonte": "docenti_mod1a",
                 }
 
-    # 2) Slot presenti nelle classi ma senza docenti assegnati
-    for cid, sched in classi.items():
-        for g, ore in sched.items():
-            for ora, cs in ore.items():
-                if not cs["docenti"]:
-                    report["classi_slot_senza_docente"].append(f"{cid} {g} ora {ora} ({cs['materia']})")
+    # 2) Sintetizza le 9 classi articolate composite (1ITE, 1MMC, 2MME, 3BSAM, 3ITE, 4BSAM, 4EEC, 5BSAM, 5EEC)
+    for parent_id, (sub1, sub2) in CLASSI_ARTICOLATE_MAP.items():
+        if sub1 not in classi and sub2 not in classi:
+            continue
+        classi[parent_id] = {g: {} for g in GIORNI}
+        for g in GIORNI:
+            for ora in ORE_NUMS:
+                s1 = classi.get(sub1, {}).get(g, {}).get(ora)
+                s2 = classi.get(sub2, {}).get(g, {}).get(ora)
+                if s1 and s2 and s1.get("materia") == s2.get("materia") and s1.get("aula") == s2.get("aula"):
+                    docs_merged = list(s1["docenti"])
+                    for d in s2["docenti"]:
+                        if d not in docs_merged:
+                            docs_merged.append(d)
+                    classi[parent_id][g][ora] = {
+                        "materia": s1["materia"],
+                        "docenti": docs_merged,
+                        "aula": s1["aula"],
+                        "articolazione": f"[{sub1.lower()}],[{sub2.lower()}]",
+                    }
+                elif s1:
+                    classi[parent_id][g][ora] = {
+                        "materia": s1["materia"],
+                        "docenti": list(s1["docenti"]),
+                        "aula": s1["aula"],
+                        "articolazione": f"[{sub1.lower()}]",
+                    }
+                elif s2:
+                    classi[parent_id][g][ora] = {
+                        "materia": s2["materia"],
+                        "docenti": list(s2["docenti"]),
+                        "aula": s2["aula"],
+                        "articolazione": f"[{sub2.lower()}]",
+                    }
 
     return classi, docenti
+
+
+def split_rooms(aula_str):
+    if not aula_str:
+        return []
+    return [norm_aula(part) for part in str(aula_str).split(",") if part.strip()]
 
 
 def costruisci_aule(classi, docenti):
     """Costruisce la mappa di occupazione di tutte le aule e laboratori presenti."""
     occ = defaultdict(lambda: {g: {} for g in GIORNI})
 
-    # Da classi
-    for cid, sched in classi.items():
+    # Priorità alle classi composite per slot condivisi (es. 2MME), poi classi individuali
+    ordered_cids = [cid for cid in CLASSI_ARTICOLATE_MAP if cid in classi] + [
+        cid for cid in sorted(classi) if cid not in CLASSI_ARTICOLATE_MAP
+    ]
+
+    for cid in ordered_cids:
+        sched = classi[cid]
         for g, ore in sched.items():
             for ora, cs in ore.items():
-                aula = cs.get("aula")
-                if not aula:
-                    continue
-                e = occ[aula][g].setdefault(
-                    ora, {"classe": cid, "materia": cs.get("materia"), "docenti": []}
-                )
-                for d in cs.get("docenti", []):
-                    if d not in e["docenti"]:
-                        e["docenti"].append(d)
+                for aula in split_rooms(cs.get("aula")):
+                    e = occ[aula][g].setdefault(
+                        ora, {"classe": cid, "materia": cs.get("materia"), "docenti": []}
+                    )
+                    for d in cs.get("docenti", []):
+                        if d not in e["docenti"]:
+                            e["docenti"].append(d)
 
     # Da docenti (integrazione disposizioni con aula o lezioni con aula speciale)
     for nome, sched in docenti.items():
         for g, ore in sched.items():
             for ora, s in ore.items():
-                aula = s.get("aula")
-                if not aula:
-                    continue
-                e = occ[aula][g].setdefault(
-                    ora,
-                    {
-                        "classe": s.get("classe") or "Disposizione",
-                        "materia": s.get("materia") or "Disposizione",
-                        "docenti": [],
-                    },
-                )
-                if nome not in e["docenti"]:
-                    e["docenti"].append(nome)
+                for aula in split_rooms(s.get("aula")):
+                    e = occ[aula][g].setdefault(
+                        ora,
+                        {
+                            "classe": s.get("classe") or "Disposizione",
+                            "materia": s.get("materia") or "Disposizione",
+                            "docenti": [],
+                        },
+                    )
+                    if nome not in e["docenti"]:
+                        e["docenti"].append(nome)
 
     return {a: occ[a] for a in sorted(occ)}
 
@@ -562,16 +676,24 @@ def run():
     ]
     report = {k: [] for k in keys}
 
-    print(f"Lettura Orario Classi: {PDF_CLASSI}")
-    classi_raw, periodo_cls = parse_classi(report)
-    print(f"Lettura Orario Docenti: {PDF_DOCENTI}")
+    print(f"Lettura Orario Docenti (mod1a): {PDF_DOCENTI}")
     docenti_raw, periodo_doc = parse_docenti(report)
+    classi_raw = {}
 
-    periodo = periodo_doc or periodo_cls or "dal 12 ottobre 2026"
+    periodo = "dal 19 novembre 2026 (mod1a • Comunicato n. 167)"
 
     classi, docenti = riconcilia(classi_raw, docenti_raw, report)
     aule = costruisci_aule(classi, docenti)
     libere = aule_libere(aule)
+
+    print("Lettura Turni Sorveglianza (da 19 novembre 2026)...")
+    try:
+        sorveglianze = parse_sorveglianze_pdf()
+        total_turni = sum(len(v) for v in sorveglianze.get("per_docente", {}).values())
+        print(f"  ✓ Sorveglianze caricate: {len(sorveglianze.get('per_docente', {}))} docenti, {total_turni} turni settimanali.")
+    except Exception as e:
+        print(f"  ⚠ Avviso: impossibile caricare le Sorveglianze ({e})")
+        sorveglianze = {}
 
     print("Lettura Piano Attività PDF...")
     try:
@@ -608,6 +730,14 @@ def run():
             "giorni": GIORNI,
             "nota_aule": "Copre aule, laboratori, palestra e spazi dell'istituto Negrelli.",
             "nota_sabato": "Il sabato le lezioni terminano alla 4ª ora (uscita ore 12:05).",
+            "recuperi_info": {
+                "comunicato": "Comunicato n. 167 del 18 novembre 2026",
+                "in_vigore_dal": "2026-11-19",
+                "Q1": "Settimane con numero dispari del calendario",
+                "Q2": "Settimane con numero pari del calendario",
+                "intervallo_lun_mer": "10 minuti (10:25-10:35)",
+                "intervallo_gio_sab": "15 minuti (10:50-11:05)",
+            },
         },
         "docenti": {
             persona_id(n): {
@@ -623,6 +753,7 @@ def run():
         "attivita": attivita,
         "calendario": calendario,
         "glo": glo,
+        "sorveglianze": sorveglianze,
     }
 
     os.makedirs(os.path.dirname(OUT_JSON), exist_ok=True)

@@ -1,0 +1,1071 @@
+{
+  "meta": {
+    "comunicato": "Comunicato n. 167 del 18 novembre 2026",
+    "in_vigore_dal": "2026-11-19",
+    "in_vigore_label": "giovedì 19 novembre 2026",
+    "intervallo": {
+      "lunedi_mercoledi": {
+        "orario": "10:25-10:35",
+        "durata_min": 10
+      },
+      "giovedi_sabato": {
+        "orario": "10:50-11:05",
+        "durata_min": 15
+      }
+    },
+    "nota_sostituzioni": "In caso di variazioni, comunicare la modifica all'Ufficio Tecnico dopo aver provveduto all'individuazione del sostituto.",
+    "dirigente": "Manuela Muliner Biga"
+  },
+  "turni": [
+    {
+      "giorno": "lunedi",
+      "zona": "Scale lato bagni",
+      "docenti": [
+        "Bordin"
+      ]
+    },
+    {
+      "giorno": "lunedi",
+      "zona": "Scale lato didattica",
+      "docenti": [
+        "Capozzolo"
+      ]
+    },
+    {
+      "giorno": "lunedi",
+      "zona": "MC Mario",
+      "docenti": [
+        "Cozzolino"
+      ]
+    },
+    {
+      "giorno": "lunedi",
+      "zona": "Cortile ingresso",
+      "docenti": [
+        "Da Rold",
+        "Gaio"
+      ]
+    },
+    {
+      "giorno": "lunedi",
+      "zona": "Piano Terra",
+      "docenti": [
+        "De Boni",
+        "Ruosi"
+      ]
+    },
+    {
+      "giorno": "lunedi",
+      "zona": "1° Piano",
+      "docenti": [
+        "De Pellegrin",
+        "Liuzzo"
+      ]
+    },
+    {
+      "giorno": "lunedi",
+      "zona": "2° Piano",
+      "docenti": [
+        "De Pizzol",
+        "Pellizzari"
+      ]
+    },
+    {
+      "giorno": "lunedi",
+      "zona": "Laboratori",
+      "docenti": [
+        "Feltrin"
+      ]
+    },
+    {
+      "giorno": "martedi",
+      "zona": "Scale lato bagni",
+      "docenti": [
+        "Da Rold"
+      ]
+    },
+    {
+      "giorno": "martedi",
+      "zona": "Scale lato didattica",
+      "docenti": [
+        "Decet"
+      ]
+    },
+    {
+      "giorno": "martedi",
+      "zona": "MC Mario",
+      "docenti": [
+        "Gasperin"
+      ]
+    },
+    {
+      "giorno": "martedi",
+      "zona": "Cortile ingresso",
+      "docenti": [
+        "Liuzzo",
+        "Chiariello"
+      ]
+    },
+    {
+      "giorno": "martedi",
+      "zona": "Piano Terra",
+      "docenti": [
+        "Schirò",
+        "Zaetta"
+      ]
+    },
+    {
+      "giorno": "martedi",
+      "zona": "1° Piano",
+      "docenti": [
+        "Tonet",
+        "Rento"
+      ]
+    },
+    {
+      "giorno": "martedi",
+      "zona": "2° Piano",
+      "docenti": [
+        "Zannol",
+        "Turrin"
+      ]
+    },
+    {
+      "giorno": "martedi",
+      "zona": "Laboratori",
+      "docenti": [
+        "De Bacco"
+      ]
+    },
+    {
+      "giorno": "mercoledi",
+      "zona": "Scale lato bagni",
+      "docenti": [
+        "Guizzo"
+      ]
+    },
+    {
+      "giorno": "mercoledi",
+      "zona": "Scale lato didattica",
+      "docenti": [
+        "Bassani"
+      ]
+    },
+    {
+      "giorno": "mercoledi",
+      "zona": "MC Mario",
+      "docenti": [
+        "Berlese"
+      ]
+    },
+    {
+      "giorno": "mercoledi",
+      "zona": "Cortile ingresso",
+      "docenti": [
+        "Cioppa",
+        "Capozzolo"
+      ]
+    },
+    {
+      "giorno": "mercoledi",
+      "zona": "Piano Terra",
+      "docenti": [
+        "Ruosi"
+      ]
+    },
+    {
+      "giorno": "mercoledi",
+      "zona": "1° Piano",
+      "docenti": [
+        "Sardina",
+        "Zannol"
+      ]
+    },
+    {
+      "giorno": "mercoledi",
+      "zona": "2° Piano",
+      "docenti": [
+        "Turchetto"
+      ]
+    },
+    {
+      "giorno": "mercoledi",
+      "zona": "Laboratori",
+      "docenti": [
+        "Zaetta"
+      ]
+    },
+    {
+      "giorno": "giovedi",
+      "zona": "Scale lato bagni",
+      "docenti": [
+        "Ambrosanio"
+      ]
+    },
+    {
+      "giorno": "giovedi",
+      "zona": "Scale lato didattica",
+      "docenti": [
+        "Bortolamiol"
+      ]
+    },
+    {
+      "giorno": "giovedi",
+      "zona": "MC Mario",
+      "docenti": [
+        "Corso"
+      ]
+    },
+    {
+      "giorno": "giovedi",
+      "zona": "Cortile ingresso",
+      "docenti": [
+        "De Min",
+        "Vivacqua"
+      ]
+    },
+    {
+      "giorno": "giovedi",
+      "zona": "Piano Terra",
+      "docenti": [
+        "Decet",
+        "Pelosio"
+      ]
+    },
+    {
+      "giorno": "giovedi",
+      "zona": "1° Piano",
+      "docenti": [
+        "Marini",
+        "De Bacco"
+      ]
+    },
+    {
+      "giorno": "giovedi",
+      "zona": "2° Piano",
+      "docenti": [
+        "Salton",
+        "Gris"
+      ]
+    },
+    {
+      "giorno": "giovedi",
+      "zona": "Laboratori",
+      "docenti": [
+        "Savaris"
+      ]
+    },
+    {
+      "giorno": "venerdi",
+      "zona": "Scale lato bagni",
+      "docenti": [
+        "Basso"
+      ]
+    },
+    {
+      "giorno": "venerdi",
+      "zona": "Scale lato didattica",
+      "docenti": [
+        "Cassarino"
+      ]
+    },
+    {
+      "giorno": "venerdi",
+      "zona": "MC Mario",
+      "docenti": [
+        "Cirillo"
+      ]
+    },
+    {
+      "giorno": "venerdi",
+      "zona": "Cortile ingresso",
+      "docenti": [
+        "D'Incau",
+        "Feltrin"
+      ]
+    },
+    {
+      "giorno": "venerdi",
+      "zona": "Piano Terra",
+      "docenti": [
+        "Guetta",
+        "Turrin"
+      ]
+    },
+    {
+      "giorno": "venerdi",
+      "zona": "1° Piano",
+      "docenti": [
+        "Noce",
+        "Gris"
+      ]
+    },
+    {
+      "giorno": "venerdi",
+      "zona": "2° Piano",
+      "docenti": [
+        "Neri",
+        "Rento"
+      ]
+    },
+    {
+      "giorno": "venerdi",
+      "zona": "Laboratori",
+      "docenti": [
+        "Chiariello"
+      ]
+    },
+    {
+      "giorno": "sabato",
+      "zona": "Scale lato bagni",
+      "docenti": [
+        "Ciarlantini"
+      ]
+    },
+    {
+      "giorno": "sabato",
+      "zona": "Scale lato didattica",
+      "docenti": [
+        "Fantinel"
+      ]
+    },
+    {
+      "giorno": "sabato",
+      "zona": "MC Mario",
+      "docenti": [
+        "Gris"
+      ]
+    },
+    {
+      "giorno": "sabato",
+      "zona": "Cortile ingresso",
+      "docenti": [
+        "Pontillo",
+        "Zaetta"
+      ]
+    },
+    {
+      "giorno": "sabato",
+      "zona": "Piano Terra",
+      "docenti": [
+        "Sardina"
+      ]
+    },
+    {
+      "giorno": "sabato",
+      "zona": "1° Piano",
+      "docenti": [
+        "Zirpolo",
+        "Zannol"
+      ]
+    },
+    {
+      "giorno": "sabato",
+      "zona": "2° Piano",
+      "docenti": [
+        "Capozzolo"
+      ]
+    },
+    {
+      "giorno": "sabato",
+      "zona": "Laboratori",
+      "docenti": [
+        "Pelosio"
+      ]
+    }
+  ],
+  "per_giorno": {
+    "lunedi": [
+      {
+        "zona": "Scale lato bagni",
+        "docenti": [
+          "Bordin"
+        ]
+      },
+      {
+        "zona": "Scale lato didattica",
+        "docenti": [
+          "Capozzolo"
+        ]
+      },
+      {
+        "zona": "MC Mario",
+        "docenti": [
+          "Cozzolino"
+        ]
+      },
+      {
+        "zona": "Cortile ingresso",
+        "docenti": [
+          "Da Rold",
+          "Gaio"
+        ]
+      },
+      {
+        "zona": "Piano Terra",
+        "docenti": [
+          "De Boni",
+          "Ruosi"
+        ]
+      },
+      {
+        "zona": "1° Piano",
+        "docenti": [
+          "De Pellegrin",
+          "Liuzzo"
+        ]
+      },
+      {
+        "zona": "2° Piano",
+        "docenti": [
+          "De Pizzol",
+          "Pellizzari"
+        ]
+      },
+      {
+        "zona": "Laboratori",
+        "docenti": [
+          "Feltrin"
+        ]
+      }
+    ],
+    "martedi": [
+      {
+        "zona": "Scale lato bagni",
+        "docenti": [
+          "Da Rold"
+        ]
+      },
+      {
+        "zona": "Scale lato didattica",
+        "docenti": [
+          "Decet"
+        ]
+      },
+      {
+        "zona": "MC Mario",
+        "docenti": [
+          "Gasperin"
+        ]
+      },
+      {
+        "zona": "Cortile ingresso",
+        "docenti": [
+          "Liuzzo",
+          "Chiariello"
+        ]
+      },
+      {
+        "zona": "Piano Terra",
+        "docenti": [
+          "Schirò",
+          "Zaetta"
+        ]
+      },
+      {
+        "zona": "1° Piano",
+        "docenti": [
+          "Tonet",
+          "Rento"
+        ]
+      },
+      {
+        "zona": "2° Piano",
+        "docenti": [
+          "Zannol",
+          "Turrin"
+        ]
+      },
+      {
+        "zona": "Laboratori",
+        "docenti": [
+          "De Bacco"
+        ]
+      }
+    ],
+    "mercoledi": [
+      {
+        "zona": "Scale lato bagni",
+        "docenti": [
+          "Guizzo"
+        ]
+      },
+      {
+        "zona": "Scale lato didattica",
+        "docenti": [
+          "Bassani"
+        ]
+      },
+      {
+        "zona": "MC Mario",
+        "docenti": [
+          "Berlese"
+        ]
+      },
+      {
+        "zona": "Cortile ingresso",
+        "docenti": [
+          "Cioppa",
+          "Capozzolo"
+        ]
+      },
+      {
+        "zona": "Piano Terra",
+        "docenti": [
+          "Ruosi"
+        ]
+      },
+      {
+        "zona": "1° Piano",
+        "docenti": [
+          "Sardina",
+          "Zannol"
+        ]
+      },
+      {
+        "zona": "2° Piano",
+        "docenti": [
+          "Turchetto"
+        ]
+      },
+      {
+        "zona": "Laboratori",
+        "docenti": [
+          "Zaetta"
+        ]
+      }
+    ],
+    "giovedi": [
+      {
+        "zona": "Scale lato bagni",
+        "docenti": [
+          "Ambrosanio"
+        ]
+      },
+      {
+        "zona": "Scale lato didattica",
+        "docenti": [
+          "Bortolamiol"
+        ]
+      },
+      {
+        "zona": "MC Mario",
+        "docenti": [
+          "Corso"
+        ]
+      },
+      {
+        "zona": "Cortile ingresso",
+        "docenti": [
+          "De Min",
+          "Vivacqua"
+        ]
+      },
+      {
+        "zona": "Piano Terra",
+        "docenti": [
+          "Decet",
+          "Pelosio"
+        ]
+      },
+      {
+        "zona": "1° Piano",
+        "docenti": [
+          "Marini",
+          "De Bacco"
+        ]
+      },
+      {
+        "zona": "2° Piano",
+        "docenti": [
+          "Salton",
+          "Gris"
+        ]
+      },
+      {
+        "zona": "Laboratori",
+        "docenti": [
+          "Savaris"
+        ]
+      }
+    ],
+    "venerdi": [
+      {
+        "zona": "Scale lato bagni",
+        "docenti": [
+          "Basso"
+        ]
+      },
+      {
+        "zona": "Scale lato didattica",
+        "docenti": [
+          "Cassarino"
+        ]
+      },
+      {
+        "zona": "MC Mario",
+        "docenti": [
+          "Cirillo"
+        ]
+      },
+      {
+        "zona": "Cortile ingresso",
+        "docenti": [
+          "D'Incau",
+          "Feltrin"
+        ]
+      },
+      {
+        "zona": "Piano Terra",
+        "docenti": [
+          "Guetta",
+          "Turrin"
+        ]
+      },
+      {
+        "zona": "1° Piano",
+        "docenti": [
+          "Noce",
+          "Gris"
+        ]
+      },
+      {
+        "zona": "2° Piano",
+        "docenti": [
+          "Neri",
+          "Rento"
+        ]
+      },
+      {
+        "zona": "Laboratori",
+        "docenti": [
+          "Chiariello"
+        ]
+      }
+    ],
+    "sabato": [
+      {
+        "zona": "Scale lato bagni",
+        "docenti": [
+          "Ciarlantini"
+        ]
+      },
+      {
+        "zona": "Scale lato didattica",
+        "docenti": [
+          "Fantinel"
+        ]
+      },
+      {
+        "zona": "MC Mario",
+        "docenti": [
+          "Gris"
+        ]
+      },
+      {
+        "zona": "Cortile ingresso",
+        "docenti": [
+          "Pontillo",
+          "Zaetta"
+        ]
+      },
+      {
+        "zona": "Piano Terra",
+        "docenti": [
+          "Sardina"
+        ]
+      },
+      {
+        "zona": "1° Piano",
+        "docenti": [
+          "Zirpolo",
+          "Zannol"
+        ]
+      },
+      {
+        "zona": "2° Piano",
+        "docenti": [
+          "Capozzolo"
+        ]
+      },
+      {
+        "zona": "Laboratori",
+        "docenti": [
+          "Pelosio"
+        ]
+      }
+    ]
+  },
+  "per_docente": {
+    "Ambrosanio": [
+      {
+        "giorno": "giovedi",
+        "zona": "Scale lato bagni"
+      }
+    ],
+    "Bassani": [
+      {
+        "giorno": "mercoledi",
+        "zona": "Scale lato didattica"
+      }
+    ],
+    "Basso": [
+      {
+        "giorno": "venerdi",
+        "zona": "Scale lato bagni"
+      }
+    ],
+    "Berlese": [
+      {
+        "giorno": "mercoledi",
+        "zona": "MC Mario"
+      }
+    ],
+    "Bordin": [
+      {
+        "giorno": "lunedi",
+        "zona": "Scale lato bagni"
+      }
+    ],
+    "Bortolamiol": [
+      {
+        "giorno": "giovedi",
+        "zona": "Scale lato didattica"
+      }
+    ],
+    "Capozzolo": [
+      {
+        "giorno": "lunedi",
+        "zona": "Scale lato didattica"
+      },
+      {
+        "giorno": "mercoledi",
+        "zona": "Cortile ingresso"
+      },
+      {
+        "giorno": "sabato",
+        "zona": "2° Piano"
+      }
+    ],
+    "Cassarino": [
+      {
+        "giorno": "venerdi",
+        "zona": "Scale lato didattica"
+      }
+    ],
+    "Chiariello": [
+      {
+        "giorno": "martedi",
+        "zona": "Cortile ingresso"
+      },
+      {
+        "giorno": "venerdi",
+        "zona": "Laboratori"
+      }
+    ],
+    "Ciarlantini": [
+      {
+        "giorno": "sabato",
+        "zona": "Scale lato bagni"
+      }
+    ],
+    "Cioppa": [
+      {
+        "giorno": "mercoledi",
+        "zona": "Cortile ingresso"
+      }
+    ],
+    "Cirillo": [
+      {
+        "giorno": "venerdi",
+        "zona": "MC Mario"
+      }
+    ],
+    "Corso": [
+      {
+        "giorno": "giovedi",
+        "zona": "MC Mario"
+      }
+    ],
+    "Cozzolino": [
+      {
+        "giorno": "lunedi",
+        "zona": "MC Mario"
+      }
+    ],
+    "D'Incau": [
+      {
+        "giorno": "venerdi",
+        "zona": "Cortile ingresso"
+      }
+    ],
+    "Da Rold": [
+      {
+        "giorno": "lunedi",
+        "zona": "Cortile ingresso"
+      },
+      {
+        "giorno": "martedi",
+        "zona": "Scale lato bagni"
+      }
+    ],
+    "De Bacco": [
+      {
+        "giorno": "martedi",
+        "zona": "Laboratori"
+      },
+      {
+        "giorno": "giovedi",
+        "zona": "1° Piano"
+      }
+    ],
+    "De Boni": [
+      {
+        "giorno": "lunedi",
+        "zona": "Piano Terra"
+      }
+    ],
+    "De Min": [
+      {
+        "giorno": "giovedi",
+        "zona": "Cortile ingresso"
+      }
+    ],
+    "De Pellegrin": [
+      {
+        "giorno": "lunedi",
+        "zona": "1° Piano"
+      }
+    ],
+    "De Pizzol": [
+      {
+        "giorno": "lunedi",
+        "zona": "2° Piano"
+      }
+    ],
+    "Decet": [
+      {
+        "giorno": "martedi",
+        "zona": "Scale lato didattica"
+      },
+      {
+        "giorno": "giovedi",
+        "zona": "Piano Terra"
+      }
+    ],
+    "Fantinel": [
+      {
+        "giorno": "sabato",
+        "zona": "Scale lato didattica"
+      }
+    ],
+    "Feltrin": [
+      {
+        "giorno": "lunedi",
+        "zona": "Laboratori"
+      },
+      {
+        "giorno": "venerdi",
+        "zona": "Cortile ingresso"
+      }
+    ],
+    "Gaio": [
+      {
+        "giorno": "lunedi",
+        "zona": "Cortile ingresso"
+      }
+    ],
+    "Gasperin": [
+      {
+        "giorno": "martedi",
+        "zona": "MC Mario"
+      }
+    ],
+    "Gris": [
+      {
+        "giorno": "giovedi",
+        "zona": "2° Piano"
+      },
+      {
+        "giorno": "venerdi",
+        "zona": "1° Piano"
+      },
+      {
+        "giorno": "sabato",
+        "zona": "MC Mario"
+      }
+    ],
+    "Guetta": [
+      {
+        "giorno": "venerdi",
+        "zona": "Piano Terra"
+      }
+    ],
+    "Guizzo": [
+      {
+        "giorno": "mercoledi",
+        "zona": "Scale lato bagni"
+      }
+    ],
+    "Liuzzo": [
+      {
+        "giorno": "lunedi",
+        "zona": "1° Piano"
+      },
+      {
+        "giorno": "martedi",
+        "zona": "Cortile ingresso"
+      }
+    ],
+    "Marini": [
+      {
+        "giorno": "giovedi",
+        "zona": "1° Piano"
+      }
+    ],
+    "Neri": [
+      {
+        "giorno": "venerdi",
+        "zona": "2° Piano"
+      }
+    ],
+    "Noce": [
+      {
+        "giorno": "venerdi",
+        "zona": "1° Piano"
+      }
+    ],
+    "Pellizzari": [
+      {
+        "giorno": "lunedi",
+        "zona": "2° Piano"
+      }
+    ],
+    "Pelosio": [
+      {
+        "giorno": "giovedi",
+        "zona": "Piano Terra"
+      },
+      {
+        "giorno": "sabato",
+        "zona": "Laboratori"
+      }
+    ],
+    "Pontillo": [
+      {
+        "giorno": "sabato",
+        "zona": "Cortile ingresso"
+      }
+    ],
+    "Rento": [
+      {
+        "giorno": "martedi",
+        "zona": "1° Piano"
+      },
+      {
+        "giorno": "venerdi",
+        "zona": "2° Piano"
+      }
+    ],
+    "Ruosi": [
+      {
+        "giorno": "lunedi",
+        "zona": "Piano Terra"
+      },
+      {
+        "giorno": "mercoledi",
+        "zona": "Piano Terra"
+      }
+    ],
+    "Salton": [
+      {
+        "giorno": "giovedi",
+        "zona": "2° Piano"
+      }
+    ],
+    "Sardina": [
+      {
+        "giorno": "mercoledi",
+        "zona": "1° Piano"
+      },
+      {
+        "giorno": "sabato",
+        "zona": "Piano Terra"
+      }
+    ],
+    "Savaris": [
+      {
+        "giorno": "giovedi",
+        "zona": "Laboratori"
+      }
+    ],
+    "Schirò": [
+      {
+        "giorno": "martedi",
+        "zona": "Piano Terra"
+      }
+    ],
+    "Tonet": [
+      {
+        "giorno": "martedi",
+        "zona": "1° Piano"
+      }
+    ],
+    "Turchetto": [
+      {
+        "giorno": "mercoledi",
+        "zona": "2° Piano"
+      }
+    ],
+    "Turrin": [
+      {
+        "giorno": "martedi",
+        "zona": "2° Piano"
+      },
+      {
+        "giorno": "venerdi",
+        "zona": "Piano Terra"
+      }
+    ],
+    "Vivacqua": [
+      {
+        "giorno": "giovedi",
+        "zona": "Cortile ingresso"
+      }
+    ],
+    "Zaetta": [
+      {
+        "giorno": "martedi",
+        "zona": "Piano Terra"
+      },
+      {
+        "giorno": "mercoledi",
+        "zona": "Laboratori"
+      },
+      {
+        "giorno": "sabato",
+        "zona": "Cortile ingresso"
+      }
+    ],
+    "Zannol": [
+      {
+        "giorno": "martedi",
+        "zona": "2° Piano"
+      },
+      {
+        "giorno": "mercoledi",
+        "zona": "1° Piano"
+      },
+      {
+        "giorno": "sabato",
+        "zona": "1° Piano"
+      }
+    ],
+    "Zirpolo": [
+      {
+        "giorno": "sabato",
+        "zona": "1° Piano"
+      }
+    ]
+  }
+}

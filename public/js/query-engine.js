@@ -70,6 +70,25 @@ export function formatDateSpoken(ymd) {
   return `${d} ${mName}`;
 }
 
+export function getISOWeek(date) {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
+}
+
+export function getWeekParity(date) {
+  const weekNum = getISOWeek(date);
+  const isOdd = weekNum % 2 === 1;
+  return {
+    weekNum,
+    code: isOdd ? "Q1" : "Q2",
+    parityLabel: isOdd ? "dispari" : "pari",
+    label: isOdd ? `Settimana Q1 (n° ${weekNum}, dispari)` : `Settimana Q2 (n° ${weekNum}, pari)`,
+  };
+}
+
 export function formatDocenteName(nome) {
   if (!nome) return "";
   if (nome.startsWith("_")) {
@@ -163,7 +182,14 @@ export function buildIndex(db) {
     giorni_sospensione: {},
   };
 
-  return { db, docenti, classKeys, aule, starts, attivita, scansione, calendario, glo };
+  const sorveglianze = db.sorveglianze || {
+    meta: {},
+    turni: [],
+    per_giorno: {},
+    per_docente: {},
+  };
+
+  return { db, docenti, classKeys, aule, starts, attivita, scansione, calendario, glo, sorveglianze };
 }
 
 // ------------------------------------------------------------------ entità
@@ -204,6 +230,10 @@ function scoreDocenti(q, idx) {
   const scored = idx.docenti
     .map((d) => {
       let score = 0;
+      const fullNorm = normalize(d.nome);
+      if (fullNorm.length >= 3 && new RegExp(`(^|\\s)${fullNorm}(\\s|$)`).test(norm)) {
+        score += 25 + fullNorm.length;
+      }
       for (const w of words) {
         if (stopWords.has(w)) continue;
         for (const t of d.tokens) {
@@ -355,6 +385,9 @@ export function resolveRoomLocation(roomStr) {
   }
   if (/rizzarda/i.test(raw)) {
     return { code: "RIZZARDA", name: "Sede Esterna Rizzarda", floor: -1, floorLabel: "SEDE ESTERNA", wing: "Succursale Rizzarda" };
+  }
+  if (/colotti/i.test(raw)) {
+    return { code: "COLOTTI", name: "Sede Esterna Colotti", floor: -1, floorLabel: "SEDE ESTERNA", wing: "Sezione Colotti" };
   }
   if (/palestra/i.test(raw) && !/entrata|spogliatoi/i.test(raw)) {
     return MAP_DIRECTORY.find((m) => m.code === "004");
@@ -517,6 +550,48 @@ export function parseQuery(text, idx, ctx = {}) {
 
   if (isHelp) {
     return { ...base, intent: "aiuto", queryText: q0 };
+  }
+
+  // Controllo per Turni di Sorveglianza & Orario Intervallo (Comunicato n. 167, dal 19 novembre 2026)
+  const isSorveglianza = /\b(sorveglianz[ae]|sorvegliare|vigilanza|ricreazione|intervallo)\b/.test(q0);
+  if (isSorveglianza) {
+    const asksDuration = /\b(quanto\s+dura|durata|a\s+che\s+ora|quando\s+(?:e|inizia|finisce)\s+(?:l\s*)?(?:intervallo|ricreazione)|orario\s+(?:dell\s*)?(?:intervallo|ricreazione))\b/.test(q0);
+    const explicitDay = /\b(oggi|domani|dopodomani|lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica)\b/.test(q0) || Boolean(explicitDate);
+    const docs = scoreDocenti(q, idx);
+    const sorvDocName = findSorveglianzaDocente(q0, idx);
+    const zona = findSorveglianzaZona(q0);
+    const wantsSelf = /\b(ho|mio|mia|miei|faccio|devo|tocca)\b/.test(q0);
+    return {
+      ...base,
+      intent: "sorveglianza",
+      asksDuration,
+      explicitDay,
+      docente: docs.length === 1 ? docs[0] : null,
+      sorvDocName,
+      zona,
+      wantsSelf,
+      queryText: q0,
+    };
+  }
+
+  // Controllo per Ore di Recupero & Settimane Q1 / Q2 (Comunicato n. 167, dal 19 novembre 2026)
+  const isRecuperoQuery = /\b(recuper[oi]|q1|q2|settimana\s+(?:pari|dispari))\b/.test(q0);
+  if (isRecuperoQuery) {
+    const asksWeekParity =
+      /\b(q1|q2|settimana\s+(?:pari|dispari)|che\s+settimana|quale\s+settimana)\b/.test(q0) &&
+      !/\b(chi\s+ha|quando\s+ha|quando\s+ho|ore\s+di\s+recupero)\b/.test(q0);
+    const explicitDay = /\b(oggi|domani|dopodomani|lunedi|martedi|mercoledi|giovedi|venerdi|sabato|domenica)\b/.test(q0) || Boolean(explicitDate);
+    const docs = scoreDocenti(q, idx);
+    const wantsSelf = /\b(ho|mio|mia|miei|devo)\b/.test(q0);
+    return {
+      ...base,
+      intent: "recupero",
+      asksWeekParity,
+      explicitDay,
+      docente: docs.length === 1 ? docs[0] : null,
+      wantsSelf,
+      queryText: q0,
+    };
   }
 
   // Controllo per le Attività (Collegi docenti, Consigli di classe, Scrutini, Colloqui, ecc.)
@@ -720,6 +795,27 @@ function answerDocente(p, idx) {
   const subj = p.isSelf ? "" : spokenDocenteName(d.nome);
 
   const describe = (s) => {
+    if (s.tipo === "recupero") {
+      const sett = s.settimana || "tutte";
+      const settLabel =
+        sett === "Q1"
+          ? "Settimana Q1 (dispari)"
+          : sett === "Q2"
+          ? "Settimana Q2 (pari)"
+          : "Settimanale (ogni settimana)";
+      const settSay =
+        sett === "Q1"
+          ? "nelle settimane dispari Q1"
+          : sett === "Q2"
+          ? "nelle settimane pari Q2"
+          : "ogni settimana";
+      return {
+        main: `Recupero (${sett === "tutte" ? "Settimanale" : sett})`,
+        sub: `${settLabel} • Comunicato n. 167`,
+        say: p.isSelf ? `hai recupero ${settSay}` : `ha recupero ${settSay}`,
+        aula: null,
+      };
+    }
     if (s.tipo === "disposizione") {
       const dove = s.aula ? ` in ${titleCase(s.aula)}` : "";
       return {
@@ -735,6 +831,15 @@ function answerDocente(p, idx) {
     const conSay = s.copresenza?.length ? s.copresenza.map(spokenDocenteName).join(", ") : "";
     const mat = s.materia ? titleCase(s.materia) : "materia non indicata";
     const aula = s.aula ? titleCase(s.aula) : "aula non indicata";
+    if (!cls) {
+      const mainLabel = s.aula && s.aula.toLowerCase() !== mat.toLowerCase() ? `${mat} • ${aula}` : mat;
+      return {
+        main: mainLabel,
+        sub: con ? `con ${con}` : "Sede esterna / attività",
+        say: p.isSelf ? `sei in ${mat}` : `è in ${mat}`,
+        aula: s.aula || null,
+      };
+    }
     const verb = s.tipo === "compresenza" ? "è in compresenza" : "ha lezione";
     return {
       main: `${aula} • ${cls}`,
@@ -749,7 +854,7 @@ function answerDocente(p, idx) {
   if (p.hour === null) {
     const groups = groupHours(
       sched,
-      (s) => JSON.stringify([s.tipo, s.classe, s.materia, s.aula, s.copresenza, s.altre_classi])
+      (s) => JSON.stringify([s.tipo, s.settimana, s.classe, s.materia, s.aula, s.copresenza, s.altre_classi])
     );
     if (!groups.length) {
       return {
@@ -1046,11 +1151,395 @@ function answerSpazioMappa(p) {
   };
 }
 
+const SORVEGLIANZA_ZONE_PATTERNS = [
+  { label: "Scale lato bagni", re: /\b(scale?\s+lato\s+bagn[oi]|lato\s+bagn[oi]|bagn[oi])\b/ },
+  { label: "Scale lato didattica", re: /\b(scale?\s+lato\s+didattica|lato\s+didattica|didattica)\b/ },
+  { label: "MC Mario", re: /\b(mc\s*mario|mario)\b/ },
+  { label: "Cortile ingresso", re: /\b(cortile|ingresso|cortile\s+ingresso)\b/ },
+  { label: "Piano Terra", re: /\b(piano\s+terra|p\s*t|piano\s+0)\b/ },
+  { label: "1° Piano", re: /\b(primo\s+piano|piano\s+primo|1\s*piano|piano\s+1)\b/ },
+  { label: "2° Piano", re: /\b(secondo\s+piano|piano\s+secondo|2\s*piano|piano\s+2)\b/ },
+  { label: "Laboratori", re: /\b(laboratori[o]?|lab)\b/ },
+];
+
+function findSorveglianzaZona(qNorm) {
+  for (const z of SORVEGLIANZA_ZONE_PATTERNS) {
+    if (z.re.test(qNorm)) return z.label;
+  }
+  return null;
+}
+
+function findSorveglianzaDocente(qNorm, idx) {
+  const perDoc = idx.sorveglianze?.per_docente || {};
+  const qWords = new Set(qNorm.split(" ").filter((w) => w.length >= 3));
+  let best = null;
+  let bestLen = 0;
+  for (const name of Object.keys(perDoc)) {
+    const nNorm = normalize(name);
+    if (new RegExp(`(^|\\s)${nNorm}(\\s|$)`).test(qNorm)) {
+      if (nNorm.length > bestLen) {
+        best = name;
+        bestLen = nNorm.length;
+      }
+      continue;
+    }
+    const tokens = nNorm.split(" ").filter((t) => t.length >= 4);
+    if (tokens.some((t) => qWords.has(t)) && nNorm.length > bestLen) {
+      best = name;
+      bestLen = nNorm.length;
+    }
+  }
+  return best;
+}
+
+function recessInfoForDay(day) {
+  if (["lunedi", "martedi", "mercoledi"].includes(day)) {
+    return { orario: "10:25-10:35", durata: 10, label: "10:25–10:35 (10 minuti)" };
+  }
+  return { orario: "10:50-11:05", durata: 15, label: "10:50–11:05 (15 minuti)" };
+}
+
+function answerSorveglianza(p, idx, ctx = {}) {
+  const sorv = idx.sorveglianze || {};
+  const perGiorno = sorv.per_giorno || {};
+  const perDocente = sorv.per_docente || {};
+  const noteStd =
+    "Comunicato n. 167 (in vigore dal 19/11/2026). In caso di variazioni comunicare la modifica all'Ufficio Tecnico dopo aver individuato il sostituto.";
+
+  // 1) Richiesta durata / orario intervallo
+  if (p.asksDuration) {
+    return {
+      title: "Orario e Durata Intervallo",
+      badge: "COMUNICATO N. 167",
+      lines: [
+        { when: "Lun – Mer", main: "10:25 – 10:35 (10 minuti)", sub: "Tra la 3ª e la 4ª ora" },
+        { when: "Gio – Sab", main: "10:50 – 11:05 (15 minuti)", sub: "Tra la 3ª e la 4ª ora" },
+      ],
+      note: noteStd,
+      speech: "L'intervallo dura 10 minuti dal lunedì al mercoledì, dalle 10:25 alle 10:35, e 15 minuti dal giovedì al sabato, dalle 10:50 alle 11:05.",
+      rooms: [],
+    };
+  }
+
+  // 2) Risoluzione docente (esplicito o self via ctx.me)
+  let targetDocName = p.sorvDocName || null;
+  let isSelf = false;
+  if (!targetDocName && p.docente) {
+    const docKeyNorm = normalize(p.docente.nome);
+    const hit = Object.keys(perDocente).find((k) => {
+      const kn = normalize(k);
+      return kn === docKeyNorm || docKeyNorm.includes(kn) || kn.includes(docKeyNorm);
+    });
+    targetDocName = hit || p.docente.nome;
+  }
+  if (!targetDocName && !p.zona && p.wantsSelf && ctx.me) {
+    const meNorm = normalize(ctx.me);
+    const hit = Object.keys(perDocente).find((k) => {
+      const kn = normalize(k);
+      return kn === meNorm || meNorm.includes(kn) || kn.includes(meNorm);
+    });
+    targetDocName = hit || titleCase(ctx.me);
+    isSelf = true;
+  } else if (targetDocName && ctx.me) {
+    const meNorm = normalize(ctx.me);
+    const tNorm = normalize(targetDocName);
+    isSelf = meNorm === tNorm || meNorm.includes(tNorm) || tNorm.includes(meNorm);
+  }
+
+  if (targetDocName) {
+    const turniDoc = perDocente[targetDocName] || [];
+    const displayDoc = isSelf ? `Prof. ${targetDocName} (Tu)` : `Prof. ${targetDocName}`;
+    if (!turniDoc.length) {
+      return {
+        title: `Sorveglianze • ${displayDoc}`,
+        badge: "SORVEGLIANZE • DAL 19 NOV",
+        lines: [],
+        note: `Nessun turno di sorveglianza assegnato nel prospetto dal 19 novembre 2026. ${noteStd}`,
+        speech: isSelf
+          ? "Non hai turni di sorveglianza assegnati all'intervallo nel prospetto dal 19 novembre."
+          : `Il professor ${targetDocName} non ha turni di sorveglianza assegnati nel prospetto dal 19 novembre.`,
+        rooms: [],
+      };
+    }
+
+    if (p.explicitDay) {
+      if (p.day === "domenica") return closedDay(p, `Sorveglianze • ${displayDoc}`);
+      const dayTurni = turniDoc.filter((t) => t.giorno === p.day);
+      const rec = recessInfoForDay(p.day);
+      const dayCap = cap(dl(p.day));
+      const allLines = turniDoc.map((t) => {
+        const r = recessInfoForDay(t.giorno);
+        return {
+          when: cap(dl(t.giorno)),
+          main: t.zona,
+          sub: `Intervallo ${r.label}`,
+        };
+      });
+      if (dayTurni.length) {
+        const zoneStr = dayTurni.map((t) => t.zona).join(" e ");
+        return {
+          title: `Sorveglianza ${displayDoc}`,
+          badge: `${dl(p.day).toUpperCase()} • ${rec.orario}`,
+          lines: dayTurni.map((t) => ({ when: dayCap, main: t.zona, sub: `Intervallo ${rec.label}` })),
+          note: noteStd,
+          speech: isSelf
+            ? `${dayCap} hai sorveglianza in zona ${zoneStr}, durante l'intervallo delle ${rec.orario}.`
+            : `${dayCap} il professor ${targetDocName} ha sorveglianza in zona ${zoneStr}, durante l'intervallo delle ${rec.orario}.`,
+          rooms: [],
+        };
+      }
+      const otherStr = turniDoc.map((t) => `${dl(t.giorno)} in zona ${t.zona}`).join(" e ");
+      return {
+        title: `Sorveglianza ${displayDoc}`,
+        badge: `${dl(p.day).toUpperCase()} • LIBERO`,
+        lines: allLines,
+        note: `${dayCap} non ha sorveglianza. Di seguito i turni settimanali assegnati. ${noteStd}`,
+        speech: isSelf
+          ? `${dayCap} non hai sorveglianza. Il tuo turno settimanale è ${otherStr}.`
+          : `${dayCap} il professor ${targetDocName} non ha sorveglianza. Il suo turno settimanale è ${otherStr}.`,
+        rooms: [],
+      };
+    }
+
+    const lines = turniDoc.map((t) => {
+      const r = recessInfoForDay(t.giorno);
+      return { when: cap(dl(t.giorno)), main: t.zona, sub: `Intervallo ${r.label}` };
+    });
+    const spoken = turniDoc.map((t) => `${dl(t.giorno)} in zona ${t.zona}`).join(" e ");
+    return {
+      title: `Sorveglianze • ${displayDoc}`,
+      badge: "SORVEGLIANZE • DAL 19 NOV",
+      lines,
+      note: noteStd,
+      speech: isSelf
+        ? `Hai sorveglianza all'intervallo ${spoken}.`
+        : `Il professor ${targetDocName} ha sorveglianza all'intervallo ${spoken}.`,
+      rooms: [],
+    };
+  }
+
+  // 3) Per zona specifica (es. "sorveglianza cortile ingresso", "sorveglianza laboratori giovedì")
+  if (p.zona) {
+    const giorniOrd = ["lunedi", "martedi", "mercoledi", "giovedi", "venerdi", "sabato"];
+    if (p.explicitDay) {
+      if (p.day === "domenica") return closedDay(p, `Sorveglianza • ${p.zona}`);
+      const list = (perGiorno[p.day] || []).filter((x) => x.zona === p.zona);
+      const docs = list.flatMap((x) => x.docenti);
+      const rec = recessInfoForDay(p.day);
+      const dayCap = cap(dl(p.day));
+      return {
+        title: `Sorveglianza • ${p.zona}`,
+        badge: `${dl(p.day).toUpperCase()} • ${rec.orario}`,
+        lines: docs.length
+          ? [{ when: dayCap, main: docs.join(", "), sub: `${p.zona} • Intervallo ${rec.label}` }]
+          : [],
+        note: noteStd,
+        speech: docs.length
+          ? `${dayCap} la sorveglianza in zona ${p.zona} è affidata a ${joinSpeech(docs)}.`
+          : `${dayCap} non risultano docenti assegnati alla zona ${p.zona}.`,
+        rooms: [],
+      };
+    }
+    const lines = [];
+    for (const g of giorniOrd) {
+      const list = (perGiorno[g] || []).filter((x) => x.zona === p.zona);
+      const docs = list.flatMap((x) => x.docenti);
+      if (docs.length) {
+        const rec = recessInfoForDay(g);
+        lines.push({ when: cap(dl(g)), main: docs.join(", "), sub: `Intervallo ${rec.label}` });
+      }
+    }
+    return {
+      title: `Turni Sorveglianza • ${p.zona}`,
+      badge: "SORVEGLIANZE • DAL 19 NOV",
+      lines,
+      note: noteStd,
+      speech: `Ecco i turni settimanali di sorveglianza per la zona ${p.zona}: ` + lines.map((l) => `${l.when} ${l.main}`).join(", ") + ".",
+      rooms: [],
+    };
+  }
+
+  // 4) Per giorno (default: giorno della query o oggi)
+  if (p.day === "domenica") return closedDay(p, "Turni di Sorveglianza");
+  const dayItems = perGiorno[p.day] || [];
+  const rec = recessInfoForDay(p.day);
+  const dayCap = cap(dl(p.day));
+  const lines = dayItems.map((it) => ({
+    when: it.zona,
+    main: it.docenti.join(", "),
+    sub: `Intervallo ${rec.label}`,
+  }));
+  return {
+    title: `Sorveglianze • ${dayCap}`,
+    badge: `INTERVALLO ${rec.orario} (${rec.durata} MIN)`,
+    lines,
+    note: noteStd,
+    speech: `${dayCap}, durante l'intervallo delle ${rec.orario} di ${rec.durata} minuti, i turni di sorveglianza coprono ${lines.length} zone dell'istituto.`,
+    rooms: [],
+  };
+}
+
+function answerRecupero(p, idx, ctx = {}) {
+  const refDate = p.targetDateStr
+    ? new Date(`${p.targetDateStr}T10:00:00`)
+    : p.now || new Date();
+  const parity = getWeekParity(refDate);
+  const noteStd =
+    "Comunicato n. 167 (in vigore dal 19/11/2026): recuperi Q1 nelle settimane dispari e Q2 nelle settimane pari del calendario.";
+
+  // 1) Verifica docente (esplicito o self)
+  let docObj = p.docente || null;
+  let isSelf = false;
+  if (!docObj && p.wantsSelf && ctx.me) {
+    const meHits = scoreDocenti(normalize(ctx.me), idx);
+    if (meHits.length === 1) {
+      docObj = meHits[0];
+      isSelf = true;
+    }
+  } else if (docObj && ctx.me) {
+    const meHits = scoreDocenti(normalize(ctx.me), idx);
+    isSelf = meHits.length === 1 && meHits[0].id === docObj.id;
+  }
+
+  if (docObj) {
+    const d = idx.db.docenti[docObj.id];
+    const displayDoc = isSelf ? `Prof. ${titleCase(d.nome)} (Tu)` : `Prof. ${titleCase(d.nome)}`;
+    const giorniOrd = ["lunedi", "martedi", "mercoledi", "giovedi", "venerdi", "sabato"];
+    const found = [];
+    for (const g of giorniOrd) {
+      const daySched = d.orario[g] || {};
+      for (let h = 1; h <= 6; h++) {
+        const s = daySched[String(h)];
+        if (s && s.tipo === "recupero") {
+          found.push({ day: g, hour: h, settimana: s.settimana || "tutte" });
+        }
+      }
+    }
+
+    if (!found.length) {
+      return {
+        title: `Ore di Recupero • ${displayDoc}`,
+        badge: `SETTIMANA CORRENTE: ${parity.code} (${parity.parityLabel.toUpperCase()})`,
+        lines: [],
+        note: `Nessuna ora di recupero registrata nell'orario mod1a. ${noteStd}`,
+        speech: isSelf
+          ? "Non hai ore di recupero in orario."
+          : `${cap(spokenDocenteName(d.nome))} non ha ore di recupero in orario.`,
+        rooms: [],
+      };
+    }
+
+    const lines = found.map((f) => {
+      const activeNow = f.settimana === "tutte" || f.settimana === parity.code;
+      const settDesc =
+        f.settimana === "Q1"
+          ? "Settimane dispari (Q1)"
+          : f.settimana === "Q2"
+          ? "Settimane pari (Q2)"
+          : "Ogni settimana";
+      const st = startOf(idx, f.hour, f.day);
+      return {
+        when: `${cap(dl(f.day))} • ${f.hour}ª ora`,
+        main: `Recupero ${f.settimana === "tutte" ? "Settimanale" : f.settimana}${activeNow ? " • Attivo questa settimana" : " • Non attivo questa settimana"}`,
+        sub: `${settDesc}${st ? " (" + st + ")" : ""}`,
+      };
+    });
+
+    const spokenParts = found.map((f) => {
+      const settSay =
+        f.settimana === "Q1"
+          ? "nelle settimane dispari Q1"
+          : f.settimana === "Q2"
+          ? "nelle settimane pari Q2"
+          : "ogni settimana";
+      return `${dl(f.day)} alla ${ORD_WORDS[f.hour]} ora ${settSay}`;
+    });
+    return {
+      title: `Ore di Recupero • ${displayDoc}`,
+      badge: `QUESTA SETTIMANA: ${parity.code} (N° ${parity.weekNum})`,
+      lines,
+      note: noteStd,
+      speech: isSelf
+        ? `Hai recupero ${joinSpeech(spokenParts)}. Questa settimana è ${parity.code}, settimana numero ${parity.weekNum} (${parity.parityLabel}).`
+        : `${cap(spokenDocenteName(d.nome))} ha recupero ${joinSpeech(spokenParts)}. Questa settimana è ${parity.code}, numero ${parity.weekNum}.`,
+      rooms: [],
+    };
+  }
+
+  // 2) Richiesta stato settimana Q1/Q2
+  if (p.asksWeekParity || !p.explicitDay) {
+    return {
+      title: `Settimana di Recupero: ${parity.code}`,
+      badge: `SETTIMANA N° ${parity.weekNum} • ${parity.parityLabel.toUpperCase()}`,
+      lines: [
+        {
+          when: "Settimana attuale",
+          main: `${parity.code} — Settimana n° ${parity.weekNum} (${parity.parityLabel})`,
+          sub: parity.code === "Q1" ? "Attivi i recuperi Q1 e i recuperi settimanali" : "Attivi i recuperi Q2 e i recuperi settimanali",
+        },
+        {
+          when: "Regola Q1",
+          main: "Settimane dispari del calendario",
+          sub: "Es. settimana 47 (16–21 nov), settimana 49 (30 nov–5 dic)",
+        },
+        {
+          when: "Regola Q2",
+          main: "Settimane pari del calendario",
+          sub: "Es. settimana 48 (23–28 nov), settimana 50 (7–12 dic)",
+        },
+      ],
+      note: noteStd,
+      speech: `La settimana numero ${parity.weekNum} è una settimana ${parity.parityLabel}, quindi è in vigore la settimana ${parity.code}. I recuperi Q1 sono attivi nelle settimane dispari e i recuperi Q2 nelle settimane pari.`,
+      rooms: [],
+    };
+  }
+
+  // 3) Tutti i docenti con recupero in un giorno specifico (es. "chi ha recupero lunedì")
+  if (p.day === "domenica") return closedDay(p, "Ore di Recupero");
+  const dayMatches = [];
+  for (const d of Object.values(idx.db.docenti)) {
+    const daySched = d.orario[p.day] || {};
+    for (let h = 1; h <= 6; h++) {
+      const s = daySched[String(h)];
+      if (s && s.tipo === "recupero") {
+        dayMatches.push({ nome: d.nome, hour: h, settimana: s.settimana || "tutte" });
+      }
+    }
+  }
+  dayMatches.sort((a, b) => a.hour - b.hour || a.nome.localeCompare(b.nome));
+  const dayCap = cap(dl(p.day));
+  const lines = dayMatches.map((m) => ({
+    when: `${m.hour}ª ora`,
+    main: `Prof. ${titleCase(m.nome)}`,
+    sub: m.settimana === "tutte" ? "Recupero settimanale" : `Recupero ${m.settimana} (${m.settimana === "Q1" ? "settimane dispari" : "settimane pari"})`,
+  }));
+  return {
+    title: `Recuperi • ${dayCap}`,
+    badge: `SETTIMANA ${parity.code} • ${dayMatches.length} DOCENTI`,
+    lines,
+    note: noteStd,
+    speech: `${dayCap} sono previste ${dayMatches.length} ore di recupero in orario. La settimana corrente è ${parity.code}.`,
+    rooms: [],
+  };
+}
+
 function answerAiuto(p) {
   return {
     title: "Guida alle Domande Possibili",
     badge: "GUIDA • COMANDI DISPONIBILI",
     lines: [
+      {
+        when: "Sorveglianze",
+        main: "Chi fa sorveglianza oggi?",
+        sub: "Anche: «Quando ho sorveglianza?», «Sorveglianza Cassarino», «Quanto dura l'intervallo?»",
+        query: "chi fa sorveglianza oggi",
+      },
+      {
+        when: "Recuperi Q1/Q2",
+        main: "Questa settimana è Q1 o Q2?",
+        sub: "Anche: «Quando ho recupero?», «Ore di recupero Cassarino», «Chi ha recupero lunedì?»",
+        query: "questa settimana è Q1 o Q2",
+      },
       {
         when: "Consigli CdC",
         main: "Quando è il consiglio di classe della 4ITA?",
@@ -1059,9 +1548,9 @@ function answerAiuto(p) {
       },
       {
         when: "Docenti",
-        main: "Cosa fa Curtolo domani alla terza ora?",
+        main: "Cosa fa Malè domani alla terza ora?",
         sub: "Anche: «Cosa ho oggi?» (salva il tuo cognome con 👤), «Cassarino lunedì ha disposizione?»",
-        query: "cosa fa Curtolo domani alla terza ora",
+        query: "cosa fa Malè domani alla terza ora",
       },
       {
         when: "Classi",
@@ -1095,7 +1584,7 @@ function answerAiuto(p) {
       },
     ],
     note: "Tocca o clicca direttamente su una delle domande sopra per visualizzare subito la risposta.",
-    speech: "Ecco le principali domande che puoi pormi: puoi chiedermi l'orario di lezioni e docenti, le aule libere, la posizione degli spazi con la mappa dei piani, il calendario scolastico con ponti e vacanze, o le convocazioni dei consigli di classe.",
+    speech: "Ecco le principali domande che puoi pormi: puoi chiedermi i turni di sorveglianza, le settimane Q1 e Q2 dei recuperi, l'orario di lezioni e docenti, le aule libere, la mappa dei piani, il calendario scolastico o i consigli di classe.",
     rooms: [],
   };
 }
@@ -1830,6 +2319,10 @@ export function answer(p, idx, ctx = {}) {
   switch (p.intent) {
     case "aiuto":
       return answerAiuto(p);
+    case "sorveglianza":
+      return answerSorveglianza(p, idx, ctx);
+    case "recupero":
+      return answerRecupero(p, idx, ctx);
     case "docente":
       return answerDocente(p, idx);
     case "classe":

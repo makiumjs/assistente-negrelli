@@ -5,9 +5,10 @@ import { buildIndex, parseQuery, answer, resolveRoomLocation } from "../public/j
 const db = JSON.parse(readFileSync(new URL("../public/data/orario_completo.json", import.meta.url)));
 const idx = buildIndex(db);
 const now = new Date("2026-10-07T10:00:00"); // mercoledì 7 ottobre 2026 ore 10:00
-const ask = (t, me = "") => {
-  const p = parseQuery(t, idx, { now, me });
-  return { p, a: answer(p, idx) };
+const ask = (t, me = "", customNow = now) => {
+  const ctx = { now: customNow, me };
+  const p = parseQuery(t, idx, ctx);
+  return { p, a: answer(p, idx, ctx) };
 };
 
 console.log("=== 1. Test Query Classe ===");
@@ -37,9 +38,9 @@ console.log("✓ 4EE lunedì:", r.a.speech);
 console.log("\n=== 2. Test Query Docente ===");
 r = ask("Cosa ha Curtolo domani?");
 assert.equal(r.p.intent, "docente");
-assert.equal(r.p.docente.nome, "Curtolo");
+assert.equal(r.p.docente.nome, "Malè (Curtolo)");
 assert.equal(r.p.day, "giovedi");
-console.log("✓ Curtolo domani:", r.a.speech);
+console.log("✓ Malè (Curtolo) domani:", r.a.speech);
 
 r = ask("cosa ho oggi", "Cassarino");
 assert.ok(r.p.isSelf);
@@ -53,13 +54,14 @@ assert.ok(r.a.speech.includes("terza e quarta ora"));
 assert.ok(r.a.speech.includes("3ITA"));
 assert.ok(r.a.speech.includes("quinta ora"));
 assert.ok(r.a.speech.includes("disposizione"));
-console.log("✓ Cassarino lunedì (3ª-4ª ora 3ITA + 5ª disp):", r.a.speech);
+assert.ok(r.a.speech.includes("sesta ora") && r.a.speech.includes("Q2"));
+console.log("✓ Cassarino lunedì (3ª-4ª 3ITA + 5ª disp + 6ª rec Q2):", r.a.speech);
 
-r = ask("orario cattedra ele 4 lunedì");
+r = ask("orario Guizzo lunedì");
 assert.equal(r.p.intent, "docente");
-assert.equal(r.p.docente.nome, "_ele 4");
+assert.equal(r.p.docente.nome, "Guizzo");
 assert.equal(r.p.day, "lunedi");
-console.log("✓ Placeholder _ele 4:", r.a.speech);
+console.log("✓ Guizzo (ex _ele 4) lunedì:", r.a.speech);
 
 r = ask("cosa ha Curtolo lunedì alla sesta ora");
 assert.equal(r.p.intent, "docente");
@@ -470,6 +472,87 @@ for (const helpQ of ["quali domande posso farti?", "domande possibili", "cosa po
   assert.ok(rHelp.a.lines.every((l) => Boolean(l.query)));
 }
 console.log("✓ Guida alle domande verificata con successo per tutte le varianti");
+
+console.log("\n=== 14. Test Orario mod1a, Recuperi Q1/Q2 & Sorveglianze (Comunicato n. 167) ===");
+const nov19 = new Date("2026-11-19T10:00:00"); // Giovedì 19 novembre 2026 -> Settimana ISO 47 (dispari -> Q1)
+const nov23 = new Date("2026-11-23T10:00:00"); // Lunedì 23 novembre 2026 -> Settimana ISO 48 (pari -> Q2)
+
+// 1. Verifica parità settimane Q1 / Q2
+let r14 = ask("questa settimana è Q1 o Q2?", "", nov19);
+assert.equal(r14.p.intent, "recupero");
+assert.ok(r14.a.title.includes("Q1"));
+assert.ok(r14.a.speech.includes("47") && r14.a.speech.includes("dispari"));
+console.log("✓ Settimana 19 nov -> Q1:", r14.a.speech);
+
+r14 = ask("questa settimana è Q1 o Q2?", "", nov23);
+assert.equal(r14.p.intent, "recupero");
+assert.ok(r14.a.title.includes("Q2"));
+assert.ok(r14.a.speech.includes("48") && r14.a.speech.includes("pari"));
+console.log("✓ Settimana 23 nov -> Q2:", r14.a.speech);
+
+// 2. Recuperi per docente (Cassarino = Lunedì 6ª ora Q2; Zadra = Mer 4ª Q2 + Gio 3ª Q1)
+r14 = ask("ore di recupero Cassarino", "", nov23);
+assert.equal(r14.p.intent, "recupero");
+assert.equal(r14.a.lines.length, 1);
+assert.ok(r14.a.lines[0].when.includes("Lunedì") && r14.a.lines[0].when.includes("6ª"));
+assert.ok(r14.a.lines[0].main.includes("Q2") && r14.a.lines[0].main.includes("Attivo questa settimana"));
+console.log("✓ Recupero Cassarino (Q2 attivo):", r14.a.speech);
+
+r14 = ask("quando ho recupero?", "Zadra", nov19);
+assert.equal(r14.p.intent, "recupero");
+assert.equal(r14.a.lines.length, 2);
+assert.ok(r14.a.lines.some((l) => l.when.includes("Mercoledì") && l.main.includes("Q2")));
+assert.ok(r14.a.lines.some((l) => l.when.includes("Giovedì") && l.main.includes("Q1")));
+console.log("✓ Recuperi Zadra (Mer Q2 + Gio Q1):", r14.a.speech);
+
+// 3. Chi ha recupero in un giorno specifico
+r14 = ask("chi ha recupero lunedì?", "", nov19);
+assert.equal(r14.p.intent, "recupero");
+assert.ok(r14.a.lines.length >= 10);
+assert.ok(r14.a.lines.some((l) => l.main.includes("Cassarino")));
+console.log("✓ Recuperi lunedì:", r14.a.lines.length, "docenti");
+
+// 4. Sorveglianze per docente (esplicito e self)
+r14 = ask("quando ho sorveglianza?", "Cassarino", nov19);
+assert.equal(r14.p.intent, "sorveglianza");
+assert.equal(r14.a.lines.length, 1);
+assert.equal(r14.a.lines[0].when, "Venerdì");
+assert.equal(r14.a.lines[0].main, "Scale lato didattica");
+assert.ok(r14.a.speech.includes("venerdì") && r14.a.speech.includes("Scale lato didattica"));
+console.log("✓ Sorveglianza self Cassarino:", r14.a.speech);
+
+r14 = ask("dove fa sorveglianza Chiariello?", "", nov19);
+assert.equal(r14.p.intent, "sorveglianza");
+assert.equal(r14.a.lines.length, 2);
+assert.ok(r14.a.lines.some((l) => l.when === "Martedì" && l.main === "Cortile ingresso"));
+assert.ok(r14.a.lines.some((l) => l.when === "Venerdì" && l.main === "Laboratori"));
+console.log("✓ Sorveglianza Chiariello (Mar + Ven):", r14.a.speech);
+
+// 5. Sorveglianze per giorno e zona
+r14 = ask("chi fa sorveglianza oggi?", "", nov19);
+assert.equal(r14.p.intent, "sorveglianza");
+assert.equal(r14.a.title, "Sorveglianze • Giovedì");
+assert.equal(r14.a.lines.length, 8);
+assert.ok(r14.a.badge.includes("10:50-11:05") && r14.a.badge.includes("15 MIN"));
+console.log("✓ Sorveglianze giovedì (8 zone):", r14.a.speech);
+
+r14 = ask("chi fa sorveglianza in cortile ingresso lunedì?", "", nov19);
+assert.equal(r14.p.intent, "sorveglianza");
+assert.ok(r14.a.speech.includes("Da Rold") && r14.a.speech.includes("Gaio"));
+console.log("✓ Sorveglianza Cortile ingresso lunedì:", r14.a.speech);
+
+// 6. Durata intervallo
+r14 = ask("quanto dura l'intervallo?", "", nov19);
+assert.equal(r14.p.intent, "sorveglianza");
+assert.ok(r14.a.speech.includes("10 minuti") && r14.a.speech.includes("15 minuti"));
+console.log("✓ Durata intervallo:", r14.a.speech);
+
+// 7. Nuovi docenti mod1a (Chiariello, Plutino, Panico, Carruggio, Di Palma, D'Albore)
+for (const docName of ["Chiariello", "Plutino", "Panico", "Carruggio", "Di Palma", "D'Albore", "Malè"]) {
+  const rd = ask(`cosa ha ${docName} venerdì`, "", nov19);
+  assert.equal(rd.p.intent, "docente", `Docente ${docName} non trovato`);
+}
+console.log("✓ Tutti i nuovi/sostituiti docenti mod1a risolti correttamente");
 
 console.log("\n TUTTI I TEST SONO PASSATI CON SUCCESSO! ");
 

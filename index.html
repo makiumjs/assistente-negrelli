@@ -1667,24 +1667,26 @@
 
     // Helper per individuare il locale associato ad una riga dell'orario
     function findRoomForLine(l, a) {
+      if (l.query) return null;
+      const valid = (loc) => (loc && loc.floor >= 0 ? loc : null);
       if (l.aula) {
-        const loc = resolveRoomLocation(l.aula);
+        const loc = valid(resolveRoomLocation(l.aula));
         if (loc) return loc;
       }
       if (l.room) {
-        const loc = resolveRoomLocation(l.room);
+        const loc = valid(resolveRoomLocation(l.room));
         if (loc) return loc;
       }
       if (l.sub) {
-        const loc = resolveRoomLocation(l.sub);
+        const loc = valid(resolveRoomLocation(l.sub));
         if (loc) return loc;
       }
       if (l.main) {
-        const loc = resolveRoomLocation(l.main);
+        const loc = valid(resolveRoomLocation(l.main));
         if (loc) return loc;
       }
       if (a && a.rooms && a.rooms.length === 1) {
-        const loc = resolveRoomLocation(a.rooms[0]);
+        const loc = valid(resolveRoomLocation(a.rooms[0]));
         if (loc) return loc;
       }
       return null;
@@ -1700,8 +1702,9 @@
 
       // Determinazione Smart di Piano e Aula con collegamento alla Mappa 2D
       const roomNames = a.rooms || [];
-      const resolvedLocs = roomNames.map(r => resolveRoomLocation(r)).filter(Boolean);
+      const resolvedLocs = roomNames.map(r => resolveRoomLocation(r)).filter(l => l && l.floor >= 0);
       let isRizzarda = roomNames.some(r => /rizzarda/i.test(r));
+      let isColotti = roomNames.some(r => /colotti/i.test(r));
 
       if (resolvedLocs.length > 0) {
         const firstLoc = resolvedLocs[0];
@@ -1739,6 +1742,10 @@
         lastLocationTarget = null;
         cardLocationBadge.style.display = "inline-block";
         cardLocationBadge.textContent = "📍 SEDE RIZZARDA";
+      } else if (isColotti) {
+        lastLocationTarget = null;
+        cardLocationBadge.style.display = "inline-block";
+        cardLocationBadge.textContent = "📍 SEDE COLOTTI";
       } else if (roomNames.length > 0) {
         lastLocationTarget = null;
         cardLocationBadge.style.display = "inline-block";
@@ -1835,8 +1842,9 @@
       if (typeof window.triggerNegrelliBotCommand === 'function') {
         window.triggerNegrelliBotCommand();
       }
-      const parsed = parseQuery(text, orarioIdx, { now: new Date(), me: myTeacherName });
-      const a = answer(parsed, orarioIdx);
+      const ctx = { now: new Date(), me: myTeacherName };
+      const parsed = parseQuery(text, orarioIdx, ctx);
+      const a = answer(parsed, orarioIdx, ctx);
       renderAnswer(a, parsed, opts);
       speak(a.speech);
     }
