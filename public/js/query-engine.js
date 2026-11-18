@@ -776,6 +776,247 @@ function noHourNow(p) {
   };
 }
 
+const ARTICOLATE_PARENT = {
+  "1EE": "1ITE", "1ITB": "1ITE",
+  "1CAT": "1MMC", "1MMB": "1MMC",
+  "2EE": "2MME", "2MMB": "2MME",
+  "3AMB": "3BSAM", "3BSB": "3BSAM", "3AM": "3BSAM",
+  "3EE": "3ITE", "3ITB": "3ITE",
+  "4AM": "4BSAM", "4BS": "4BSAM",
+  "4CAT": "4EEC", "4EE": "4EEC",
+  "5AM": "5BSAM", "5BS": "5BSAM",
+  "5CAT": "5EEC", "5EE": "5EEC",
+};
+
+function getExactActivityYMD(item) {
+  if (!item) return null;
+  if (item.data_iso && /^\d{4}-\d{2}-\d{2}$/.test(item.data_iso)) return item.data_iso;
+  const rawDateField = `${item.giorno || ""} ${item.data || ""}`.toLowerCase();
+  if (/da\s+definire/.test(rawDateField)) return null;
+  if (!/\b\d{1,2}\b/.test(rawDateField)) return null;
+  const d = parseActivityDate(item);
+  return d ? formatDateYMD(d) : null;
+}
+
+function resolveQueryDate(p) {
+  if (p.targetDateStr) {
+    const [y, m, d] = p.targetDateStr.split("-").map(Number);
+    return { ymd: p.targetDateStr, date: new Date(y, m - 1, d, 10, 0) };
+  }
+  const baseNow = p.now || new Date();
+  const targetDow = JS_DAYS.indexOf(p.day);
+  if (targetDow < 0) {
+    return { ymd: formatDateYMD(baseNow), date: baseNow };
+  }
+  const offset = (targetDow - baseNow.getDay() + 7) % 7;
+  const dt = new Date(baseNow.getFullYear(), baseNow.getMonth(), baseNow.getDate() + offset, 10, 0);
+  return { ymd: formatDateYMD(dt), date: dt };
+}
+
+function getTeacherClasses(d) {
+  const clsSet = new Set();
+  for (const daySched of Object.values(d.orario || {})) {
+    for (const s of Object.values(daySched || {})) {
+      if (s.classe) {
+        const up = s.classe.toUpperCase();
+        clsSet.add(up);
+        if (ARTICOLATE_PARENT[up]) clsSet.add(ARTICOLATE_PARENT[up]);
+      }
+      for (const ac of s.altre_classi || []) {
+        const up = ac.toUpperCase();
+        clsSet.add(up);
+        if (ARTICOLATE_PARENT[up]) clsSet.add(ARTICOLATE_PARENT[up]);
+      }
+    }
+  }
+  return clsSet;
+}
+
+function findSorveglianzaKeyForDocente(docName, idx) {
+  const perDoc = idx.sorveglianze?.per_docente || {};
+  const dNorm = normalize(docName);
+  const dTokens = dNorm.split(" ").filter((t) => t.length >= 4);
+  for (const key of Object.keys(perDoc)) {
+    const kNorm = normalize(key);
+    if (kNorm === dNorm || dNorm.includes(kNorm) || kNorm.includes(dNorm)) return key;
+    if (dTokens.some((t) => kNorm.split(" ").includes(t))) return key;
+  }
+  return null;
+}
+
+function collectDocenteDayExtras(d, p, idx, resolvedDate) {
+  const lines = [];
+  const speechParts = [];
+  const rooms = [];
+  const ymd = resolvedDate.ymd;
+  const teacherClasses = getTeacherClasses(d);
+  const att = idx.attivita || {};
+
+  // 1) Sorveglianza all'intervallo (in vigore dal 19/11/2026)
+  if (ymd >= "2026-11-19") {
+    const sorvKey = findSorveglianzaKeyForDocente(d.nome, idx);
+    if (sorvKey) {
+      const dayTurni = (idx.sorveglianze?.per_docente?.[sorvKey] || []).filter((t) => t.giorno === p.day);
+      const rec = recessInfoForDay(p.day);
+      for (const t of dayTurni) {
+        lines.push({
+          when: `Intervallo (${rec.orario})`,
+          main: `Sorveglianza • ${t.zona}`,
+          sub: `Durata ${rec.durata} min • Comunicato n. 167`,
+          aula: null,
+        });
+        speechParts.push(
+          p.isSelf
+            ? `all'intervallo delle ${rec.orario} hai sorveglianza in zona ${t.zona}`
+            : `all'intervallo delle ${rec.orario} ha sorveglianza in zona ${t.zona}`
+        );
+      }
+    }
+  }
+
+  // 2) Consigli di Classe / Scrutini per le classi del docente in questa data
+  const consigli = (att.consigli_classe_dettaglio || []).filter((c) => {
+    if (getExactActivityYMD(c) !== ymd) return false;
+    const cList = (c.classi || []).map((x) => x.toUpperCase());
+    if (c.classe_raw) cList.push(c.classe_raw.toUpperCase());
+    return cList.some((cls) => teacherClasses.has(cls));
+  });
+  consigli.sort((a, b) => (a.ora || "").localeCompare(b.ora || ""));
+  for (const c of consigli) {
+    const isScrut = /scrutini/i.test(c.periodo || "") || /scrutini/i.test(c.giorno || "");
+    const label = isScrut ? "Scrutinio" : "Consiglio di Classe";
+    const clsLabel = c.classe_raw || (c.classi || []).join("+");
+    const aula = c.aula || "Lab. Multimediale";
+    lines.push({
+      when: `Ore ${c.ora}`,
+      main: `${label} ${clsLabel} • ${aula}`,
+      sub: c.nota_apertura || c.comunicato || c.periodo || "",
+      aula,
+    });
+    if (aula) rooms.push(aula);
+    speechParts.push(
+      `alle ${c.ora} il ${label.toLowerCase()} della ${clsLabel}${aula ? " in " + aula : ""}`
+    );
+  }
+
+  // 3) GLO per le classi del docente in questa data
+  const gloMatches = (idx.glo || att.glo || []).filter(
+    (g) => getExactActivityYMD(g) === ymd && teacherClasses.has((g.classe || "").toUpperCase())
+  );
+  gloMatches.sort((a, b) => (a.ora || "").localeCompare(b.ora || ""));
+  for (const g of gloMatches) {
+    lines.push({
+      when: `Ore ${g.ora}`,
+      main: `GLO ${g.classe} • ${g.luogo}`,
+      sub: "Condivisione PEI (Comunicato n. 83)",
+      aula: null,
+    });
+    speechParts.push(`alle ${g.ora} il GLO della ${g.classe}`);
+  }
+
+  // 4) Attività collegiali d'Istituto (Collegi Docenti, Dipartimenti, ecc.)
+  const istMatches = (att.attivita_istituto || []).filter((i) => getExactActivityYMD(i) === ymd);
+  for (const i of istMatches) {
+    const actText = (i.attivita || "").replace(/\s+/g, " ").trim();
+    const whenStr = i.orario ? `Ore ${i.orario.replace(/\s+/g, " ").trim()}` : "Istituto";
+    lines.push({
+      when: whenStr,
+      main: actText,
+      sub: i.durata ? `Durata: ${i.durata} • Piano Attività` : "Piano Annuale Attività",
+      aula: null,
+    });
+    speechParts.push(i.orario ? `${actText} dalle ${i.orario.replace(/\s+/g, " ").trim()}` : actText);
+  }
+
+  // 5) Colloqui Generali sede Negrelli (filtrati per biennio/triennio del docente)
+  const hasBiennio = [...teacherClasses].some((c) => /^[12]/.test(c));
+  const hasTriennio = [...teacherClasses].some((c) => /^[345]/.test(c));
+  const collMatches = (att.colloqui_generali || []).filter((c) => {
+    if (getExactActivityYMD(c) !== ymd) return false;
+    if ((c.sede || "").toLowerCase() !== "negrelli") return false;
+    const fascia = (c.classi || "").toLowerCase();
+    if (fascia === "biennio") return hasBiennio;
+    if (fascia === "triennio") return hasTriennio;
+    return true;
+  });
+  for (const c of collMatches) {
+    lines.push({
+      when: "Pomeriggio",
+      main: `Colloqui Generali • ${c.sede} (${c.classi})`,
+      sub: `${c.periodo}`,
+      aula: null,
+    });
+    speechParts.push(`i colloqui generali per il ${c.classi}`);
+  }
+
+  return { lines, speechParts, rooms };
+}
+
+function collectClasseDayExtras(cid, p, idx, resolvedDate) {
+  const lines = [];
+  const speechParts = [];
+  const rooms = [];
+  const ymd = resolvedDate.ymd;
+  const cidUp = cid.toUpperCase();
+  const parentUp = ARTICOLATE_PARENT[cidUp] || null;
+  const att = idx.attivita || {};
+
+  // 1) Consigli di Classe / Scrutini
+  const consigli = (att.consigli_classe_dettaglio || []).filter((c) => {
+    if (getExactActivityYMD(c) !== ymd) return false;
+    const cList = (c.classi || []).map((x) => x.toUpperCase());
+    if (c.classe_raw) cList.push(c.classe_raw.toUpperCase());
+    return cList.includes(cidUp) || (parentUp && cList.includes(parentUp));
+  });
+  for (const c of consigli) {
+    const isScrut = /scrutini/i.test(c.periodo || "") || /scrutini/i.test(c.giorno || "");
+    const label = isScrut ? "Scrutinio" : "Consiglio di Classe";
+    const aula = c.aula || "Lab. Multimediale";
+    lines.push({
+      when: `Ore ${c.ora}`,
+      main: `${label} ${c.classe_raw || cidUp} • ${aula}`,
+      sub: c.nota_apertura || c.comunicato || c.periodo || "",
+      aula,
+    });
+    if (aula) rooms.push(aula);
+    speechParts.push(`alle ${c.ora} è previsto il ${label.toLowerCase()}${aula ? " in " + aula : ""}`);
+  }
+
+  // 2) GLO
+  const gloMatches = (idx.glo || att.glo || []).filter(
+    (g) => getExactActivityYMD(g) === ymd && ((g.classe || "").toUpperCase() === cidUp || (parentUp && (g.classe || "").toUpperCase() === parentUp))
+  );
+  for (const g of gloMatches) {
+    lines.push({
+      when: `Ore ${g.ora}`,
+      main: `GLO ${g.classe} • ${g.luogo}`,
+      sub: "Condivisione PEI (Comunicato n. 83)",
+      aula: null,
+    });
+    speechParts.push(`alle ${g.ora} c'è il GLO`);
+  }
+
+  // 3) Colloqui Generali
+  const isBiennio = /^[12]/.test(cidUp);
+  const collMatches = (att.colloqui_generali || []).filter((c) => {
+    if (getExactActivityYMD(c) !== ymd) return false;
+    if ((c.sede || "").toLowerCase() !== "negrelli") return false;
+    const fascia = (c.classi || "").toLowerCase();
+    return fascia === "tutte" || (isBiennio ? fascia === "biennio" : fascia === "triennio");
+  });
+  for (const c of collMatches) {
+    lines.push({
+      when: "Pomeriggio",
+      main: `Colloqui Generali • ${c.sede} (${c.classi})`,
+      sub: c.periodo,
+      aula: null,
+    });
+    speechParts.push(`ci sono i colloqui generali (${c.classi})`);
+  }
+
+  return { lines, speechParts, rooms };
+}
+
 function answerDocente(p, idx) {
   const d = idx.db.docenti[p.docente.id];
   const isPlaceholder = Boolean(d.senza_nome || d.nome.startsWith("_"));
@@ -793,10 +1034,14 @@ function answerDocente(p, idx) {
   const sched = d.orario[p.day] || {};
   const dayCap = cap(dl(p.day));
   const subj = p.isSelf ? "" : spokenDocenteName(d.nome);
+  const resolvedDate = resolveQueryDate(p);
+  const weekParity = getWeekParity(resolvedDate.date);
 
   const describe = (s) => {
     if (s.tipo === "recupero") {
       const sett = s.settimana || "tutte";
+      const isActive = sett === "tutte" || sett === weekParity.code;
+      const statusTag = sett === "tutte" ? "Settimanale" : isActive ? `${sett} • Attivo` : `${sett} • Non attivo (sett. ${weekParity.code})`;
       const settLabel =
         sett === "Q1"
           ? "Settimana Q1 (dispari)"
@@ -810,7 +1055,7 @@ function answerDocente(p, idx) {
           ? "nelle settimane pari Q2"
           : "ogni settimana";
       return {
-        main: `Recupero (${sett === "tutte" ? "Settimanale" : sett})`,
+        main: `Recupero (${statusTag})`,
         sub: `${settLabel} • Comunicato n. 167`,
         say: p.isSelf ? `hai recupero ${settSay}` : `ha recupero ${settSay}`,
         aula: null,
@@ -856,23 +1101,50 @@ function answerDocente(p, idx) {
       sched,
       (s) => JSON.stringify([s.tipo, s.settimana, s.classe, s.materia, s.aula, s.copresenza, s.altre_classi])
     );
-    if (!groups.length) {
+    const extras = collectDocenteDayExtras(d, p, idx, resolvedDate);
+    const dateLabel = formatDateSpoken(resolvedDate.ymd);
+
+    if (!groups.length && !extras.lines.length) {
       return {
         title,
         badge: `${dl(p.day).toUpperCase()} • GIORNATA`,
         lines: [],
-        note: isPlaceholder ? "Nessuna lezione in orario (cattedra provvisoria)." : "Nessuna lezione in orario.",
+        note: isPlaceholder ? "Nessuna lezione in orario (cattedra provvisoria)." : "Nessuna lezione o attività in programma.",
         speech: p.isSelf ? `${dayCap} non hai lezioni in orario.` : `${dayCap} ${subj} non ha lezioni in orario.`,
         rooms: [],
       };
     }
+
+    if (!groups.length && extras.lines.length) {
+      return {
+        title,
+        badge: `${dl(p.day).toUpperCase()} ${dateLabel.toUpperCase()} • ATTIVITÀ`,
+        lines: extras.lines,
+        note: "Nessuna lezione al mattino, ma risultano impegni collegiali/sorveglianza in agenda.",
+        speech: `${dayCap} ${p.isSelf ? "non hai lezioni al mattino, ma hai" : subj + " non ha lezioni al mattino, ma ha"} ${joinSpeech(extras.speechParts)}.`.replace(/\s+/g, " "),
+        rooms: extras.rooms,
+      };
+    }
+
     const descs = groups.map((g) => ({ g, ...describe(g.slot) }));
-    const roomsCollected = descs.map((x) => x.aula).filter(Boolean);
+    const lessonLines = descs.map((x) => ({ when: span(x.g), main: x.main, sub: x.sub, aula: x.aula }));
+    const allLines = extras.lines.length
+      ? [...lessonLines, { when: `IMPEGNI & ATTIVITÀ (${dateLabel.toUpperCase()})`, heading: true }, ...extras.lines]
+      : lessonLines;
+    const roomsCollected = [...descs.map((x) => x.aula).filter(Boolean), ...extras.rooms];
+    const baseSpeech = `${dayCap} ${subj} ${joinSpeech(descs.map((x) => `${spokenSpan(x.g)} ${x.say}`))}.`.replace(/\s+/g, " ");
+    const extraSpeech = extras.speechParts.length
+      ? ` Inoltre, per il ${dateLabel}: ${joinSpeech(extras.speechParts)}.`
+      : "";
+
     return {
       title,
-      badge: `${dl(p.day).toUpperCase()} • GIORNATA INTERA`,
-      lines: descs.map((x) => ({ when: span(x.g), main: x.main, sub: x.sub, aula: x.aula })),
-      speech: `${dayCap} ${subj} ${joinSpeech(descs.map((x) => `${spokenSpan(x.g)} ${x.say}`))}.`.replace(/\s+/g, " "),
+      badge: extras.lines.length
+        ? `${dl(p.day).toUpperCase()} ${dateLabel.toUpperCase()} • AGENDA COMPLETA`
+        : `${dl(p.day).toUpperCase()} • GIORNATA INTERA`,
+      lines: allLines,
+      note: extras.lines.length ? `Include lezioni, sorveglianze e attività collegiali del ${dateLabel}.` : "",
+      speech: `${baseSpeech}${extraSpeech}`.replace(/\s+/g, " ").trim(),
       rooms: roomsCollected,
     };
   }
@@ -931,8 +1203,11 @@ function answerClasse(p, idx) {
     const dayCap = cap(dl(p.day));
 
     if (p.hour === null) {
+      const resolvedDate = resolveQueryDate(p);
+      const dateLabel = formatDateSpoken(resolvedDate.ymd);
+      const extras = collectClasseDayExtras(cid, p, idx, resolvedDate);
       const groups = groupHours(sched, (s) => JSON.stringify([s.materia, s.docenti, s.aula]));
-      if (!groups.length) {
+      if (!groups.length && !extras.lines.length) {
         out.push({
           title: `Classe ${cid}`,
           badge: `${dl(p.day).toUpperCase()} • GIORNATA`,
@@ -944,12 +1219,27 @@ function answerClasse(p, idx) {
         continue;
       }
       const descs = groups.map((g) => ({ g, ...describe(g.slot) }));
+      const lessonLines = descs.map((x) => ({ when: span(x.g), main: x.main, sub: x.sub, aula: x.aula }));
+      const allLines = extras.lines.length
+        ? (lessonLines.length
+            ? [...lessonLines, { when: `IMPEGNI & ATTIVITÀ (${dateLabel.toUpperCase()})`, heading: true }, ...extras.lines]
+            : extras.lines)
+        : lessonLines;
+      const baseSpeech = lessonLines.length
+        ? `${dayCap} la ${cid} ${joinSpeech(descs.map((x) => `${spokenSpan(x.g)} ${x.say}`))}.`
+        : `${dayCap} la ${cid} non ha lezioni in orario.`;
+      const extraSpeech = extras.speechParts.length
+        ? ` Inoltre, per il ${dateLabel}, ${joinSpeech(extras.speechParts)}.`
+        : "";
       out.push({
         title: `Classe ${cid}`,
-        badge: `${dl(p.day).toUpperCase()} • GIORNATA INTERA`,
-        lines: descs.map((x) => ({ when: span(x.g), main: x.main, sub: x.sub, aula: x.aula })),
-        speech: `${dayCap} la ${cid} ${joinSpeech(descs.map((x) => `${spokenSpan(x.g)} ${x.say}`))}.`,
-        rooms: descs.map((x) => x.aula).filter(Boolean),
+        badge: extras.lines.length
+          ? `${dl(p.day).toUpperCase()} ${dateLabel.toUpperCase()} • AGENDA COMPLETA`
+          : `${dl(p.day).toUpperCase()} • GIORNATA INTERA`,
+        lines: allLines,
+        note: extras.lines.length ? `Include lezioni e attività del ${dateLabel}.` : "",
+        speech: `${baseSpeech}${extraSpeech}`.replace(/\s+/g, " ").trim(),
+        rooms: [...descs.map((x) => x.aula).filter(Boolean), ...extras.rooms],
       });
       continue;
     }

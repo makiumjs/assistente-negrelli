@@ -554,5 +554,43 @@ for (const docName of ["Chiariello", "Plutino", "Panico", "Carruggio", "Di Palma
 }
 console.log("✓ Tutti i nuovi/sostituiti docenti mod1a risolti correttamente");
 
+console.log("\n=== 15. Test Agenda Completa di Giornata (Lezioni + Sorveglianze + CdC + Collegi) ===");
+const nov18 = new Date("2026-11-18T11:30:00"); // Mercoledì 18 novembre 2026
+
+// 1. "domani" per Cassarino (19 nov): lezioni + CdC 3ITA, 4ITA, 5ITA (NO 3CAT!)
+let r15 = ask("domani", "Cassarino", nov18);
+assert.equal(r15.p.intent, "docente");
+assert.ok(r15.a.badge.includes("AGENDA COMPLETA"));
+assert.ok(r15.a.lines.some((l) => l.main && l.main.includes("Consiglio di Classe 3ITA")));
+assert.ok(r15.a.lines.some((l) => l.main && l.main.includes("Consiglio di Classe 4ITA")));
+assert.ok(r15.a.lines.some((l) => l.main && l.main.includes("Consiglio di Classe 5ITA")));
+assert.ok(!r15.a.lines.some((l) => l.main && l.main.includes("3CAT")), "Non deve includere CdC di classi non del docente");
+console.log("✓ Cassarino 'domani' (19 nov): lezioni + 3 CdC propri");
+
+// 2. "venerdì" per Cassarino (20 nov): lezioni + Sorveglianza Scale lato didattica + CdC 5ITB
+r15 = ask("venerdì", "Cassarino", nov18);
+assert.ok(r15.a.lines.some((l) => l.main && l.main.includes("Sorveglianza • Scale lato didattica")));
+assert.ok(r15.a.lines.some((l) => l.main && l.main.includes("Consiglio di Classe 5ITB")));
+console.log("✓ Cassarino 'venerdì' (20 nov): lezioni + sorveglianza + CdC 5ITB");
+
+// 3. Mapping classi articolate (De Bacco 4EE/5EE -> CdC 4EEC/5EEC venerdì 20 nov)
+r15 = ask("cosa ha De Bacco venerdì", "", nov18);
+assert.ok(r15.a.lines.some((l) => l.main && l.main.includes("Consiglio di Classe 4EEC")));
+assert.ok(r15.a.lines.some((l) => l.main && l.main.includes("Consiglio di Classe 5EEC")));
+console.log("✓ De Bacco venerdì (20 nov): mapping articolate 4EE/5EE -> CdC 4EEC/5EEC");
+
+// 4. Agenda classe ("4ITA domani" il 18 nov -> lezioni + CdC 4ITA ore 16:00)
+r15 = ask("4ITA domani", "", nov18);
+assert.equal(r15.p.intent, "classe");
+assert.ok(r15.a.badge.includes("AGENDA COMPLETA"));
+assert.ok(r15.a.lines.some((l) => l.main && l.main.includes("Consiglio di Classe 4ITA")));
+console.log("✓ 4ITA 'domani' (19 nov): lezioni + CdC 4ITA");
+
+// 5. Giorno senza lezioni al mattino ma con Collegio Docenti (Cassarino mer 28 ott)
+r15 = ask("cosa ho il 28 ottobre", "Cassarino", new Date("2026-10-18T10:00:00"));
+assert.equal(r15.p.intent, "docente");
+assert.ok(r15.a.lines.some((l) => l.main && /collegio docenti/i.test(l.main)));
+console.log("✓ Giorno libero al mattino con Collegio Docenti rilevato correttamente");
+
 console.log("\n TUTTI I TEST SONO PASSATI CON SUCCESSO! ");
 

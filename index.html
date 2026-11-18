@@ -1667,7 +1667,7 @@
 
     // Helper per individuare il locale associato ad una riga dell'orario
     function findRoomForLine(l, a) {
-      if (l.query) return null;
+      if (l.heading || l.query) return null;
       const valid = (loc) => (loc && loc.floor >= 0 ? loc : null);
       if (l.aula) {
         const loc = valid(resolveRoomLocation(l.aula));
