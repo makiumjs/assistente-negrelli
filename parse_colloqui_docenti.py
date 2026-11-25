@@ -81,6 +81,8 @@ def parse_colloqui_docenti(csv_path=None, orario_json_path=None):
         normalize_str("Chiariello [Bucca (Di Mari)] Jacqueline"): "CHIARIELLO_BUCCA_DI_MARI",
         normalize_str("Foltran (Lusuardi) Damiano"): "FOLTRAN_LUSUARDI",
         normalize_str("Plutino (Caligiuri) Maria Rita"): "PLUTINO_CALIGIURI",
+        normalize_str("De Bortoli Francesca"): "DE_BORTOLI",
+        normalize_str("Debortoli Simone"): "DEBORTOLI",
     }
 
     per_docente = {}

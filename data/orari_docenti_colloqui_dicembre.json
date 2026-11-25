@@ -1213,10 +1213,10 @@
       },
       "note": ""
     },
-    "DEBORTOLI": {
-      "docente_id": "DEBORTOLI",
-      "docente_nome": "Debortoli",
-      "nome_originale": "Debortoli Simone",
+    "DE_BORTOLI": {
+      "docente_id": "DE_BORTOLI",
+      "docente_nome": "De Bortoli",
+      "nome_originale": "De Bortoli Francesca",
       "biennio": {
         "attivo": true,
         "data": "03.12.26",
@@ -1225,16 +1225,13 @@
         "sede": "Negrelli",
         "ciclo": "biennio",
         "classi": [
-          "1MMA",
-          "2EE",
-          "2MMA",
-          "2MMB"
+          "2ITB"
         ],
         "assente": false,
         "non_previsto": false,
-        "ora_inizio": "14:00",
-        "ora_fine": "15:00",
-        "orario": "14:00-15:00",
+        "ora_inizio": "16:30",
+        "ora_fine": "17:00",
+        "orario": "16:30-17:00",
         "orario_default": false
       },
       "triennio": {
@@ -1245,20 +1242,14 @@
         "sede": "Negrelli",
         "ciclo": "triennio",
         "classi": [
-          "3AMB",
-          "3BSA",
-          "3BSB",
-          "3MM",
-          "4AM",
-          "4BS",
-          "4MM",
-          "5MM"
+          "5AM",
+          "5BS"
         ],
         "assente": false,
         "non_previsto": false,
         "ora_inizio": "15:00",
-        "ora_fine": "17:00",
-        "orario": "15:00-17:00",
+        "ora_fine": "15:30",
+        "orario": "15:00-15:30",
         "orario_default": false
       },
       "note": ""
@@ -1497,6 +1488,56 @@
         "ora_fine": "17:30",
         "orario": "14:30-17:30",
         "orario_default": true
+      },
+      "note": ""
+    },
+    "DEBORTOLI": {
+      "docente_id": "DEBORTOLI",
+      "docente_nome": "Debortoli",
+      "nome_originale": "Debortoli Simone",
+      "biennio": {
+        "attivo": true,
+        "data": "03.12.26",
+        "data_iso": "2026-12-03",
+        "giorno": "Giovedì",
+        "sede": "Negrelli",
+        "ciclo": "biennio",
+        "classi": [
+          "1MMA",
+          "2EE",
+          "2MMA",
+          "2MMB"
+        ],
+        "assente": false,
+        "non_previsto": false,
+        "ora_inizio": "14:00",
+        "ora_fine": "15:00",
+        "orario": "14:00-15:00",
+        "orario_default": false
+      },
+      "triennio": {
+        "attivo": true,
+        "data": "04.12.26",
+        "data_iso": "2026-12-04",
+        "giorno": "Venerdì",
+        "sede": "Negrelli",
+        "ciclo": "triennio",
+        "classi": [
+          "3AMB",
+          "3BSA",
+          "3BSB",
+          "3MM",
+          "4AM",
+          "4BS",
+          "4MM",
+          "5MM"
+        ],
+        "assente": false,
+        "non_previsto": false,
+        "ora_inizio": "15:00",
+        "ora_fine": "17:00",
+        "orario": "15:00-17:00",
+        "orario_default": false
       },
       "note": ""
     },
@@ -5449,6 +5490,19 @@
         "note": ""
       },
       {
+        "docente_id": "DE_BORTOLI",
+        "docente_nome": "De Bortoli",
+        "ciclo": "triennio",
+        "data": "04.12.26",
+        "giorno": "Venerdì",
+        "orario": "15:00-15:30",
+        "ora_inizio": "15:00",
+        "ora_fine": "15:30",
+        "assente": false,
+        "orario_default": false,
+        "note": ""
+      },
+      {
         "docente_id": "DE_PIZZOL",
         "docente_nome": "De Pizzol",
         "ciclo": "triennio",
@@ -5459,19 +5513,6 @@
         "ora_fine": "17:30",
         "assente": false,
         "orario_default": true,
-        "note": ""
-      },
-      {
-        "docente_id": "DEBORTOLI",
-        "docente_nome": "Debortoli",
-        "ciclo": "triennio",
-        "data": "04.12.26",
-        "giorno": "Venerdì",
-        "orario": "15:00-15:30",
-        "ora_inizio": "15:00",
-        "ora_fine": "15:30",
-        "assente": false,
-        "orario_default": false,
         "note": ""
       },
       {
@@ -8434,6 +8475,19 @@
         "note": ""
       },
       {
+        "docente_id": "DE_BORTOLI",
+        "docente_nome": "De Bortoli",
+        "ciclo": "biennio",
+        "data": "03.12.26",
+        "giorno": "Giovedì",
+        "orario": "16:30-17:00",
+        "ora_inizio": "16:30",
+        "ora_fine": "17:00",
+        "assente": false,
+        "orario_default": false,
+        "note": ""
+      },
+      {
         "docente_id": "DE_SALVADOR",
         "docente_nome": "De Salvador",
         "ciclo": "biennio",
@@ -8444,19 +8498,6 @@
         "ora_fine": "17:30",
         "assente": false,
         "orario_default": true,
-        "note": ""
-      },
-      {
-        "docente_id": "DEBORTOLI",
-        "docente_nome": "Debortoli",
-        "ciclo": "biennio",
-        "data": "03.12.26",
-        "giorno": "Giovedì",
-        "orario": "16:30-17:00",
-        "ora_inizio": "16:30",
-        "ora_fine": "17:00",
-        "assente": false,
-        "orario_default": false,
         "note": ""
       },
       {
@@ -9787,8 +9828,8 @@
         "note": ""
       },
       {
-        "docente_id": "DEBORTOLI",
-        "docente_nome": "Debortoli",
+        "docente_id": "DE_BORTOLI",
+        "docente_nome": "De Bortoli",
         "ciclo": "triennio",
         "data": "04.12.26",
         "giorno": "Venerdì",
