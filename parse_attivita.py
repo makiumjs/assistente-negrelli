@@ -189,18 +189,32 @@ def parse_consigli_dettaglio(pdf):
 
     return items
 
-def parse_colloqui(page):
-    colloqui = [
-        {"periodo": "I periodo", "giorno": "Martedì", "data": "01.12.26", "sede": "Colotti", "classi": "tutte"},
-        {"periodo": "I periodo", "giorno": "Mercoledì", "data": "02.12.26", "sede": "Rizzarda", "classi": "tutte"},
-        {"periodo": "I periodo", "giorno": "Giovedì", "data": "03.12.26", "sede": "Negrelli", "classi": "biennio"},
-        {"periodo": "I periodo", "giorno": "Venerdì", "data": "04.12.26", "sede": "Negrelli", "classi": "triennio"},
-        {"periodo": "II periodo", "giorno": "Lunedì", "data": "05.04.27", "sede": "Colotti", "classi": "tutte"},
-        {"periodo": "II periodo", "giorno": "Martedì", "data": "06.04.27", "sede": "Negrelli", "classi": "triennio"},
-        {"periodo": "II periodo", "giorno": "Mercoledì", "data": "07.04.27", "sede": "Negrelli", "classi": "biennio"},
-        {"periodo": "II periodo", "giorno": "Giovedì", "data": "08.04.27", "sede": "Rizzarda", "classi": "tutte"}
+def parse_colloqui(page=None):
+    # Integrazione Comunicato n. 185 (Colloqui I periodo dicembre 2026)
+    colloqui_i = []
+    try:
+        from parse_colloqui_dicembre import parse_colloqui_dicembre_pdf
+        res = parse_colloqui_dicembre_pdf()
+        colloqui_i = res.get("incontri", [])
+    except Exception as e:
+        print(f"  ⚠ Avviso parsing Comunicato 185: {e}")
+
+    if not colloqui_i:
+        colloqui_i = [
+            {"periodo": "I periodo", "giorno": "Martedì", "data": "01.12.26", "data_iso": "2026-12-01", "orario": "14:30-17:30", "ora_inizio": "14:30", "ora_fine": "17:30", "sede": "Colotti", "classi": "tutte", "modalita": "in presenza nei rispettivi plessi", "comunicato": "Comunicato n. 185 del 24/11/2026"},
+            {"periodo": "I periodo", "giorno": "Mercoledì", "data": "02.12.26", "data_iso": "2026-12-02", "orario": "14:30-17:30", "ora_inizio": "14:30", "ora_fine": "17:30", "sede": "Rizzarda", "classi": "tutte", "modalita": "in presenza nei rispettivi plessi", "comunicato": "Comunicato n. 185 del 24/11/2026"},
+            {"periodo": "I periodo", "giorno": "Giovedì", "data": "03.12.26", "data_iso": "2026-12-03", "orario": "14:30-17:30", "ora_inizio": "14:30", "ora_fine": "17:30", "sede": "Negrelli", "classi": "biennio", "modalita": "in presenza nei rispettivi plessi", "comunicato": "Comunicato n. 185 del 24/11/2026"},
+            {"periodo": "I periodo", "giorno": "Venerdì", "data": "04.12.26", "data_iso": "2026-12-04", "orario": "14:30-17:30", "ora_inizio": "14:30", "ora_fine": "17:30", "sede": "Negrelli", "classi": "triennio", "modalita": "in presenza nei rispettivi plessi", "comunicato": "Comunicato n. 185 del 24/11/2026"},
+        ]
+
+    colloqui_ii = [
+        {"periodo": "II periodo", "giorno": "Lunedì", "data": "05.04.27", "data_iso": "2027-04-05", "orario": "14:30-17:30", "ora_inizio": "14:30", "ora_fine": "17:30", "sede": "Colotti", "classi": "tutte", "modalita": "in presenza nei rispettivi plessi", "comunicato": "Piano Annuale Attività"},
+        {"periodo": "II periodo", "giorno": "Martedì", "data": "06.04.27", "data_iso": "2027-04-06", "orario": "14:30-17:30", "ora_inizio": "14:30", "ora_fine": "17:30", "sede": "Negrelli", "classi": "triennio", "modalita": "in presenza nei rispettivi plessi", "comunicato": "Piano Annuale Attività"},
+        {"periodo": "II periodo", "giorno": "Mercoledì", "data": "07.04.27", "data_iso": "2027-04-07", "orario": "14:30-17:30", "ora_inizio": "14:30", "ora_fine": "17:30", "sede": "Negrelli", "classi": "biennio", "modalita": "in presenza nei rispettivi plessi", "comunicato": "Piano Annuale Attività"},
+        {"periodo": "II periodo", "giorno": "Giovedì", "data": "08.04.27", "data_iso": "2027-04-08", "orario": "14:30-17:30", "ora_inizio": "14:30", "ora_fine": "17:30", "sede": "Rizzarda", "classi": "tutte", "modalita": "in presenza nei rispettivi plessi", "comunicato": "Piano Annuale Attività"}
     ]
-    return colloqui
+
+    return colloqui_i + colloqui_ii
 
 def parse_attivita_pdf(pdf_path=None):
     if not pdf_path:
@@ -229,12 +243,21 @@ def parse_attivita_pdf(pdf_path=None):
     except Exception as e:
         print(f"  ⚠ Avviso integrazione CdC Novembre: {e}")
 
+    colloqui_meta = {}
+    try:
+        from parse_colloqui_dicembre import parse_colloqui_dicembre_pdf
+        c_res = parse_colloqui_dicembre_pdf()
+        colloqui_meta = c_res.get("meta", {})
+    except Exception as e:
+        print(f"  ⚠ Avviso meta Colloqui Dicembre: {e}")
+
     return {
         "attivita_istituto": istituto,
         "attivita_classe_sintesi": sintesi,
         "consigli_classe_dettaglio": consigli,
         "colloqui_generali": colloqui,
-        "cdc_novembre": cdc_meta
+        "cdc_novembre": cdc_meta,
+        "colloqui_dicembre": colloqui_meta
     }
 
 if __name__ == "__main__":

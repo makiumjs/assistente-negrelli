@@ -928,25 +928,40 @@ function collectDocenteDayExtras(d, p, idx, resolvedDate) {
     speechParts.push(i.orario ? `${actText} dalle ${i.orario.replace(/\s+/g, " ").trim()}` : actText);
   }
 
-  // 5) Colloqui Generali sede Negrelli (filtrati per biennio/triennio del docente)
+  // 5) Colloqui Generali (filtrati per sede e biennio/triennio del docente)
   const hasBiennio = [...teacherClasses].some((c) => /^[12]/.test(c));
   const hasTriennio = [...teacherClasses].some((c) => /^[345]/.test(c));
+  const hasColotti = [...teacherClasses].some((c) => /AFM|RIM|BRIM/i.test(c));
+  const hasRizzarda = [...teacherClasses].some((c) => /ASS|SSAS|IAMI/i.test(c));
+  const hasNegrelli = [...teacherClasses].some((c) => !/AFM|RIM|BRIM|ASS|SSAS|IAMI/i.test(c));
   const collMatches = (att.colloqui_generali || []).filter((c) => {
     if (getExactActivityYMD(c) !== ymd) return false;
-    if ((c.sede || "").toLowerCase() !== "negrelli") return false;
+    const sede = (c.sede || "").toLowerCase();
     const fascia = (c.classi || "").toLowerCase();
-    if (fascia === "biennio") return hasBiennio;
-    if (fascia === "triennio") return hasTriennio;
+    if (sede === "negrelli") {
+      if (!hasNegrelli) return false;
+      if (fascia === "biennio") return hasBiennio;
+      if (fascia === "triennio") return hasTriennio;
+      return true;
+    }
+    if (sede === "colotti") return hasColotti;
+    if (sede === "rizzarda") return hasRizzarda;
     return true;
   });
   for (const c of collMatches) {
+    const whenStr = c.orario ? `Ore ${c.orario}` : "Pomeriggio";
+    const subParts = [];
+    if (c.modalita) subParts.push(c.modalita);
+    if (c.comunicato) subParts.push(c.comunicato);
+    else if (c.periodo) subParts.push(c.periodo);
     lines.push({
-      when: "Pomeriggio",
+      when: whenStr,
       main: `Colloqui Generali • ${c.sede} (${c.classi})`,
-      sub: `${c.periodo}`,
+      sub: subParts.join(" • "),
       aula: null,
     });
-    speechParts.push(`i colloqui generali per il ${c.classi}`);
+    const orarioSpeech = c.orario ? `dalle ${c.orario.replace("-", " alle ")} ` : "";
+    speechParts.push(`${orarioSpeech}i colloqui generali per il ${c.classi} (${c.sede})`);
   }
 
   return { lines, speechParts, rooms };
@@ -998,20 +1013,32 @@ function collectClasseDayExtras(cid, p, idx, resolvedDate) {
 
   // 3) Colloqui Generali
   const isBiennio = /^[12]/.test(cidUp);
+  const isColotti = /AFM|RIM|BRIM/i.test(cidUp);
+  const isRizzarda = /ASS|SSAS|IAMI/i.test(cidUp);
+  const isNegrelli = !isColotti && !isRizzarda;
   const collMatches = (att.colloqui_generali || []).filter((c) => {
     if (getExactActivityYMD(c) !== ymd) return false;
-    if ((c.sede || "").toLowerCase() !== "negrelli") return false;
+    const sede = (c.sede || "").toLowerCase();
+    if (sede === "colotti" && !isColotti) return false;
+    if (sede === "rizzarda" && !isRizzarda) return false;
+    if (sede === "negrelli" && !isNegrelli) return false;
     const fascia = (c.classi || "").toLowerCase();
     return fascia === "tutte" || (isBiennio ? fascia === "biennio" : fascia === "triennio");
   });
   for (const c of collMatches) {
+    const whenStr = c.orario ? `Ore ${c.orario}` : "Pomeriggio";
+    const subParts = [];
+    if (c.modalita) subParts.push(c.modalita);
+    if (c.comunicato) subParts.push(c.comunicato);
+    else if (c.periodo) subParts.push(c.periodo);
     lines.push({
-      when: "Pomeriggio",
+      when: whenStr,
       main: `Colloqui Generali • ${c.sede} (${c.classi})`,
-      sub: c.periodo,
+      sub: subParts.join(" • "),
       aula: null,
     });
-    speechParts.push(`ci sono i colloqui generali (${c.classi})`);
+    const orarioSpeech = c.orario ? `dalle ${c.orario.replace("-", " alle ")} ` : "";
+    speechParts.push(`${orarioSpeech}ci sono i colloqui generali in presenza (${c.sede})`);
   }
 
   return { lines, speechParts, rooms };
@@ -2134,15 +2161,45 @@ function answerAttivita(p, idx, ctx = {}) {
     let filtered = colloqui;
     if (p.classi?.length) {
       const clsId = p.classi[0].toUpperCase();
-      if (/NEG|ITA|ITE|BTA|BTB|MMA|MMC|MME|CAT|EEC|BSA|BSB|CS|CMS|MS/i.test(clsId)) {
-        filtered = colloqui.filter((c) => c.sede.toLowerCase() === "negrelli");
-      } else if (/AFM|RIM|BRIM/i.test(clsId)) {
-        filtered = colloqui.filter((c) => c.sede.toLowerCase() === "colotti");
+      const isBiennio = /^[12]/.test(clsId);
+      if (/AFM|RIM|BRIM/i.test(clsId)) {
+        filtered = filtered.filter((c) => c.sede.toLowerCase() === "colotti");
       } else if (/ASS|SSAS|IAMI/i.test(clsId)) {
-        filtered = colloqui.filter((c) => c.sede.toLowerCase() === "rizzarda");
+        filtered = filtered.filter((c) => c.sede.toLowerCase() === "rizzarda");
+      } else {
+        filtered = filtered.filter((c) => {
+          if (c.sede.toLowerCase() !== "negrelli") return false;
+          const fascia = (c.classi || "").toLowerCase();
+          return fascia === "tutte" || (isBiennio ? fascia === "biennio" : fascia === "triennio");
+        });
+      }
+    }
+    if (p.targetDateStr) {
+      filtered = filtered.filter((c) => getExactActivityYMD(c) === p.targetDateStr);
+    } else if (p.mese || /\bdicembre|aprile\b/i.test(p.queryText || "")) {
+      const wantsDicembre = /dicembre/i.test(p.mese || "") || /dicembre/i.test(p.queryText || "");
+      const wantsAprile = /aprile/i.test(p.mese || "") || /aprile/i.test(p.queryText || "");
+      if (wantsDicembre && !wantsAprile) {
+        filtered = filtered.filter((c) => c.periodo === "I periodo" || (c.data_iso && c.data_iso.includes("-12-")));
+      } else if (wantsAprile && !wantsDicembre) {
+        filtered = filtered.filter((c) => c.periodo === "II periodo" || (c.data_iso && c.data_iso.includes("-04-")));
       }
     }
     filtered = sortActivities(filtered);
+
+    const makeLines = (list) =>
+      list.map((c) => {
+        const orarioText = c.orario ? ` • Ore ${c.orario}` : "";
+        const subParts = [];
+        if (c.modalita) subParts.push(c.modalita);
+        if (c.comunicato) subParts.push(c.comunicato);
+        else if (c.periodo) subParts.push(c.periodo);
+        return {
+          when: `${c.periodo} • ${c.giorno} ${c.data}${orarioText}`,
+          main: `Sede: ${c.sede} (${c.classi})`,
+          sub: subParts.join(" • "),
+        };
+      });
 
     if (p.isProssimo) {
       const upcoming = filtered.filter((c) => {
@@ -2151,32 +2208,31 @@ function answerAttivita(p, idx, ctx = {}) {
       });
       const target = upcoming.length > 0 ? upcoming[0] : filtered[filtered.length - 1];
       const nextList = upcoming.length > 0 ? upcoming : filtered;
-      const lines = nextList.map((c) => ({
-        when: `${c.periodo} • ${c.giorno} ${c.data}`,
-        main: `Sede: ${c.sede} (${c.classi})`,
-        sub: "",
-      }));
+      const orarioSpeech = target.orario ? ` dalle ${target.orario.replace("-", " alle ")}` : "";
       return {
         title: "Prossimi Colloqui Generali",
         badge: "PROSSIMA ATTIVITÀ",
-        lines,
-        note: "Date dei colloqui generali per il I e II periodo.",
-        speech: `I prossimi colloqui generali per ${target.sede} si terranno ${target.giorno} ${target.data} (${target.classi}).`,
+        lines: makeLines(nextList),
+        note: "Colloqui in presenza nei rispettivi plessi (Comunicato n. 185 del 24/11/2026).",
+        speech: `I prossimi colloqui generali per ${target.sede} si terranno ${target.giorno} ${target.data}${orarioSpeech} (${target.classi}).`,
         rooms: [],
       };
     }
 
-    const lines = filtered.map((c) => ({
-      when: `${c.periodo} • ${c.giorno} ${c.data}`,
-      main: `Sede: ${c.sede} (${c.classi})`,
-      sub: "",
-    }));
+    const isSingleClass = p.classi?.length && filtered.length > 0;
+    const targetSingle = isSingleClass ? filtered[0] : null;
+    let speech = "I colloqui generali del primo periodo si terranno dall'1 al 4 dicembre 2026 dalle 14:30 alle 17:30 in presenza nei rispettivi plessi.";
+    if (targetSingle) {
+      const orarioSpeech = targetSingle.orario ? ` dalle ${targetSingle.orario.replace("-", " alle ")}` : "";
+      speech = `I colloqui generali per la ${p.classi[0].toUpperCase()} (${targetSingle.sede}) si terranno ${targetSingle.giorno} ${targetSingle.data}${orarioSpeech} in presenza nei rispettivi plessi (${targetSingle.comunicato || targetSingle.periodo}).`;
+    }
+
     return {
       title: "Colloqui Generali con i Genitori",
       badge: "COLLOQUI",
-      lines,
-      note: "Date dei colloqui generali per il I e II periodo.",
-      speech: "I colloqui generali si terranno a dicembre 2026 per il primo periodo e ad aprile 2027 per il secondo periodo.",
+      lines: makeLines(filtered),
+      note: "Colloqui I periodo: 1–4 dicembre 2026 ore 14:30–17:30 in presenza nei rispettivi plessi (Comunicato n. 185 del 24/11/2026). II periodo: 5–8 aprile 2027.",
+      speech,
       rooms: [],
     };
   }

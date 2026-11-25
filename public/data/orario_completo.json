@@ -43457,57 +43457,105 @@
         "periodo": "I periodo",
         "giorno": "Martedì",
         "data": "01.12.26",
+        "data_iso": "2026-12-01",
+        "orario": "14:30-17:30",
+        "ora_inizio": "14:30",
+        "ora_fine": "17:30",
         "sede": "Colotti",
-        "classi": "tutte"
+        "classi": "tutte",
+        "modalita": "in presenza nei rispettivi plessi",
+        "comunicato": "Comunicato n. 185 del 24/11/2026"
       },
       {
         "periodo": "I periodo",
         "giorno": "Mercoledì",
         "data": "02.12.26",
+        "data_iso": "2026-12-02",
+        "orario": "14:30-17:30",
+        "ora_inizio": "14:30",
+        "ora_fine": "17:30",
         "sede": "Rizzarda",
-        "classi": "tutte"
+        "classi": "tutte",
+        "modalita": "in presenza nei rispettivi plessi",
+        "comunicato": "Comunicato n. 185 del 24/11/2026"
       },
       {
         "periodo": "I periodo",
         "giorno": "Giovedì",
         "data": "03.12.26",
+        "data_iso": "2026-12-03",
+        "orario": "14:30-17:30",
+        "ora_inizio": "14:30",
+        "ora_fine": "17:30",
         "sede": "Negrelli",
-        "classi": "biennio"
+        "classi": "biennio",
+        "modalita": "in presenza nei rispettivi plessi",
+        "comunicato": "Comunicato n. 185 del 24/11/2026"
       },
       {
         "periodo": "I periodo",
         "giorno": "Venerdì",
         "data": "04.12.26",
+        "data_iso": "2026-12-04",
+        "orario": "14:30-17:30",
+        "ora_inizio": "14:30",
+        "ora_fine": "17:30",
         "sede": "Negrelli",
-        "classi": "triennio"
+        "classi": "triennio",
+        "modalita": "in presenza nei rispettivi plessi",
+        "comunicato": "Comunicato n. 185 del 24/11/2026"
       },
       {
         "periodo": "II periodo",
         "giorno": "Lunedì",
         "data": "05.04.27",
+        "data_iso": "2027-04-05",
+        "orario": "14:30-17:30",
+        "ora_inizio": "14:30",
+        "ora_fine": "17:30",
         "sede": "Colotti",
-        "classi": "tutte"
+        "classi": "tutte",
+        "modalita": "in presenza nei rispettivi plessi",
+        "comunicato": "Piano Annuale Attività"
       },
       {
         "periodo": "II periodo",
         "giorno": "Martedì",
         "data": "06.04.27",
+        "data_iso": "2027-04-06",
+        "orario": "14:30-17:30",
+        "ora_inizio": "14:30",
+        "ora_fine": "17:30",
         "sede": "Negrelli",
-        "classi": "triennio"
+        "classi": "triennio",
+        "modalita": "in presenza nei rispettivi plessi",
+        "comunicato": "Piano Annuale Attività"
       },
       {
         "periodo": "II periodo",
         "giorno": "Mercoledì",
         "data": "07.04.27",
+        "data_iso": "2027-04-07",
+        "orario": "14:30-17:30",
+        "ora_inizio": "14:30",
+        "ora_fine": "17:30",
         "sede": "Negrelli",
-        "classi": "biennio"
+        "classi": "biennio",
+        "modalita": "in presenza nei rispettivi plessi",
+        "comunicato": "Piano Annuale Attività"
       },
       {
         "periodo": "II periodo",
         "giorno": "Giovedì",
         "data": "08.04.27",
+        "data_iso": "2027-04-08",
+        "orario": "14:30-17:30",
+        "ora_inizio": "14:30",
+        "ora_fine": "17:30",
         "sede": "Rizzarda",
-        "classi": "tutte"
+        "classi": "tutte",
+        "modalita": "in presenza nei rispettivi plessi",
+        "comunicato": "Piano Annuale Attività"
       }
     ],
     "cdc_novembre": {
@@ -43536,6 +43584,15 @@
         "2. Attività integrative dell'offerta formativa",
         "3. Varie ed eventuali"
       ]
+    },
+    "colloqui_dicembre": {
+      "numero": "185",
+      "comunicato": "Comunicato n. 185",
+      "data_comunicato": "24 novembre 2026",
+      "oggetto": "colloqui generali Genitori/Docenti primo periodo di valutazione a.s. 26/27.",
+      "modalita": "in presenza nei rispettivi plessi",
+      "orario_standard": "14:30-17:30",
+      "dirigente": "Manuela Muliner Biga"
     },
     "glo": [
       {

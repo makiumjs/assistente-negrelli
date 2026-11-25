@@ -592,5 +592,79 @@ assert.equal(r15.p.intent, "docente");
 assert.ok(r15.a.lines.some((l) => l.main && /collegio docenti/i.test(l.main)));
 console.log("✓ Giorno libero al mattino con Collegio Docenti rilevato correttamente");
 
+console.log("\n=== 16. Test Colloqui Generali Genitori/Docenti Dicembre 2026 (Comunicato n. 185) ===");
+
+// 1. Query generale per i colloqui di dicembre
+let r16 = ask("quando sono i colloqui di dicembre");
+assert.equal(r16.p.intent, "attivita");
+assert.equal(r16.p.subType, "colloqui");
+assert.equal(r16.a.lines.length, 4);
+assert.ok(r16.a.lines.some((l) => l.when.includes("01.12.26") && l.main.includes("Colotti")));
+assert.ok(r16.a.lines.some((l) => l.when.includes("02.12.26") && l.main.includes("Rizzarda")));
+assert.ok(r16.a.lines.some((l) => l.when.includes("03.12.26") && l.main.includes("Negrelli (biennio)")));
+assert.ok(r16.a.lines.some((l) => l.when.includes("04.12.26") && l.main.includes("Negrelli (triennio)")));
+assert.ok(r16.a.lines.every((l) => l.when.includes("Ore 14:30-17:30")));
+assert.ok(r16.a.note.includes("Comunicato n. 185"));
+assert.ok(r16.a.speech.includes("14:30 alle 17:30"));
+console.log("✓ Colloqui dicembre generale:", r16.a.speech);
+
+// 2. Query specifica classe triennio Negrelli (4ITA)
+r16 = ask("quando ci sono i colloqui per la 4ITA?");
+assert.equal(r16.p.intent, "attivita");
+assert.equal(r16.p.subType, "colloqui");
+assert.equal(r16.a.lines.length, 2); // 1 per I periodo (dicembre) + 1 per II periodo (aprile)
+const cI4ITA = r16.a.lines.find((l) => l.when.includes("I periodo"));
+assert.ok(cI4ITA.when.includes("04.12.26"));
+assert.ok(cI4ITA.when.includes("Ore 14:30-17:30"));
+assert.ok(cI4ITA.main.includes("Negrelli (triennio)"));
+assert.ok(r16.a.speech.includes("4ITA (Negrelli)"));
+assert.ok(r16.a.speech.includes("04.12.26"));
+console.log("✓ Colloqui 4ITA (Negrelli triennio):", r16.a.speech);
+
+// 3. Query specifica classe biennio Negrelli (1ITA)
+r16 = ask("colloqui genitori 1ITA");
+assert.equal(r16.p.intent, "attivita");
+assert.equal(r16.p.subType, "colloqui");
+const cI1ITA = r16.a.lines.find((l) => l.when.includes("I periodo"));
+assert.ok(cI1ITA.when.includes("03.12.26"));
+assert.ok(cI1ITA.when.includes("Ore 14:30-17:30"));
+assert.ok(cI1ITA.main.includes("Negrelli (biennio)"));
+console.log("✓ Colloqui 1ITA (Negrelli biennio):", r16.a.speech);
+
+// 4. Agenda docente con solo triennio (Cassarino il 3 dicembre - biennio: solo lezioni, niente colloqui)
+r16 = ask("cosa ho il 3 dicembre", "Cassarino");
+assert.equal(r16.p.intent, "docente");
+assert.ok(!r16.a.lines.some((l) => l.main && l.main.includes("Colloqui")), "Cassarino ha solo classi di triennio, non deve avere colloqui il 3 dicembre");
+console.log("✓ Cassarino 3 dicembre (solo lezioni ordinarie, nessun colloquio biennio)");
+
+// 5. Agenda docente con biennio (Basso il 3 dicembre - biennio: lezioni + colloqui)
+r16 = ask("cosa ho il 3 dicembre", "Basso");
+assert.equal(r16.p.intent, "docente");
+assert.ok(r16.a.badge.includes("AGENDA COMPLETA"));
+assert.ok(r16.a.lines.some((l) => l.when === "Ore 14:30-17:30" && l.main.includes("Colloqui Generali • Negrelli (biennio)")));
+console.log("✓ Basso 3 dicembre (Lezioni + Colloqui biennio ore 14:30-17:30)");
+
+// 6. Agenda docente triennio (Cassarino il 4 dicembre - triennio: lezioni + sorveglianza + colloqui)
+r16 = ask("cosa ho il 4 dicembre", "Cassarino");
+assert.equal(r16.p.intent, "docente");
+assert.ok(r16.a.badge.includes("AGENDA COMPLETA"));
+assert.ok(r16.a.lines.some((l) => l.when === "Ore 14:30-17:30" && l.main.includes("Colloqui Generali • Negrelli (triennio)")));
+assert.ok(r16.a.lines.some((l) => l.main && l.main.includes("Sorveglianza • Scale lato didattica")));
+console.log("✓ Cassarino 4 dicembre (Lezioni + Sorveglianza + Colloqui triennio ore 14:30-17:30)");
+
+// 7. Agenda classe biennio (1ITA il 3 dicembre)
+r16 = ask("1ITA il 3 dicembre");
+assert.equal(r16.p.intent, "classe");
+assert.ok(r16.a.badge.includes("AGENDA COMPLETA"));
+assert.ok(r16.a.lines.some((l) => l.when === "Ore 14:30-17:30" && l.main.includes("Colloqui Generali • Negrelli (biennio)")));
+console.log("✓ 1ITA 3 dicembre (Lezioni + Colloqui biennio ore 14:30-17:30)");
+
+// 8. Agenda classe triennio (4ITA il 4 dicembre)
+r16 = ask("4ITA il 4 dicembre");
+assert.equal(r16.p.intent, "classe");
+assert.ok(r16.a.badge.includes("AGENDA COMPLETA"));
+assert.ok(r16.a.lines.some((l) => l.when === "Ore 14:30-17:30" && l.main.includes("Colloqui Generali • Negrelli (triennio)")));
+console.log("✓ 4ITA 4 dicembre (Lezioni + Colloqui triennio ore 14:30-17:30)");
+
 console.log("\n TUTTI I TEST SONO PASSATI CON SUCCESSO! ");
 
