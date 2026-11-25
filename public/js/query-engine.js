@@ -606,6 +606,11 @@ export function parseQuery(text, idx, ctx = {}) {
     const isDipartimenti = /\b(dipartimenti|dipartimento)\b/.test(q0);
     const monthMatch = q0.match(/\b(settembre|ottobre|novembre|dicembre|gennaio|febbraio|marzo|aprile|maggio|giugno)\b/);
     const mese = monthMatch ? monthMatch[1] : null;
+    const docs = scoreDocenti(q, idx);
+    const wantsSelf = /\b(ho|mio|mia|miei|faccio|devo|tocca)\b/.test(q0);
+    const me = ctx.me ? scoreDocenti(normalize(ctx.me), idx) : [];
+    const docente = docs.length === 1 ? docs[0] : (wantsSelf && me.length === 1 ? me[0] : null);
+    const isSelf = Boolean(wantsSelf && me.length === 1 && (!docente || docente.id === me[0].id));
 
     let subType = "generale";
     if (isCollegio) subType = "collegio";
@@ -615,7 +620,7 @@ export function parseQuery(text, idx, ctx = {}) {
     else if (isConsigli) subType = "consigli_classe";
     else if (isDipartimenti) subType = "dipartimenti";
 
-    return { ...base, intent: "attivita", subType, classi, mese, queryText: q0 };
+    return { ...base, intent: "attivita", subType, classi, mese, docente, isSelf, wantsSelf, queryText: q0 };
   }
 
   // Controllo per Calendario Scolastico (vacanze, inizio/fine lezioni, ponti, festività)
@@ -2159,6 +2164,45 @@ function answerAttivita(p, idx, ctx = {}) {
   // 4. Colloqui Generali
   if (p.subType === "colloqui" || /\bcolloqui\b/i.test(p.queryText || "")) {
     let filtered = colloqui;
+
+    // Filtro per Docente (esplicito o self "quando ho i colloqui?")
+    let docObj = p.docente || null;
+    if (!docObj && (p.wantsSelf || (!p.classi?.length && !p.targetDateStr)) && ctx.me) {
+      const meHits = scoreDocenti(normalize(ctx.me), idx);
+      if (meHits.length === 1) docObj = meHits[0];
+    }
+
+    let docFasciaDesc = "";
+    if (docObj) {
+      const d = idx.db.docenti[docObj.id];
+      if (d) {
+        const teacherClasses = getTeacherClasses(d);
+        const hasBiennio = [...teacherClasses].some((c) => /^[12]/.test(c));
+        const hasTriennio = [...teacherClasses].some((c) => /^[345]/.test(c));
+        const hasColotti = [...teacherClasses].some((c) => /AFM|RIM|BRIM/i.test(c));
+        const hasRizzarda = [...teacherClasses].some((c) => /ASS|SSAS|IAMI/i.test(c));
+        const hasNegrelli = [...teacherClasses].some((c) => !/AFM|RIM|BRIM|ASS|SSAS|IAMI/i.test(c));
+
+        if (hasBiennio && hasTriennio) docFasciaDesc = "biennio e triennio";
+        else if (hasBiennio) docFasciaDesc = "biennio";
+        else if (hasTriennio) docFasciaDesc = "triennio";
+
+        filtered = filtered.filter((c) => {
+          const sede = (c.sede || "").toLowerCase();
+          const fascia = (c.classi || "").toLowerCase();
+          if (sede === "negrelli") {
+            if (!hasNegrelli) return false;
+            if (fascia === "biennio") return hasBiennio;
+            if (fascia === "triennio") return hasTriennio;
+            return true;
+          }
+          if (sede === "colotti") return hasColotti;
+          if (sede === "rizzarda") return hasRizzarda;
+          return true;
+        });
+      }
+    }
+
     if (p.classi?.length) {
       const clsId = p.classi[0].toUpperCase();
       const isBiennio = /^[12]/.test(clsId);
@@ -2222,13 +2266,19 @@ function answerAttivita(p, idx, ctx = {}) {
     const isSingleClass = p.classi?.length && filtered.length > 0;
     const targetSingle = isSingleClass ? filtered[0] : null;
     let speech = "I colloqui generali del primo periodo si terranno dall'1 al 4 dicembre 2026 dalle 14:30 alle 17:30 in presenza nei rispettivi plessi.";
-    if (targetSingle) {
+
+    if (docObj && filtered.length > 0) {
+      const isMe = p.isSelf || (ctx.me && normalize(ctx.me) === normalize(docObj.nome));
+      const subj = isMe ? "hai i colloqui generali" : `il professor ${docObj.nome} ha i colloqui generali`;
+      const datesText = filtered.map((c) => `${c.giorno} ${c.data}${c.orario ? " dalle " + c.orario.replace("-", " alle ") : ""} (${c.sede} ${c.classi})`).join(", e ");
+      speech = `In base alle tue classi (${docFasciaDesc || "competenza"}), ${subj} ${datesText} in presenza nei rispettivi plessi (Comunicato n. 185).`;
+    } else if (targetSingle) {
       const orarioSpeech = targetSingle.orario ? ` dalle ${targetSingle.orario.replace("-", " alle ")}` : "";
       speech = `I colloqui generali per la ${p.classi[0].toUpperCase()} (${targetSingle.sede}) si terranno ${targetSingle.giorno} ${targetSingle.data}${orarioSpeech} in presenza nei rispettivi plessi (${targetSingle.comunicato || targetSingle.periodo}).`;
     }
 
     return {
-      title: "Colloqui Generali con i Genitori",
+      title: docObj ? `Colloqui Generali • ${docObj.nome}` : "Colloqui Generali con i Genitori",
       badge: "COLLOQUI",
       lines: makeLines(filtered),
       note: "Colloqui I periodo: 1–4 dicembre 2026 ore 14:30–17:30 in presenza nei rispettivi plessi (Comunicato n. 185 del 24/11/2026). II periodo: 5–8 aprile 2027.",

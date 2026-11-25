@@ -666,5 +666,24 @@ assert.ok(r16.a.badge.includes("AGENDA COMPLETA"));
 assert.ok(r16.a.lines.some((l) => l.when === "Ore 14:30-17:30" && l.main.includes("Colloqui Generali • Negrelli (triennio)")));
 console.log("✓ 4ITA 4 dicembre (Lezioni + Colloqui triennio ore 14:30-17:30)");
 
+// 9. Query diretta docente self triennio ("quando ho i colloqui di dicembre")
+r16 = ask("quando ho i colloqui di dicembre", "Cassarino");
+assert.equal(r16.p.intent, "attivita");
+assert.equal(r16.p.subType, "colloqui");
+assert.equal(r16.a.lines.length, 1, "Cassarino ha solo classi di triennio: a dicembre deve avere solo venerdì 4 dicembre");
+assert.ok(r16.a.lines[0].when.includes("04.12.26"));
+assert.ok(r16.a.lines[0].main.includes("Negrelli (triennio)"));
+assert.ok(r16.a.speech.includes("Venerdì 04.12.26"));
+console.log("✓ Cassarino 'quando ho i colloqui di dicembre': profilato solo su venerdì 04.12.26");
+
+// 10. Query diretta docente self biennio+triennio ("quando ho i colloqui di dicembre" per Basso)
+r16 = ask("quando ho i colloqui di dicembre", "Basso");
+assert.equal(r16.p.intent, "attivita");
+assert.equal(r16.p.subType, "colloqui");
+assert.equal(r16.a.lines.length, 2, "Basso ha sia biennio che triennio: a dicembre deve avere sia il 3 che il 4");
+assert.ok(r16.a.lines.some((l) => l.when.includes("03.12.26")));
+assert.ok(r16.a.lines.some((l) => l.when.includes("04.12.26")));
+console.log("✓ Basso 'quando ho i colloqui di dicembre': profilato su giovedì 3 e venerdì 4");
+
 console.log("\n TUTTI I TEST SONO PASSATI CON SUCCESSO! ");
 
