@@ -189,7 +189,13 @@ export function buildIndex(db) {
     per_docente: {},
   };
 
-  return { db, docenti, classKeys, aule, starts, attivita, scansione, calendario, glo, sorveglianze };
+  const colloqui_docenti = db.colloqui_docenti || {
+    meta: {},
+    per_docente: {},
+    per_classe: {},
+  };
+
+  return { db, docenti, classKeys, aule, starts, attivita, scansione, calendario, glo, sorveglianze, colloqui_docenti };
 }
 
 // ------------------------------------------------------------------ entità
@@ -933,40 +939,89 @@ function collectDocenteDayExtras(d, p, idx, resolvedDate) {
     speechParts.push(i.orario ? `${actText} dalle ${i.orario.replace(/\s+/g, " ").trim()}` : actText);
   }
 
-  // 5) Colloqui Generali (filtrati per sede e biennio/triennio del docente)
-  const hasBiennio = [...teacherClasses].some((c) => /^[12]/.test(c));
-  const hasTriennio = [...teacherClasses].some((c) => /^[345]/.test(c));
-  const hasColotti = [...teacherClasses].some((c) => /AFM|RIM|BRIM/i.test(c));
-  const hasRizzarda = [...teacherClasses].some((c) => /ASS|SSAS|IAMI/i.test(c));
-  const hasNegrelli = [...teacherClasses].some((c) => !/AFM|RIM|BRIM|ASS|SSAS|IAMI/i.test(c));
-  const collMatches = (att.colloqui_generali || []).filter((c) => {
-    if (getExactActivityYMD(c) !== ymd) return false;
-    const sede = (c.sede || "").toLowerCase();
-    const fascia = (c.classi || "").toLowerCase();
-    if (sede === "negrelli") {
-      if (!hasNegrelli) return false;
-      if (fascia === "biennio") return hasBiennio;
-      if (fascia === "triennio") return hasTriennio;
-      return true;
+  // 5) Colloqui Generali (con supporto orari personalizzati docenti dal CSV)
+  const teacherDocKey = p.docente?.id || Object.keys(idx.db?.docenti || {}).find((k) => idx.db.docenti[k]?.nome === d.nome) || null;
+  const docColloquiInfo = idx.colloqui_docenti?.per_docente?.[teacherDocKey] || null;
+
+  if (docColloquiInfo && (ymd === "2026-12-03" || ymd === "2026-12-04")) {
+    if (ymd === "2026-12-03" && docColloquiInfo.biennio?.attivo) {
+      const b = docColloquiInfo.biennio;
+      if (b.assente) {
+        lines.push({
+          when: "Pomeriggio",
+          main: "Colloqui Generali • Assente giustificato",
+          sub: "Docente assente ai colloqui del biennio (Comunicato n. 185)",
+          aula: null,
+        });
+        speechParts.push(p.isSelf ? "nel pomeriggio risulti assente giustificato ai colloqui del biennio" : "nel pomeriggio risulta assente giustificato ai colloqui del biennio");
+      } else {
+        const defaultNote = b.orario_default ? " (orario d'istituto)" : "";
+        lines.push({
+          when: `Ore ${b.orario}`,
+          main: `Colloqui Generali • Negrelli (biennio)`,
+          sub: `Classi: ${b.classi.join(", ")}${defaultNote} • in presenza`,
+          aula: null,
+        });
+        speechParts.push(`dalle ${b.orario.replace("-", " alle ")} i colloqui generali per il biennio (Negrelli)`);
+      }
+    } else if (ymd === "2026-12-04" && docColloquiInfo.triennio?.attivo) {
+      const t = docColloquiInfo.triennio;
+      if (t.assente) {
+        lines.push({
+          when: "Pomeriggio",
+          main: "Colloqui Generali • Assente giustificato",
+          sub: "Docente assente ai colloqui del triennio (Comunicato n. 185)",
+          aula: null,
+        });
+        speechParts.push(p.isSelf ? "nel pomeriggio risulti assente giustificato ai colloqui del triennio" : "nel pomeriggio risulta assente giustificato ai colloqui del triennio");
+      } else {
+        const defaultNote = t.orario_default ? " (orario d'istituto)" : "";
+        const noteExtra = docColloquiInfo.note ? ` • ${docColloquiInfo.note}` : "";
+        lines.push({
+          when: `Ore ${t.orario}`,
+          main: `Colloqui Generali • Negrelli (triennio)`,
+          sub: `Classi: ${t.classi.join(", ")}${defaultNote}${noteExtra} • in presenza`,
+          aula: null,
+        });
+        speechParts.push(`dalle ${t.orario.replace("-", " alle ")} i colloqui generali per il triennio (Negrelli)`);
+      }
     }
-    if (sede === "colotti") return hasColotti;
-    if (sede === "rizzarda") return hasRizzarda;
-    return true;
-  });
-  for (const c of collMatches) {
-    const whenStr = c.orario ? `Ore ${c.orario}` : "Pomeriggio";
-    const subParts = [];
-    if (c.modalita) subParts.push(c.modalita);
-    if (c.comunicato) subParts.push(c.comunicato);
-    else if (c.periodo) subParts.push(c.periodo);
-    lines.push({
-      when: whenStr,
-      main: `Colloqui Generali • ${c.sede} (${c.classi})`,
-      sub: subParts.join(" • "),
-      aula: null,
+  } else {
+    // Fallback per II periodo o altri plessi (Colotti, Rizzarda)
+    const hasBiennio = [...teacherClasses].some((c) => /^[12]/.test(c));
+    const hasTriennio = [...teacherClasses].some((c) => /^[345]/.test(c));
+    const hasColotti = [...teacherClasses].some((c) => /AFM|RIM|BRIM/i.test(c));
+    const hasRizzarda = [...teacherClasses].some((c) => /ASS|SSAS|IAMI/i.test(c));
+    const hasNegrelli = [...teacherClasses].some((c) => !/AFM|RIM|BRIM|ASS|SSAS|IAMI/i.test(c));
+    const collMatches = (att.colloqui_generali || []).filter((c) => {
+      if (getExactActivityYMD(c) !== ymd) return false;
+      const sede = (c.sede || "").toLowerCase();
+      const fascia = (c.classi || "").toLowerCase();
+      if (sede === "negrelli") {
+        if (!hasNegrelli) return false;
+        if (fascia === "biennio") return hasBiennio;
+        if (fascia === "triennio") return hasTriennio;
+        return true;
+      }
+      if (sede === "colotti") return hasColotti;
+      if (sede === "rizzarda") return hasRizzarda;
+      return true;
     });
-    const orarioSpeech = c.orario ? `dalle ${c.orario.replace("-", " alle ")} ` : "";
-    speechParts.push(`${orarioSpeech}i colloqui generali per il ${c.classi} (${c.sede})`);
+    for (const c of collMatches) {
+      const whenStr = c.orario ? `Ore ${c.orario}` : "Pomeriggio";
+      const subParts = [];
+      if (c.modalita) subParts.push(c.modalita);
+      if (c.comunicato) subParts.push(c.comunicato);
+      else if (c.periodo) subParts.push(c.periodo);
+      lines.push({
+        when: whenStr,
+        main: `Colloqui Generali • ${c.sede} (${c.classi})`,
+        sub: subParts.join(" • "),
+        aula: null,
+      });
+      const orarioSpeech = c.orario ? `dalle ${c.orario.replace("-", " alle ")} ` : "";
+      speechParts.push(`${orarioSpeech}i colloqui generali per il ${c.classi} (${c.sede})`);
+    }
   }
 
   return { lines, speechParts, rooms };
@@ -2201,6 +2256,98 @@ function answerAttivita(p, idx, ctx = {}) {
           return true;
         });
       }
+    }
+
+    // A) Orario individualizzato per Classe (es. "colloqui 4ITA")
+    if (p.classi?.length && !docObj) {
+      const clsId = p.classi[0].toUpperCase();
+      const docList = idx.colloqui_docenti?.per_classe?.[clsId];
+      if (docList && docList.length > 0) {
+        const sample = docList[0];
+        const lines = docList.map((d) => {
+          const whenStr = d.assente ? "ASSENTE" : `Ore ${d.orario}`;
+          const defStr = d.orario_default ? " (orario d'istituto)" : "";
+          const extraStr = d.note ? ` • ${d.note}` : "";
+          return {
+            when: whenStr,
+            main: `Prof. ${d.docente_nome}`,
+            sub: `${d.giorno} ${d.data} • Negrelli (${d.ciclo})${defStr}${extraStr}`,
+          };
+        });
+        return {
+          title: `Colloqui Generali • Docenti ${clsId}`,
+          badge: `${sample.giorno.toUpperCase()} ${sample.data} • ${sample.ciclo.toUpperCase()}`,
+          lines,
+          note: `Orari individuali di ricevimento docenti della classe ${clsId} (Comunicato n. 185). Chi non ha indicato orario specifico riceve dalle 14:30 alle 17:30.`,
+          speech: `I colloqui generali per la ${clsId} si terranno ${sample.giorno} ${sample.data} in presenza al Negrelli. Sono indicati gli orari di ricevimento individuali per i ${docList.length} docenti della classe.`,
+          rooms: [],
+        };
+      }
+    }
+
+    // B) Orario individualizzato per Docente (es. "a che ora riceve Basso?" o self)
+    if (docObj && idx.colloqui_docenti?.per_docente?.[docObj.id]) {
+      const docData = idx.colloqui_docenti.per_docente[docObj.id];
+      const isMe = p.isSelf || (ctx.me && normalize(ctx.me) === normalize(docObj.nome));
+      const subj = isMe ? "hai i colloqui generali" : `il professor ${docObj.nome} riceve ai colloqui generali`;
+      const lines = [];
+      const speechParts = [];
+
+      if (docData.biennio?.attivo) {
+        const b = docData.biennio;
+        const whenStr = b.assente ? "ASSENTE" : `Ore ${b.orario}`;
+        const noteStr = b.assente ? "Docente assente giustificato" : `Classi: ${b.classi.join(", ")}`;
+        const defStr = b.orario_default ? " (orario d'istituto)" : "";
+        lines.push({
+          when: `I periodo • Giovedì 03.12.26 • ${whenStr}`,
+          main: `Sede: Negrelli (biennio)`,
+          sub: `${noteStr}${defStr}`,
+        });
+        if (b.assente) speechParts.push("giovedì 3 dicembre per il biennio risulta assente giustificato");
+        else speechParts.push(`giovedì 3 dicembre dalle ${b.orario.replace("-", " alle ")} per il biennio (${b.classi.join(", ")})`);
+      }
+
+      if (docData.triennio?.attivo) {
+        const t = docData.triennio;
+        const whenStr = t.assente ? "ASSENTE" : `Ore ${t.orario}`;
+        const noteStr = t.assente ? "Docente assente giustificato" : `Classi: ${t.classi.join(", ")}`;
+        const defStr = t.orario_default ? " (orario d'istituto)" : "";
+        const extraNote = docData.note ? ` • ${docData.note}` : "";
+        lines.push({
+          when: `I periodo • Venerdì 04.12.26 • ${whenStr}`,
+          main: `Sede: Negrelli (triennio)`,
+          sub: `${noteStr}${defStr}${extraNote}`,
+        });
+        if (t.assente) speechParts.push("venerdì 4 dicembre per il triennio risulta assente giustificato");
+        else speechParts.push(`venerdì 4 dicembre dalle ${t.orario.replace("-", " alle ")} per il triennio (${t.classi.join(", ")})`);
+      }
+
+      if (!/dicembre/i.test(p.queryText || "") && !/dicembre/i.test(p.mese || "")) {
+        const iiPeriodo = filtered.filter((c) => c.periodo === "II periodo");
+        for (const c of iiPeriodo) {
+          lines.push({
+            when: `${c.periodo} • ${c.giorno} ${c.data}${c.orario ? " • Ore " + c.orario : ""}`,
+            main: `Sede: ${c.sede} (${c.classi})`,
+            sub: c.comunicato || "Piano Annuale Attività",
+          });
+        }
+      }
+
+      let speech = "";
+      const anyAttivo = (docData.biennio?.attivo && !docData.biennio?.assente) || (docData.triennio?.attivo && !docData.triennio?.assente);
+      if (!anyAttivo) {
+        speech = `${isMe ? "Risulti" : `Il professor ${docObj.nome} risulta`} assente giustificato ai colloqui generali del I periodo (Comunicato n. 185).`;
+      } else {
+        speech = `${isMe ? "In base al tuo orario" : "In base all'orario di ricevimento"}, ${subj} ${speechParts.join(", e ")} in presenza nei rispettivi plessi (Comunicato n. 185).`;
+      }
+      return {
+        title: `Colloqui Generali • ${docObj.nome}`,
+        badge: "COLLOQUI INDIVIDUALI",
+        lines,
+        note: "Orario individuale di ricevimento per i colloqui generali del I periodo (Comunicato n. 185). Chi non ha indicato orario specifico riceve dalle 14:30 alle 17:30.",
+        speech,
+        rooms: [],
+      };
     }
 
     if (p.classi?.length) {

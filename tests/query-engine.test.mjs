@@ -612,23 +612,19 @@ console.log("✓ Colloqui dicembre generale:", r16.a.speech);
 r16 = ask("quando ci sono i colloqui per la 4ITA?");
 assert.equal(r16.p.intent, "attivita");
 assert.equal(r16.p.subType, "colloqui");
-assert.equal(r16.a.lines.length, 2); // 1 per I periodo (dicembre) + 1 per II periodo (aprile)
-const cI4ITA = r16.a.lines.find((l) => l.when.includes("I periodo"));
-assert.ok(cI4ITA.when.includes("04.12.26"));
-assert.ok(cI4ITA.when.includes("Ore 14:30-17:30"));
-assert.ok(cI4ITA.main.includes("Negrelli (triennio)"));
-assert.ok(r16.a.speech.includes("4ITA (Negrelli)"));
-assert.ok(r16.a.speech.includes("04.12.26"));
+assert.equal(r16.a.lines.length, 13); // Elenco 13 docenti con orari individuali
+assert.ok(r16.a.lines.some((l) => l.main.includes("Cassarino") && l.when === "Ore 14:30-17:30"));
+assert.ok(r16.a.lines.some((l) => l.main.includes("Boschello") && l.when === "Ore 14:00-17:00"));
+assert.ok(r16.a.lines.every((l) => l.sub.includes("04.12.26")));
+assert.ok(r16.a.speech.includes("4ITA"));
 console.log("✓ Colloqui 4ITA (Negrelli triennio):", r16.a.speech);
 
 // 3. Query specifica classe biennio Negrelli (1ITA)
 r16 = ask("colloqui genitori 1ITA");
 assert.equal(r16.p.intent, "attivita");
 assert.equal(r16.p.subType, "colloqui");
-const cI1ITA = r16.a.lines.find((l) => l.when.includes("I periodo"));
-assert.ok(cI1ITA.when.includes("03.12.26"));
-assert.ok(cI1ITA.when.includes("Ore 14:30-17:30"));
-assert.ok(cI1ITA.main.includes("Negrelli (biennio)"));
+assert.ok(r16.a.lines.length > 0);
+assert.ok(r16.a.lines.every((l) => l.sub.includes("03.12.26")));
 console.log("✓ Colloqui 1ITA (Negrelli biennio):", r16.a.speech);
 
 // 4. Agenda docente con solo triennio (Cassarino il 3 dicembre - biennio: solo lezioni, niente colloqui)
@@ -637,14 +633,14 @@ assert.equal(r16.p.intent, "docente");
 assert.ok(!r16.a.lines.some((l) => l.main && l.main.includes("Colloqui")), "Cassarino ha solo classi di triennio, non deve avere colloqui il 3 dicembre");
 console.log("✓ Cassarino 3 dicembre (solo lezioni ordinarie, nessun colloquio biennio)");
 
-// 5. Agenda docente con biennio (Basso il 3 dicembre - biennio: lezioni + colloqui)
+// 5. Agenda docente con biennio (Basso il 3 dicembre - biennio: lezioni + colloqui orario personalizzato 14:00-15:30)
 r16 = ask("cosa ho il 3 dicembre", "Basso");
 assert.equal(r16.p.intent, "docente");
 assert.ok(r16.a.badge.includes("AGENDA COMPLETA"));
-assert.ok(r16.a.lines.some((l) => l.when === "Ore 14:30-17:30" && l.main.includes("Colloqui Generali • Negrelli (biennio)")));
-console.log("✓ Basso 3 dicembre (Lezioni + Colloqui biennio ore 14:30-17:30)");
+assert.ok(r16.a.lines.some((l) => l.when === "Ore 14:00-15:30" && l.main.includes("Colloqui Generali • Negrelli (biennio)")));
+console.log("✓ Basso 3 dicembre (Lezioni + Colloqui personalizzati biennio ore 14:00-15:30)");
 
-// 6. Agenda docente triennio (Cassarino il 4 dicembre - triennio: lezioni + sorveglianza + colloqui)
+// 6. Agenda docente triennio (Cassarino il 4 dicembre - triennio: lezioni + sorveglianza + colloqui ore 14:30-17:30)
 r16 = ask("cosa ho il 4 dicembre", "Cassarino");
 assert.equal(r16.p.intent, "docente");
 assert.ok(r16.a.badge.includes("AGENDA COMPLETA"));
@@ -670,20 +666,44 @@ console.log("✓ 4ITA 4 dicembre (Lezioni + Colloqui triennio ore 14:30-17:30)")
 r16 = ask("quando ho i colloqui di dicembre", "Cassarino");
 assert.equal(r16.p.intent, "attivita");
 assert.equal(r16.p.subType, "colloqui");
-assert.equal(r16.a.lines.length, 1, "Cassarino ha solo classi di triennio: a dicembre deve avere solo venerdì 4 dicembre");
-assert.ok(r16.a.lines[0].when.includes("04.12.26"));
-assert.ok(r16.a.lines[0].main.includes("Negrelli (triennio)"));
-assert.ok(r16.a.speech.includes("Venerdì 04.12.26"));
-console.log("✓ Cassarino 'quando ho i colloqui di dicembre': profilato solo su venerdì 04.12.26");
+assert.ok(r16.a.lines.some((l) => l.when.includes("04.12.26") && l.when.includes("Ore 14:30-17:30")));
+assert.ok(!r16.a.lines.some((l) => l.when.includes("03.12.26")), "Cassarino non deve avere biennio");
+assert.ok(r16.a.speech.includes("venerdì 4 dicembre") || r16.a.speech.includes("Venerdì 04.12.26"));
+console.log("✓ Cassarino 'quando ho i colloqui di dicembre': profilato solo su venerdì 4 dicembre ore 14:30-17:30");
 
 // 10. Query diretta docente self biennio+triennio ("quando ho i colloqui di dicembre" per Basso)
 r16 = ask("quando ho i colloqui di dicembre", "Basso");
 assert.equal(r16.p.intent, "attivita");
 assert.equal(r16.p.subType, "colloqui");
-assert.equal(r16.a.lines.length, 2, "Basso ha sia biennio che triennio: a dicembre deve avere sia il 3 che il 4");
-assert.ok(r16.a.lines.some((l) => l.when.includes("03.12.26")));
-assert.ok(r16.a.lines.some((l) => l.when.includes("04.12.26")));
-console.log("✓ Basso 'quando ho i colloqui di dicembre': profilato su giovedì 3 e venerdì 4");
+assert.ok(r16.a.lines.some((l) => l.when.includes("03.12.26") && l.when.includes("Ore 14:00-15:30")));
+assert.ok(r16.a.lines.some((l) => l.when.includes("04.12.26") && l.when.includes("Ore 13:30-15:00")));
+console.log("✓ Basso 'quando ho i colloqui di dicembre': orari personalizzati 14:00-15:30 e 13:30-15:00");
+
+// 11. Orario colloqui docenti per una classe specifica ("colloqui 4ITA")
+r16 = ask("colloqui 4ITA");
+assert.equal(r16.p.intent, "attivita");
+assert.equal(r16.p.subType, "colloqui");
+assert.equal(r16.a.title, "Colloqui Generali • Docenti 4ITA");
+assert.equal(r16.a.lines.length, 13);
+assert.ok(r16.a.lines.some((l) => l.main.includes("Boschello") && l.when === "Ore 14:00-17:00"));
+assert.ok(r16.a.lines.some((l) => l.main.includes("Cassarino") && l.when === "Ore 14:30-17:30"));
+assert.ok(r16.a.lines.some((l) => l.main.includes("Fantinel") && l.when === "Ore 14:30-16:30"));
+console.log("✓ Colloqui 4ITA: elenco 13 docenti con orari individuali");
+
+// 12. Query docente assente ai colloqui ("a che ora riceve Berlese ai colloqui?")
+r16 = ask("a che ora riceve Berlese ai colloqui?");
+assert.equal(r16.p.intent, "attivita");
+assert.equal(r16.p.subType, "colloqui");
+assert.ok(r16.a.lines.some((l) => l.when.includes("ASSENTE")));
+assert.ok(r16.a.speech.includes("assente giustificato"));
+console.log("✓ Berlese ai colloqui: rilevato assente giustificato");
+
+// 13. Query docente con orario standard non compilato ("a che ora riceve De Bacco ai colloqui?")
+r16 = ask("a che ora riceve De Bacco ai colloqui?");
+assert.equal(r16.p.intent, "attivita");
+assert.equal(r16.p.subType, "colloqui");
+assert.ok(r16.a.lines.some((l) => l.when.includes("Ore 14:30-17:30") && l.sub.includes("orario d'istituto")));
+console.log("✓ De Bacco ai colloqui: applicato orario d'istituto 14:30-17:30");
 
 console.log("\n TUTTI I TEST SONO PASSATI CON SUCCESSO! ");
 

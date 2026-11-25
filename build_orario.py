@@ -16,6 +16,7 @@ from parse_attivita import parse_attivita_pdf
 from parse_calendario import parse_calendario_pdf
 from parse_glo import parse_glo_pdf
 from parse_sorveglianze import parse_sorveglianze_pdf
+from parse_colloqui_docenti import parse_colloqui_docenti
 
 def find_pdf_path(filename):
     candidates = [
@@ -721,6 +722,14 @@ def run():
         print(f"  ⚠ Avviso: impossibile caricare il Calendario GLO ({e})")
         glo = {}
 
+    print("Lettura Orari Individuali Colloqui Docenti...")
+    try:
+        colloqui_docenti = parse_colloqui_docenti()
+        print(f"  ✓ Orari colloqui caricati per {len(colloqui_docenti.get('per_docente', {}))} docenti.")
+    except Exception as e:
+        print(f"  ⚠ Avviso: impossibile caricare gli orari colloqui docenti ({e})")
+        colloqui_docenti = {}
+
     dataset = {
         "meta": {
             "istituto": "ITIS Negrelli Feltre",
@@ -754,6 +763,7 @@ def run():
         "calendario": calendario,
         "glo": glo,
         "sorveglianze": sorveglianze,
+        "colloqui_docenti": colloqui_docenti,
     }
 
     os.makedirs(os.path.dirname(OUT_JSON), exist_ok=True)
