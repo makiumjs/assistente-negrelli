@@ -54,8 +54,8 @@ assert.ok(r.a.speech.includes("terza e quarta ora"));
 assert.ok(r.a.speech.includes("3ITA"));
 assert.ok(r.a.speech.includes("quinta ora"));
 assert.ok(r.a.speech.includes("disposizione"));
-assert.ok(r.a.speech.includes("sesta ora") && r.a.speech.includes("Q2"));
-console.log("✓ Cassarino lunedì (3ª-4ª 3ITA + 5ª disp + 6ª rec Q2):", r.a.speech);
+assert.ok(r.a.speech.includes("sesta ora") && r.a.speech.includes("Q1"));
+console.log("✓ Cassarino lunedì (3ª-4ª 3ITA + 5ª disp + 6ª rec Q1):", r.a.speech);
 
 r = ask("orario Guizzo lunedì");
 assert.equal(r.p.intent, "docente");
@@ -490,43 +490,40 @@ assert.ok(r14.a.title.includes("Q2"));
 assert.ok(r14.a.speech.includes("48") && r14.a.speech.includes("pari"));
 console.log("✓ Settimana 23 nov -> Q2:", r14.a.speech);
 
-// 2. Recuperi per docente (Cassarino = Lunedì 6ª ora Q2; Zadra = Mer 4ª Q2 + Gio 3ª Q1)
-r14 = ask("ore di recupero Cassarino", "", nov23);
+// 2. Recuperi per docente (Cassarino = Lunedì 6ª ora Q1; Zadra = Mer 4ª Q2)
+r14 = ask("ore di recupero Cassarino", "", nov19);
 assert.equal(r14.p.intent, "recupero");
 assert.equal(r14.a.lines.length, 1);
 assert.ok(r14.a.lines[0].when.includes("Lunedì") && r14.a.lines[0].when.includes("6ª"));
-assert.ok(r14.a.lines[0].main.includes("Q2") && r14.a.lines[0].main.includes("Attivo questa settimana"));
-console.log("✓ Recupero Cassarino (Q2 attivo):", r14.a.speech);
+assert.ok(r14.a.lines[0].main.includes("Q1") && r14.a.lines[0].main.includes("Attivo questa settimana"));
+console.log("✓ Recupero Cassarino (Q1 attivo in sett. 47):", r14.a.speech);
 
-r14 = ask("quando ho recupero?", "Zadra", nov19);
+r14 = ask("quando ho recupero?", "Zadra", nov23);
 assert.equal(r14.p.intent, "recupero");
-assert.equal(r14.a.lines.length, 2);
+assert.equal(r14.a.lines.length, 1);
 assert.ok(r14.a.lines.some((l) => l.when.includes("Mercoledì") && l.main.includes("Q2")));
-assert.ok(r14.a.lines.some((l) => l.when.includes("Giovedì") && l.main.includes("Q1")));
-console.log("✓ Recuperi Zadra (Mer Q2 + Gio Q1):", r14.a.speech);
+console.log("✓ Recuperi Zadra (Mer Q2):", r14.a.speech);
 
 // 3. Chi ha recupero in un giorno specifico
 r14 = ask("chi ha recupero lunedì?", "", nov19);
 assert.equal(r14.p.intent, "recupero");
-assert.ok(r14.a.lines.length >= 10);
+assert.equal(r14.a.lines.length, 10);
 assert.ok(r14.a.lines.some((l) => l.main.includes("Cassarino")));
 console.log("✓ Recuperi lunedì:", r14.a.lines.length, "docenti");
 
 // 4. Sorveglianze per docente (esplicito e self)
 r14 = ask("quando ho sorveglianza?", "Cassarino", nov19);
 assert.equal(r14.p.intent, "sorveglianza");
-assert.equal(r14.a.lines.length, 1);
-assert.equal(r14.a.lines[0].when, "Venerdì");
-assert.equal(r14.a.lines[0].main, "Scale lato didattica");
-assert.ok(r14.a.speech.includes("venerdì") && r14.a.speech.includes("Scale lato didattica"));
-console.log("✓ Sorveglianza self Cassarino:", r14.a.speech);
+assert.equal(r14.a.lines.length, 2);
+assert.ok(r14.a.lines.some((l) => l.when === "Lunedì" && l.main === "2° Piano"));
+assert.ok(r14.a.lines.some((l) => l.when === "Sabato" && l.main === "Cortile ingresso"));
+console.log("✓ Sorveglianza self Cassarino (Lun 2° Piano + Sab Cortile):", r14.a.speech);
 
 r14 = ask("dove fa sorveglianza Chiariello?", "", nov19);
 assert.equal(r14.p.intent, "sorveglianza");
-assert.equal(r14.a.lines.length, 2);
-assert.ok(r14.a.lines.some((l) => l.when === "Martedì" && l.main === "Cortile ingresso"));
-assert.ok(r14.a.lines.some((l) => l.when === "Venerdì" && l.main === "Laboratori"));
-console.log("✓ Sorveglianza Chiariello (Mar + Ven):", r14.a.speech);
+assert.equal(r14.a.lines.length, 1);
+assert.ok(r14.a.lines.some((l) => l.when === "Venerdì" && l.main === "Cortile ingresso"));
+console.log("✓ Sorveglianza Chiariello (Ven Cortile):", r14.a.speech);
 
 // 5. Sorveglianze per giorno e zona
 r14 = ask("chi fa sorveglianza oggi?", "", nov19);
@@ -538,7 +535,7 @@ console.log("✓ Sorveglianze giovedì (8 zone):", r14.a.speech);
 
 r14 = ask("chi fa sorveglianza in cortile ingresso lunedì?", "", nov19);
 assert.equal(r14.p.intent, "sorveglianza");
-assert.ok(r14.a.speech.includes("Da Rold") && r14.a.speech.includes("Gaio"));
+assert.ok(r14.a.speech.includes("Debortoli") && r14.a.speech.includes("Feltrin") && r14.a.speech.includes("Palma"));
 console.log("✓ Sorveglianza Cortile ingresso lunedì:", r14.a.speech);
 
 // 6. Durata intervallo
@@ -567,11 +564,16 @@ assert.ok(r15.a.lines.some((l) => l.main && l.main.includes("Consiglio di Classe
 assert.ok(!r15.a.lines.some((l) => l.main && l.main.includes("3CAT")), "Non deve includere CdC di classi non del docente");
 console.log("✓ Cassarino 'domani' (19 nov): lezioni + 3 CdC propri");
 
-// 2. "venerdì" per Cassarino (20 nov): lezioni + Sorveglianza Scale lato didattica + CdC 5ITB
+// 2. "venerdì" per Cassarino (20 nov): lezioni + CdC 5ITB
 r15 = ask("venerdì", "Cassarino", nov18);
-assert.ok(r15.a.lines.some((l) => l.main && l.main.includes("Sorveglianza • Scale lato didattica")));
 assert.ok(r15.a.lines.some((l) => l.main && l.main.includes("Consiglio di Classe 5ITB")));
-console.log("✓ Cassarino 'venerdì' (20 nov): lezioni + sorveglianza + CdC 5ITB");
+console.log("✓ Cassarino 'venerdì' (20 nov): lezioni + CdC 5ITB");
+
+// 2b. "lunedì 30 novembre" per Cassarino: lezioni + Sorveglianza 2° Piano + Recupero Q1
+let r15b = ask("cosa ho il 30 novembre", "Cassarino");
+assert.ok(r15b.a.lines.some((l) => l.main && l.main.includes("Sorveglianza • 2° Piano")));
+assert.ok(r15b.a.lines.some((l) => l.main && l.main.includes("Recupero (Q1")));
+console.log("✓ Cassarino '30 novembre': lezioni + sorveglianza 2° Piano + recupero Q1");
 
 // 3. Mapping classi articolate (De Bacco 4EE/5EE -> CdC 4EEC/5EEC venerdì 20 nov)
 r15 = ask("cosa ha De Bacco venerdì", "", nov18);
@@ -640,13 +642,12 @@ assert.ok(r16.a.badge.includes("AGENDA COMPLETA"));
 assert.ok(r16.a.lines.some((l) => l.when === "Ore 14:00-15:30" && l.main.includes("Colloqui Generali • Negrelli (biennio)")));
 console.log("✓ Basso 3 dicembre (Lezioni + Colloqui personalizzati biennio ore 14:00-15:30)");
 
-// 6. Agenda docente triennio (Cassarino il 4 dicembre - triennio: lezioni + sorveglianza + colloqui ore 14:30-17:30)
+// 6. Agenda docente triennio (Cassarino il 4 dicembre - triennio: lezioni + colloqui ore 14:30-17:30)
 r16 = ask("cosa ho il 4 dicembre", "Cassarino");
 assert.equal(r16.p.intent, "docente");
 assert.ok(r16.a.badge.includes("AGENDA COMPLETA"));
 assert.ok(r16.a.lines.some((l) => l.when === "Ore 14:30-17:30" && l.main.includes("Colloqui Generali • Negrelli (triennio)")));
-assert.ok(r16.a.lines.some((l) => l.main && l.main.includes("Sorveglianza • Scale lato didattica")));
-console.log("✓ Cassarino 4 dicembre (Lezioni + Sorveglianza + Colloqui triennio ore 14:30-17:30)");
+console.log("✓ Cassarino 4 dicembre (Lezioni + Colloqui triennio ore 14:30-17:30)");
 
 // 7. Agenda classe biennio (1ITA il 3 dicembre)
 r16 = ask("1ITA il 3 dicembre");

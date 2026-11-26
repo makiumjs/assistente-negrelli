@@ -17,6 +17,7 @@ from parse_calendario import parse_calendario_pdf
 from parse_glo import parse_glo_pdf
 from parse_sorveglianze import parse_sorveglianze_pdf
 from parse_colloqui_docenti import parse_colloqui_docenti
+from parse_recuperi import parse_recuperi_pdf
 
 def find_pdf_path(filename):
     candidates = [
@@ -494,12 +495,7 @@ def riconcilia(classi_raw, docenti_raw, report):
         for g, ore in sched.items():
             for ora, s in ore.items():
                 if s["tipo"] == "recupero":
-                    docenti[nome][g][ora] = {
-                        "tipo": "recupero",
-                        "settimana": s.get("settimana", "tutte"),
-                        "materia": "Recupero",
-                        "aula": None,
-                    }
+                    # I recuperi ufficiali vengono caricati da parse_recuperi_pdf()
                     continue
 
                 if s["tipo"] == "disposizione":
@@ -681,13 +677,37 @@ def run():
     docenti_raw, periodo_doc = parse_docenti(report)
     classi_raw = {}
 
-    periodo = "dal 19 novembre 2026 (mod1a • Comunicato n. 167)"
+    periodo = "dal 30 novembre 2026 (mod1a • orario con recuperi dal 30/11/2026)"
 
     classi, docenti = riconcilia(classi_raw, docenti_raw, report)
+
+    print("Lettura Recuperi Ufficiali Q1/Q2 (dal 30 novembre 2026)...")
+    try:
+        recuperi_data = parse_recuperi_pdf()
+        count_rec = 0
+        for r in recuperi_data.get("recuperi", []):
+            d_id = r["docente_id"]
+            matched_name = None
+            for n in docenti:
+                if persona_id(n) == d_id or n.lower() == r["docente_nome"].lower():
+                    matched_name = n
+                    break
+            if matched_name:
+                docenti[matched_name][r["giorno"]][str(r["ora"])] = {
+                    "tipo": "recupero",
+                    "settimana": r["settimana"],
+                    "materia": "Recupero",
+                    "aula": None,
+                }
+                count_rec += 1
+        print(f"  ✓ Recuperi caricati: {count_rec} slot (in vigore dal 30 novembre 2026).")
+    except Exception as e:
+        print(f"  ⚠ Avviso: impossibile caricare i Recuperi ({e})")
+
     aule = costruisci_aule(classi, docenti)
     libere = aule_libere(aule)
 
-    print("Lettura Turni Sorveglianza (da 19 novembre 2026)...")
+    print("Lettura Turni Sorveglianza (da 30 novembre 2026)...")
     try:
         sorveglianze = parse_sorveglianze_pdf()
         total_turni = sum(len(v) for v in sorveglianze.get("per_docente", {}).values())
@@ -740,8 +760,9 @@ def run():
             "nota_aule": "Copre aule, laboratori, palestra e spazi dell'istituto Negrelli.",
             "nota_sabato": "Il sabato le lezioni terminano alla 4ª ora (uscita ore 12:05).",
             "recuperi_info": {
-                "comunicato": "Comunicato n. 167 del 18 novembre 2026",
-                "in_vigore_dal": "2026-11-19",
+                "comunicato": "Orario con recuperi dal 30 novembre 2026",
+                "in_vigore_dal": "2026-11-30",
+                "in_vigore_label": "lunedì 30 novembre 2026",
                 "Q1": "Settimane con numero dispari del calendario",
                 "Q2": "Settimane con numero pari del calendario",
                 "intervallo_lun_mer": "10 minuti (10:25-10:35)",

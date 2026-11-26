@@ -121,6 +121,9 @@ export function buildIndex(db) {
     const words = clean.split(" ").filter((t) => /^[a-z]{3,}$/.test(t));
     const compact = clean.replace(/\s+/g, "");
     const tokens = [...new Set([...words, compact])];
+    if (id === "PLUTINO_CALIGIURI") {
+      tokens.push("dajnko");
+    }
     return {
       id,
       nome: d.nome,
@@ -873,7 +876,7 @@ function collectDocenteDayExtras(d, p, idx, resolvedDate) {
         lines.push({
           when: `Intervallo (${rec.orario})`,
           main: `Sorveglianza • ${t.zona}`,
-          sub: `Durata ${rec.durata} min • Comunicato n. 167`,
+          sub: `Durata ${rec.durata} min • Dal 30/11/2026`,
           aula: null,
         });
         speechParts.push(
@@ -1143,7 +1146,7 @@ function answerDocente(p, idx) {
           : "ogni settimana";
       return {
         main: `Recupero (${statusTag})`,
-        sub: `${settLabel} • Comunicato n. 167`,
+        sub: `${settLabel} • Dal 30/11/2026`,
         say: p.isSelf ? `hai recupero ${settSay}` : `ha recupero ${settSay}`,
         aula: null,
       };
@@ -1581,13 +1584,13 @@ function answerSorveglianza(p, idx, ctx = {}) {
   const perGiorno = sorv.per_giorno || {};
   const perDocente = sorv.per_docente || {};
   const noteStd =
-    "Comunicato n. 167 (in vigore dal 19/11/2026). In caso di variazioni comunicare la modifica all'Ufficio Tecnico dopo aver individuato il sostituto.";
+    "In vigore dal 30/11/2026. In caso di variazioni comunicare la modifica all'Ufficio Tecnico dopo aver individuato il sostituto.";
 
   // 1) Richiesta durata / orario intervallo
   if (p.asksDuration) {
     return {
       title: "Orario e Durata Intervallo",
-      badge: "COMUNICATO N. 167",
+      badge: "DAL 30 NOV",
       lines: [
         { when: "Lun – Mer", main: "10:25 – 10:35 (10 minuti)", sub: "Tra la 3ª e la 4ª ora" },
         { when: "Gio – Sab", main: "10:50 – 11:05 (15 minuti)", sub: "Tra la 3ª e la 4ª ora" },
@@ -1629,12 +1632,12 @@ function answerSorveglianza(p, idx, ctx = {}) {
     if (!turniDoc.length) {
       return {
         title: `Sorveglianze • ${displayDoc}`,
-        badge: "SORVEGLIANZE • DAL 19 NOV",
+        badge: "SORVEGLIANZE • DAL 30 NOV",
         lines: [],
-        note: `Nessun turno di sorveglianza assegnato nel prospetto dal 19 novembre 2026. ${noteStd}`,
+        note: `Nessun turno di sorveglianza assegnato nel prospetto dal 30 novembre 2026. ${noteStd}`,
         speech: isSelf
-          ? "Non hai turni di sorveglianza assegnati all'intervallo nel prospetto dal 19 novembre."
-          : `Il professor ${targetDocName} non ha turni di sorveglianza assegnati nel prospetto dal 19 novembre.`,
+          ? "Non hai turni di sorveglianza assegnati all'intervallo nel prospetto dal 30 novembre."
+          : `Il professor ${targetDocName} non ha turni di sorveglianza assegnati nel prospetto dal 30 novembre.`,
         rooms: [],
       };
     }
@@ -1685,7 +1688,7 @@ function answerSorveglianza(p, idx, ctx = {}) {
     const spoken = turniDoc.map((t) => `${dl(t.giorno)} in zona ${t.zona}`).join(" e ");
     return {
       title: `Sorveglianze • ${displayDoc}`,
-      badge: "SORVEGLIANZE • DAL 19 NOV",
+      badge: "SORVEGLIANZE • DAL 30 NOV",
       lines,
       note: noteStd,
       speech: isSelf
@@ -1728,7 +1731,7 @@ function answerSorveglianza(p, idx, ctx = {}) {
     }
     return {
       title: `Turni Sorveglianza • ${p.zona}`,
-      badge: "SORVEGLIANZE • DAL 19 NOV",
+      badge: "SORVEGLIANZE • DAL 30 NOV",
       lines,
       note: noteStd,
       speech: `Ecco i turni settimanali di sorveglianza per la zona ${p.zona}: ` + lines.map((l) => `${l.when} ${l.main}`).join(", ") + ".",
@@ -1762,7 +1765,7 @@ function answerRecupero(p, idx, ctx = {}) {
     : p.now || new Date();
   const parity = getWeekParity(refDate);
   const noteStd =
-    "Comunicato n. 167 (in vigore dal 19/11/2026): recuperi Q1 nelle settimane dispari e Q2 nelle settimane pari del calendario.";
+    "In vigore dal 30/11/2026: recuperi Q1 nelle settimane dispari e Q2 nelle settimane pari del calendario.";
 
   // 1) Verifica docente (esplicito o self)
   let docObj = p.docente || null;

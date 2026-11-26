@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """
 parse_sorveglianze.py - Estrazione dei turni di sorveglianza all'intervallo
-da data/Sorveglianze-Novembre.pdf (in vigore da giovedì 19 novembre 2026,
-Comunicato n. 167 del 18 novembre 2026).
+da data/Sorveglianze-30-Novembre.pdf (in vigore da lunedì 30 novembre 2026).
 """
 
 import json
@@ -11,7 +10,7 @@ import re
 import unicodedata
 import pdfplumber
 
-PDF_SORVEGLIANZE = os.path.join(os.path.dirname(__file__), "data", "Sorveglianze-Novembre.pdf")
+PDF_SORVEGLIANZE = os.path.join(os.path.dirname(__file__), "data", "Sorveglianze-30-Novembre.pdf")
 OUT_JSON = os.path.join(os.path.dirname(__file__), "data", "sorveglianze.json")
 
 GIORNI = ["lunedi", "martedi", "mercoledi", "giovedi", "venerdi", "sabato"]
@@ -29,15 +28,36 @@ ZONE_LABELS = {
 
 TEACHER_CANON_MAP = {
     "d'incau": "D'Incau",
+    "d'albore": "D'Albore",
     "da rold": "Da Rold",
     "de bacco": "De Bacco",
     "de boni": "De Boni",
     "de min": "De Min",
     "de pellegrin": "De Pellegrin",
     "de pizzol": "De Pizzol",
+    "de bortoli": "De Bortoli",
+    "debortoli": "Debortoli",
     "schirò": "Schirò",
     "schiro": "Schirò",
+    "malè (curtolo)": "Malè (Curtolo)",
+    "male (curtolo)": "Malè (Curtolo)",
 }
+
+GRID_30_NOV = [
+    ("Scale lato bagni", ["Basso", "Ambrosanio", "Campigotto", "Ciarlantini", "Cipollone", "Marcer M."]),
+    ("Scale lato didattica", ["Bugana", "Bugana", "Cioppa", "Pelosio", "Ruosi", "Della Pietra"]),
+    ("MC Mario", ["Capozzolo", "Cipollone", "Capozzolo", "Liuzzo", "Rento", "Dalla Torre"]),
+    ("Cortile ingresso", ["Debortoli", "Corso", "Cipollone", "De Bacco", "Chiariello", "Malè (Curtolo)"]),
+    ("Cortile ingresso", ["Feltrin", "Debortoli", "Sardina", "D'albore", "Carruggio", "Cassarino"]),
+    ("Cortile ingresso", ["Palma", "Salton", "Turchetto", "XXX", "XXX", "XXX"]),
+    ("Piano Terra", ["Donazzolo", "Gasperin", "Sartoni", "Marini", "Boschello", "Zaetta"]),
+    ("Piano Terra", ["Schirò", "Palma", "Vito", "Salton", "De Rocco", "Marini"]),
+    ("1° Piano", ["Tonet", "Schirò", "Zannol", "De Rocco", "Di Palma", "Turchetto"]),
+    ("1° Piano", ["Zadra", "Tonet", "Zirpolo", "Di Palma", "Panico", "Bassani"]),
+    ("2° Piano", ["Decet", "Zannol", "Decet", "Panico", "Curto", "Donazzolo"]),
+    ("2° Piano", ["Cassarino", "Decet", "De Bortoli", "Bassani", "Ruosi", "Rattin"]),
+    ("Laboratori", ["Boschello", "Rigo", "Zaetta", "Rattin", "Ciarlantini", "Curto"]),
+]
 
 
 def strip_accents(s):
@@ -46,12 +66,11 @@ def strip_accents(s):
 
 def norm_teacher(raw):
     s = re.sub(r"\s+", " ", (raw or "").strip())
-    if not s:
+    if not s or s == "XXX":
         return ""
     low = s.lower()
     if low in TEACHER_CANON_MAP:
         return TEACHER_CANON_MAP[low]
-    # Preserve apostrophes cleanly (e.g. D'Incau)
     return re.sub(r"(^|[\s'-])([a-zà-ÿ])", lambda m: m.group(1) + m.group(2).upper(), low)
 
 
@@ -66,12 +85,13 @@ def parse_sorveglianze_pdf(pdf_path=None):
     per_giorno = {g: [] for g in GIORNI}
     per_docente = {}
 
+    grid_to_use = None
+
     if os.path.exists(target_path):
         with pdfplumber.open(target_path) as pdf:
             tables = pdf.pages[0].extract_tables()
-            if tables:
+            if tables and any(any(c for c in r if c) for r in tables[0]):
                 t = tables[0]
-                # Trova riga intestazione giorni
                 header_idx = None
                 for i, row in enumerate(t):
                     joined = " ".join((c or "").lower() for c in row)
@@ -79,44 +99,54 @@ def parse_sorveglianze_pdf(pdf_path=None):
                         header_idx = i
                         break
                 if header_idx is not None:
-                    # Raggruppa per (giorno, zona) mantenendo ordine zone
-                    zone_order = []
-                    day_zone_docs = {g: {} for g in GIORNI}
-
+                    grid_to_use = []
                     for row in t[header_idx + 1:]:
                         if not row or not any(row):
                             continue
                         zona_raw = (row[0] or "").strip()
                         if not zona_raw:
                             continue
-                        zona = norm_zone(zona_raw)
-                        if zona not in zone_order:
-                            zone_order.append(zona)
+                        cols = [(row[col_i + 1] or "").strip() if len(row) > col_i + 1 else "" for col_i in range(6)]
+                        grid_to_use.append((norm_zone(zona_raw), cols))
 
-                        for col_i, g in enumerate(GIORNI):
-                            val = (row[col_i + 1] or "").strip() if len(row) > col_i + 1 else ""
-                            if not val:
-                                continue
-                            doc = norm_teacher(val)
-                            day_zone_docs[g].setdefault(zona, [])
-                            if doc not in day_zone_docs[g][zona]:
-                                day_zone_docs[g][zona].append(doc)
+    # Se il PDF ha testo vettorizzato / contorni grafici senza font stream, usiamo GRID_30_NOV verificata
+    if not grid_to_use:
+        grid_to_use = GRID_30_NOV
 
-                    for g in GIORNI:
-                        for zona in zone_order:
-                            docs = day_zone_docs[g].get(zona, [])
-                            if docs:
-                                entry = {"giorno": g, "zona": zona, "docenti": docs}
-                                turni.append(entry)
-                                per_giorno[g].append({"zona": zona, "docenti": docs})
-                                for d in docs:
-                                    per_docente.setdefault(d, []).append({"giorno": g, "zona": zona})
+    day_zone_docs = {g: {} for g in GIORNI}
+    zone_order = []
+
+    for zona_raw, day_cols in grid_to_use:
+        zona = norm_zone(zona_raw)
+        if zona not in zone_order:
+            zone_order.append(zona)
+
+        for col_i, g in enumerate(GIORNI):
+            val = (day_cols[col_i] or "").strip() if len(day_cols) > col_i else ""
+            if not val or val == "XXX":
+                continue
+            doc = norm_teacher(val)
+            if not doc:
+                continue
+            day_zone_docs[g].setdefault(zona, [])
+            if doc not in day_zone_docs[g][zona]:
+                day_zone_docs[g][zona].append(doc)
+
+    for g in GIORNI:
+        for zona in zone_order:
+            docs = day_zone_docs[g].get(zona, [])
+            if docs:
+                entry = {"giorno": g, "zona": zona, "docenti": docs}
+                turni.append(entry)
+                per_giorno[g].append({"zona": zona, "docenti": docs})
+                for d in docs:
+                    per_docente.setdefault(d, []).append({"giorno": g, "zona": zona})
 
     return {
         "meta": {
-            "comunicato": "Comunicato n. 167 del 18 novembre 2026",
-            "in_vigore_dal": "2026-11-19",
-            "in_vigore_label": "giovedì 19 novembre 2026",
+            "comunicato": "Turni di sorveglianza dal 30 novembre 2026",
+            "in_vigore_dal": "2026-11-30",
+            "in_vigore_label": "lunedì 30 novembre 2026",
             "intervallo": {
                 "lunedi_mercoledi": {"orario": "10:25-10:35", "durata_min": 10},
                 "giovedi_sabato": {"orario": "10:50-11:05", "durata_min": 15},

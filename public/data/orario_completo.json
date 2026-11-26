@@ -1,7 +1,7 @@
 {
   "meta": {
     "istituto": "ITIS Negrelli Feltre",
-    "periodo": "dal 19 novembre 2026 (mod1a • Comunicato n. 167)",
+    "periodo": "dal 30 novembre 2026 (mod1a • orario con recuperi dal 30/11/2026)",
     "ore": [
       {
         "ora": 1,
@@ -150,8 +150,9 @@
     "nota_aule": "Copre aule, laboratori, palestra e spazi dell'istituto Negrelli.",
     "nota_sabato": "Il sabato le lezioni terminano alla 4ª ora (uscita ore 12:05).",
     "recuperi_info": {
-      "comunicato": "Comunicato n. 167 del 18 novembre 2026",
-      "in_vigore_dal": "2026-11-19",
+      "comunicato": "Orario con recuperi dal 30 novembre 2026",
+      "in_vigore_dal": "2026-11-30",
+      "in_vigore_label": "lunedì 30 novembre 2026",
       "Q1": "Settimane con numero dispari del calendario",
       "Q2": "Settimane con numero pari del calendario",
       "intervallo_lun_mer": "10 minuti (10:25-10:35)",
@@ -425,6 +426,12 @@
               "De Rocco"
             ],
             "fonte": "docenti_mod1a"
+          },
+          "3": {
+            "tipo": "recupero",
+            "settimana": "Q1",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "giovedi": {
@@ -557,12 +564,6 @@
             "copresenza": [],
             "fonte": "docenti_mod1a"
           },
-          "4": {
-            "tipo": "recupero",
-            "settimana": "Q1",
-            "materia": "Recupero",
-            "aula": null
-          },
           "6": {
             "tipo": "lezione",
             "classe": "3ITB",
@@ -689,6 +690,12 @@
               "Di Palma"
             ],
             "fonte": "docenti_mod1a"
+          },
+          "2": {
+            "tipo": "recupero",
+            "settimana": "Q1",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "martedi": {
@@ -789,12 +796,6 @@
             "aula": "Aula 134",
             "copresenza": [],
             "fonte": "docenti_mod1a"
-          },
-          "3": {
-            "tipo": "recupero",
-            "settimana": "tutte",
-            "materia": "Recupero",
-            "aula": null
           },
           "5": {
             "tipo": "lezione",
@@ -1226,6 +1227,12 @@
             "aula": "Lab. Cad-Automazione 116-117",
             "copresenza": [],
             "fonte": "docenti_mod1a"
+          },
+          "5": {
+            "tipo": "recupero",
+            "settimana": "Q1",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "martedi": {},
@@ -1304,12 +1311,6 @@
             "aula": "Aula 016",
             "copresenza": [],
             "fonte": "docenti_mod1a"
-          },
-          "2": {
-            "tipo": "recupero",
-            "settimana": "tutte",
-            "materia": "Recupero",
-            "aula": null
           },
           "4": {
             "tipo": "lezione",
@@ -1569,12 +1570,6 @@
           }
         },
         "sabato": {
-          "1": {
-            "tipo": "recupero",
-            "settimana": "tutte",
-            "materia": "Recupero",
-            "aula": null
-          },
           "2": {
             "tipo": "disposizione",
             "aula": "Aula Pot-Disp"
@@ -1722,12 +1717,6 @@
             "copresenza": [],
             "fonte": "docenti_mod1a"
           },
-          "3": {
-            "tipo": "recupero",
-            "settimana": "Q2",
-            "materia": "Recupero",
-            "aula": null
-          },
           "4": {
             "tipo": "lezione",
             "classe": "4ITB",
@@ -1871,12 +1860,6 @@
             ],
             "fonte": "docenti_mod1a"
           },
-          "3": {
-            "tipo": "recupero",
-            "settimana": "Q1",
-            "materia": "Recupero",
-            "aula": null
-          },
           "5": {
             "tipo": "lezione",
             "classe": "4MM",
@@ -1894,6 +1877,12 @@
             "aula": "Aula 209",
             "copresenza": [],
             "fonte": "docenti_mod1a"
+          },
+          "3": {
+            "tipo": "recupero",
+            "settimana": "Q1",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "mercoledi": {
@@ -1974,12 +1963,6 @@
             "aula": "Aula 202",
             "copresenza": [],
             "fonte": "docenti_mod1a"
-          },
-          "2": {
-            "tipo": "recupero",
-            "settimana": "Q2",
-            "materia": "Recupero",
-            "aula": null
           },
           "3": {
             "tipo": "lezione",
@@ -2292,12 +2275,6 @@
               "Turrin"
             ],
             "fonte": "docenti_mod1a"
-          },
-          "6": {
-            "tipo": "recupero",
-            "settimana": "Q1",
-            "materia": "Recupero",
-            "aula": null
           }
         },
         "giovedi": {
@@ -2467,7 +2444,7 @@
           },
           "6": {
             "tipo": "recupero",
-            "settimana": "Q2",
+            "settimana": "Q1",
             "materia": "Recupero",
             "aula": null
           }
@@ -2906,6 +2883,12 @@
               "Interdonato"
             ],
             "fonte": "docenti_mod1a"
+          },
+          "6": {
+            "tipo": "recupero",
+            "settimana": "Q1",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "giovedi": {
@@ -2920,12 +2903,6 @@
               "Rigo"
             ],
             "fonte": "docenti_mod1a"
-          },
-          "5": {
-            "tipo": "recupero",
-            "settimana": "Q1",
-            "materia": "Recupero",
-            "aula": null
           }
         },
         "venerdi": {
@@ -3094,12 +3071,6 @@
             "aula": "Aula 203",
             "copresenza": [],
             "fonte": "docenti_mod1a"
-          },
-          "2": {
-            "tipo": "recupero",
-            "settimana": "Q1",
-            "materia": "Recupero",
-            "aula": null
           },
           "3": {
             "tipo": "lezione",
@@ -3283,12 +3254,6 @@
             "copresenza": [],
             "fonte": "docenti_mod1a"
           },
-          "5": {
-            "tipo": "recupero",
-            "settimana": "Q1",
-            "materia": "Recupero",
-            "aula": null
-          },
           "6": {
             "tipo": "lezione",
             "classe": "1BTA",
@@ -3361,12 +3326,6 @@
             "aula": "Aula 014",
             "copresenza": [],
             "fonte": "docenti_mod1a"
-          },
-          "3": {
-            "tipo": "recupero",
-            "settimana": "Q2",
-            "materia": "Recupero",
-            "aula": null
           }
         },
         "venerdi": {
@@ -3791,12 +3750,6 @@
             ],
             "fonte": "docenti_mod1a"
           },
-          "3": {
-            "tipo": "recupero",
-            "settimana": "Q2",
-            "materia": "Recupero",
-            "aula": null
-          },
           "5": {
             "tipo": "lezione",
             "classe": "1BTB",
@@ -3807,6 +3760,12 @@
               "Rigo"
             ],
             "fonte": "docenti_mod1a"
+          },
+          "3": {
+            "tipo": "recupero",
+            "settimana": "Q2",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "mercoledi": {
@@ -4069,12 +4028,6 @@
             "copresenza": [],
             "fonte": "docenti_mod1a"
           },
-          "3": {
-            "tipo": "recupero",
-            "settimana": "tutte",
-            "materia": "Recupero",
-            "aula": null
-          },
           "4": {
             "tipo": "lezione",
             "classe": "3MM",
@@ -4216,12 +4169,6 @@
             ],
             "fonte": "docenti_mod1a"
           },
-          "2": {
-            "tipo": "recupero",
-            "settimana": "Q2",
-            "materia": "Recupero",
-            "aula": null
-          },
           "3": {
             "tipo": "lezione",
             "classe": "1BTB",
@@ -4361,6 +4308,12 @@
             "aula": "Aula Informale 128",
             "copresenza": [],
             "fonte": "docenti_mod1a"
+          },
+          "3": {
+            "tipo": "recupero",
+            "settimana": "Q1",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "martedi": {},
@@ -4431,12 +4384,6 @@
           }
         },
         "venerdi": {
-          "1": {
-            "tipo": "recupero",
-            "settimana": "Q1",
-            "materia": "Recupero",
-            "aula": null
-          },
           "2": {
             "tipo": "lezione",
             "classe": "4BS",
@@ -4798,12 +4745,6 @@
             "aula": "Aula 114",
             "copresenza": [],
             "fonte": "docenti_mod1a"
-          },
-          "4": {
-            "tipo": "recupero",
-            "settimana": "Q2",
-            "materia": "Recupero",
-            "aula": null
           },
           "5": {
             "tipo": "lezione",
@@ -5192,6 +5133,12 @@
               "Tonet"
             ],
             "fonte": "docenti_mod1a"
+          },
+          "6": {
+            "tipo": "recupero",
+            "settimana": "Q1",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "mercoledi": {},
@@ -5244,12 +5191,6 @@
               "Tonet"
             ],
             "fonte": "docenti_mod1a"
-          },
-          "2": {
-            "tipo": "recupero",
-            "settimana": "Q1",
-            "materia": "Recupero",
-            "aula": null
           },
           "3": {
             "tipo": "lezione",
@@ -5342,12 +5283,6 @@
             "aula": "Palestra",
             "copresenza": [],
             "fonte": "docenti_mod1a"
-          },
-          "5": {
-            "tipo": "recupero",
-            "settimana": "Q1",
-            "materia": "Recupero",
-            "aula": null
           }
         },
         "giovedi": {},
@@ -5421,12 +5356,6 @@
             "aula": "Aula 119",
             "copresenza": [],
             "fonte": "docenti_mod1a"
-          },
-          "5": {
-            "tipo": "recupero",
-            "settimana": "tutte",
-            "materia": "Recupero",
-            "aula": null
           },
           "6": {
             "tipo": "lezione",
@@ -5547,6 +5476,12 @@
             "aula": "Aula 114",
             "copresenza": [],
             "fonte": "docenti_mod1a"
+          },
+          "4": {
+            "tipo": "recupero",
+            "settimana": "Q1",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "sabato": {}
@@ -5626,12 +5561,6 @@
           }
         },
         "mercoledi": {
-          "2": {
-            "tipo": "recupero",
-            "settimana": "Q2",
-            "materia": "Recupero",
-            "aula": null
-          },
           "3": {
             "tipo": "lezione",
             "classe": "3EE",
@@ -5675,6 +5604,12 @@
               "Guizzo"
             ],
             "fonte": "docenti_mod1a"
+          },
+          "2": {
+            "tipo": "recupero",
+            "settimana": "Q2",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "giovedi": {
@@ -5795,6 +5730,12 @@
             "aula": "Aula 202",
             "copresenza": [],
             "fonte": "docenti_mod1a"
+          },
+          "6": {
+            "tipo": "recupero",
+            "settimana": "Q2",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "martedi": {
@@ -5966,12 +5907,6 @@
             "aula": "Aula 110",
             "copresenza": [],
             "fonte": "docenti_mod1a"
-          },
-          "4": {
-            "tipo": "recupero",
-            "settimana": "Q2",
-            "materia": "Recupero",
-            "aula": null
           }
         }
       }
@@ -6007,6 +5942,12 @@
             "aula": "Aula 113",
             "copresenza": [],
             "fonte": "docenti_mod1a"
+          },
+          "5": {
+            "tipo": "recupero",
+            "settimana": "Q2",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "martedi": {},
@@ -6123,12 +6064,6 @@
               "Plutino (Caligiuri)"
             ],
             "fonte": "docenti_mod1a"
-          },
-          "4": {
-            "tipo": "recupero",
-            "settimana": "Q2",
-            "materia": "Recupero",
-            "aula": null
           },
           "5": {
             "tipo": "lezione",
@@ -6297,12 +6232,6 @@
             "aula": "Lab. Linux 018",
             "copresenza": [],
             "fonte": "docenti_mod1a"
-          },
-          "3": {
-            "tipo": "recupero",
-            "settimana": "tutte",
-            "materia": "Recupero",
-            "aula": null
           },
           "4": {
             "tipo": "lezione",
@@ -6569,12 +6498,6 @@
             "aula": "Palestra",
             "copresenza": [],
             "fonte": "docenti_mod1a"
-          },
-          "5": {
-            "tipo": "recupero",
-            "settimana": "Q1",
-            "materia": "Recupero",
-            "aula": null
           }
         },
         "martedi": {
@@ -6864,12 +6787,6 @@
             "aula": "Lab. Sistemi 223",
             "copresenza": [],
             "fonte": "docenti_mod1a"
-          },
-          "5": {
-            "tipo": "recupero",
-            "settimana": "Q1",
-            "materia": "Recupero",
-            "aula": null
           }
         },
         "giovedi": {
@@ -7058,12 +6975,6 @@
           }
         },
         "venerdi": {
-          "1": {
-            "tipo": "recupero",
-            "settimana": "Q1",
-            "materia": "Recupero",
-            "aula": null
-          },
           "2": {
             "tipo": "lezione",
             "classe": "2ITA",
@@ -7294,12 +7205,6 @@
               "Fantinel"
             ],
             "fonte": "docenti_mod1a"
-          },
-          "4": {
-            "tipo": "recupero",
-            "settimana": "tutte",
-            "materia": "Recupero",
-            "aula": null
           }
         },
         "venerdi": {
@@ -7416,12 +7321,6 @@
             "aula": "Aula 119",
             "copresenza": [],
             "fonte": "docenti_mod1a"
-          },
-          "6": {
-            "tipo": "recupero",
-            "settimana": "tutte",
-            "materia": "Recupero",
-            "aula": null
           }
         },
         "mercoledi": {
@@ -8044,12 +7943,6 @@
           }
         },
         "mercoledi": {
-          "1": {
-            "tipo": "recupero",
-            "settimana": "tutte",
-            "materia": "Recupero",
-            "aula": null
-          },
           "2": {
             "tipo": "lezione",
             "classe": "3MM",
@@ -8130,6 +8023,12 @@
           "4": {
             "tipo": "disposizione",
             "aula": "Aula Pot-Disp"
+          },
+          "2": {
+            "tipo": "recupero",
+            "settimana": "Q2",
+            "materia": "Recupero",
+            "aula": null
           }
         }
       }
@@ -8139,12 +8038,6 @@
       "senza_nome": false,
       "orario": {
         "lunedi": {
-          "1": {
-            "tipo": "recupero",
-            "settimana": "Q2",
-            "materia": "Recupero",
-            "aula": null
-          },
           "2": {
             "tipo": "lezione",
             "classe": "3CAT",
@@ -8180,6 +8073,12 @@
             "aula": "Aula 019",
             "copresenza": [],
             "fonte": "docenti_mod1a"
+          },
+          "1": {
+            "tipo": "recupero",
+            "settimana": "Q2",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "martedi": {},
@@ -8513,6 +8412,12 @@
             "aula": "Aula 113",
             "copresenza": [],
             "fonte": "docenti_mod1a"
+          },
+          "4": {
+            "tipo": "recupero",
+            "settimana": "Q1",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "giovedi": {
@@ -8684,12 +8589,6 @@
           }
         },
         "mercoledi": {
-          "2": {
-            "tipo": "recupero",
-            "settimana": "tutte",
-            "materia": "Recupero",
-            "aula": null
-          },
           "3": {
             "tipo": "lezione",
             "classe": "1EE",
@@ -8767,6 +8666,12 @@
             "aula": "Palestra",
             "copresenza": [],
             "fonte": "docenti_mod1a"
+          },
+          "1": {
+            "tipo": "recupero",
+            "settimana": "Q2",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "venerdi": {
@@ -8822,12 +8727,6 @@
           }
         },
         "mercoledi": {
-          "1": {
-            "tipo": "recupero",
-            "settimana": "Q1",
-            "materia": "Recupero",
-            "aula": null
-          },
           "2": {
             "tipo": "lezione",
             "classe": "5MM",
@@ -8882,6 +8781,12 @@
               "Bortolamiol"
             ],
             "fonte": "docenti_mod1a"
+          },
+          "1": {
+            "tipo": "recupero",
+            "settimana": "Q1",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "giovedi": {
@@ -9037,12 +8942,6 @@
             "aula": "Lab. Elettronica 208",
             "copresenza": [],
             "fonte": "docenti_mod1a"
-          },
-          "3": {
-            "tipo": "recupero",
-            "settimana": "Q2",
-            "materia": "Recupero",
-            "aula": null
           },
           "5": {
             "tipo": "lezione",
@@ -9566,12 +9465,6 @@
             "copresenza": [],
             "fonte": "docenti_mod1a"
           },
-          "3": {
-            "tipo": "recupero",
-            "settimana": "Q1",
-            "materia": "Recupero",
-            "aula": null
-          },
           "6": {
             "tipo": "lezione",
             "classe": "4AM",
@@ -9708,12 +9601,6 @@
             "copresenza": [],
             "fonte": "docenti_mod1a"
           },
-          "3": {
-            "tipo": "recupero",
-            "settimana": "tutte",
-            "materia": "Recupero",
-            "aula": null
-          },
           "5": {
             "tipo": "lezione",
             "classe": "3ITA",
@@ -9846,6 +9733,12 @@
             "aula": "Aula 224",
             "copresenza": [],
             "fonte": "docenti_mod1a"
+          },
+          "3": {
+            "tipo": "recupero",
+            "settimana": "Q2",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "venerdi": {},
@@ -10052,12 +9945,6 @@
           }
         },
         "sabato": {
-          "1": {
-            "tipo": "recupero",
-            "settimana": "Q2",
-            "materia": "Recupero",
-            "aula": null
-          },
           "2": {
             "tipo": "lezione",
             "classe": "4EE",
@@ -10223,12 +10110,6 @@
             "aula": "Aula 016",
             "copresenza": [],
             "fonte": "docenti_mod1a"
-          },
-          "4": {
-            "tipo": "recupero",
-            "settimana": "Q1",
-            "materia": "Recupero",
-            "aula": null
           }
         },
         "venerdi": {},
@@ -10767,12 +10648,6 @@
             "copresenza": [],
             "fonte": "docenti_mod1a"
           },
-          "2": {
-            "tipo": "recupero",
-            "settimana": "tutte",
-            "materia": "Recupero",
-            "aula": null
-          },
           "4": {
             "tipo": "lezione",
             "classe": "3BSB",
@@ -10792,6 +10667,12 @@
             "aula": "Aula 014",
             "copresenza": [],
             "fonte": "docenti_mod1a"
+          },
+          "2": {
+            "tipo": "recupero",
+            "settimana": "Q2",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "martedi": {
@@ -11255,6 +11136,12 @@
               "De Pizzol"
             ],
             "fonte": "docenti_mod1a"
+          },
+          "2": {
+            "tipo": "recupero",
+            "settimana": "Q1",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "venerdi": {
@@ -11384,12 +11271,6 @@
           }
         },
         "martedi": {
-          "2": {
-            "tipo": "recupero",
-            "settimana": "Q1",
-            "materia": "Recupero",
-            "aula": null
-          },
           "3": {
             "tipo": "lezione",
             "classe": "5CAT",
@@ -11429,6 +11310,12 @@
             "aula": "Palestra",
             "copresenza": [],
             "fonte": "docenti_mod1a"
+          },
+          "2": {
+            "tipo": "recupero",
+            "settimana": "Q1",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "mercoledi": {
@@ -11627,12 +11514,6 @@
             "aula": "Aula 016",
             "copresenza": [],
             "fonte": "docenti_mod1a"
-          },
-          "4": {
-            "tipo": "recupero",
-            "settimana": "Q1",
-            "materia": "Recupero",
-            "aula": null
           }
         },
         "giovedi": {},
@@ -11663,6 +11544,12 @@
             "aula": "Aula Informale 130",
             "copresenza": [],
             "fonte": "docenti_mod1a"
+          },
+          "2": {
+            "tipo": "recupero",
+            "settimana": "Q2",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "sabato": {}
@@ -11673,12 +11560,6 @@
       "senza_nome": false,
       "orario": {
         "lunedi": {
-          "1": {
-            "tipo": "recupero",
-            "settimana": "Q1",
-            "materia": "Recupero",
-            "aula": null
-          },
           "2": {
             "tipo": "lezione",
             "classe": "1MMA",
@@ -11911,12 +11792,6 @@
               "Decet"
             ],
             "fonte": "docenti_mod1a"
-          },
-          "5": {
-            "tipo": "recupero",
-            "settimana": "tutte",
-            "materia": "Recupero",
-            "aula": null
           }
         },
         "martedi": {
@@ -12562,6 +12437,12 @@
               "D'Incau"
             ],
             "fonte": "docenti_mod1a"
+          },
+          "1": {
+            "tipo": "recupero",
+            "settimana": "Q1",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "venerdi": {
@@ -13080,12 +12961,6 @@
           }
         },
         "giovedi": {
-          "1": {
-            "tipo": "recupero",
-            "settimana": "tutte",
-            "materia": "Recupero",
-            "aula": null
-          },
           "2": {
             "tipo": "lezione",
             "classe": "1ITA",
@@ -13442,6 +13317,12 @@
               "Zirpolo"
             ],
             "fonte": "docenti_mod1a"
+          },
+          "6": {
+            "tipo": "recupero",
+            "settimana": "Q2",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "giovedi": {
@@ -13478,12 +13359,6 @@
               "Interdonato"
             ],
             "fonte": "docenti_mod1a"
-          },
-          "5": {
-            "tipo": "recupero",
-            "settimana": "tutte",
-            "materia": "Recupero",
-            "aula": null
           }
         },
         "venerdi": {},
@@ -13756,12 +13631,6 @@
           }
         },
         "martedi": {
-          "2": {
-            "tipo": "recupero",
-            "settimana": "Q2",
-            "materia": "Recupero",
-            "aula": null
-          },
           "3": {
             "tipo": "lezione",
             "classe": "3AMB",
@@ -14148,12 +14017,6 @@
             "copresenza": [],
             "fonte": "docenti_mod1a"
           },
-          "5": {
-            "tipo": "recupero",
-            "settimana": "tutte",
-            "materia": "Recupero",
-            "aula": null
-          },
           "6": {
             "tipo": "lezione",
             "classe": "1CAT",
@@ -14242,12 +14105,6 @@
             "copresenza": [],
             "fonte": "docenti_mod1a"
           },
-          "4": {
-            "tipo": "recupero",
-            "settimana": "tutte",
-            "materia": "Recupero",
-            "aula": null
-          },
           "5": {
             "tipo": "lezione",
             "classe": "4CAT",
@@ -14267,6 +14124,12 @@
             "aula": "Lab. Costruzioni 118",
             "copresenza": [],
             "fonte": "docenti_mod1a"
+          },
+          "4": {
+            "tipo": "recupero",
+            "settimana": "Q2",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "mercoledi": {
@@ -14579,12 +14442,6 @@
               "Guizzo"
             ],
             "fonte": "docenti_mod1a"
-          },
-          "5": {
-            "tipo": "recupero",
-            "settimana": "Q2",
-            "materia": "Recupero",
-            "aula": null
           }
         },
         "mercoledi": {},
@@ -15217,12 +15074,6 @@
             "copresenza": [],
             "fonte": "docenti_mod1a"
           },
-          "3": {
-            "tipo": "recupero",
-            "settimana": "Q1",
-            "materia": "Recupero",
-            "aula": null
-          },
           "4": {
             "tipo": "lezione",
             "classe": "3CAT",
@@ -15393,12 +15244,6 @@
             "copresenza": [],
             "fonte": "docenti_mod1a"
           },
-          "2": {
-            "tipo": "recupero",
-            "settimana": "Q2",
-            "materia": "Recupero",
-            "aula": null
-          },
           "3": {
             "tipo": "lezione",
             "classe": "1ITA",
@@ -15407,6 +15252,12 @@
             "aula": "Aula 110",
             "copresenza": [],
             "fonte": "docenti_mod1a"
+          },
+          "2": {
+            "tipo": "recupero",
+            "settimana": "Q1",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "sabato": {}
@@ -15460,6 +15311,12 @@
               "Meneguz (Chimica)"
             ],
             "fonte": "docenti_mod1a"
+          },
+          "1": {
+            "tipo": "recupero",
+            "settimana": "Q1",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "martedi": {
@@ -15566,12 +15423,6 @@
           }
         },
         "giovedi": {
-          "2": {
-            "tipo": "recupero",
-            "settimana": "tutte",
-            "materia": "Recupero",
-            "aula": null
-          },
           "3": {
             "tipo": "lezione",
             "classe": "2ITB",
@@ -15745,6 +15596,12 @@
             "aula": "Lab. Linux 018",
             "copresenza": [],
             "fonte": "docenti_mod1a"
+          },
+          "4": {
+            "tipo": "recupero",
+            "settimana": "Q1",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "mercoledi": {
@@ -15815,12 +15672,6 @@
               "Rattin"
             ],
             "fonte": "docenti_mod1a"
-          },
-          "5": {
-            "tipo": "recupero",
-            "settimana": "Q2",
-            "materia": "Recupero",
-            "aula": null
           }
         },
         "venerdi": {
@@ -15970,12 +15821,6 @@
             "copresenza": [],
             "fonte": "docenti_mod1a"
           },
-          "4": {
-            "tipo": "recupero",
-            "settimana": "Q2",
-            "materia": "Recupero",
-            "aula": null
-          },
           "5": {
             "tipo": "lezione",
             "classe": "3MM",
@@ -15984,6 +15829,12 @@
             "aula": "Aula 111",
             "copresenza": [],
             "fonte": "docenti_mod1a"
+          },
+          "4": {
+            "tipo": "recupero",
+            "settimana": "Q2",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "giovedi": {
@@ -16006,12 +15857,6 @@
             "aula": "Aula 201",
             "copresenza": [],
             "fonte": "docenti_mod1a"
-          },
-          "3": {
-            "tipo": "recupero",
-            "settimana": "Q1",
-            "materia": "Recupero",
-            "aula": null
           }
         },
         "venerdi": {
@@ -16741,12 +16586,6 @@
             "copresenza": [],
             "fonte": "docenti_mod1a"
           },
-          "3": {
-            "tipo": "recupero",
-            "settimana": "tutte",
-            "materia": "Recupero",
-            "aula": null
-          },
           "4": {
             "tipo": "lezione",
             "classe": "1BTB",
@@ -16818,6 +16657,12 @@
             "aula": "Aula 134",
             "copresenza": [],
             "fonte": "docenti_mod1a"
+          },
+          "3": {
+            "tipo": "recupero",
+            "settimana": "Q1",
+            "materia": "Recupero",
+            "aula": null
           }
         }
       }
@@ -16903,6 +16748,12 @@
               "D'Albore"
             ],
             "fonte": "docenti_mod1a"
+          },
+          "2": {
+            "tipo": "recupero",
+            "settimana": "Q2",
+            "materia": "Recupero",
+            "aula": null
           }
         },
         "mercoledi": {
@@ -16983,12 +16834,6 @@
           "1": {
             "tipo": "disposizione",
             "aula": "Aula Pot-Disp"
-          },
-          "2": {
-            "tipo": "recupero",
-            "settimana": "Q1",
-            "materia": "Recupero",
-            "aula": null
           },
           "3": {
             "tipo": "lezione",
@@ -44478,9 +44323,9 @@
   },
   "sorveglianze": {
     "meta": {
-      "comunicato": "Comunicato n. 167 del 18 novembre 2026",
-      "in_vigore_dal": "2026-11-19",
-      "in_vigore_label": "giovedì 19 novembre 2026",
+      "comunicato": "Turni di sorveglianza dal 30 novembre 2026",
+      "in_vigore_dal": "2026-11-30",
+      "in_vigore_label": "lunedì 30 novembre 2026",
       "intervallo": {
         "lunedi_mercoledi": {
           "orario": "10:25-10:35",
@@ -44499,105 +44344,107 @@
         "giorno": "lunedi",
         "zona": "Scale lato bagni",
         "docenti": [
-          "Bordin"
+          "Basso"
         ]
       },
       {
         "giorno": "lunedi",
         "zona": "Scale lato didattica",
+        "docenti": [
+          "Bugana"
+        ]
+      },
+      {
+        "giorno": "lunedi",
+        "zona": "MC Mario",
         "docenti": [
           "Capozzolo"
         ]
       },
       {
         "giorno": "lunedi",
-        "zona": "MC Mario",
-        "docenti": [
-          "Cozzolino"
-        ]
-      },
-      {
-        "giorno": "lunedi",
         "zona": "Cortile ingresso",
         "docenti": [
-          "Da Rold",
-          "Gaio"
+          "Debortoli",
+          "Feltrin",
+          "Palma"
         ]
       },
       {
         "giorno": "lunedi",
         "zona": "Piano Terra",
         "docenti": [
-          "De Boni",
-          "Ruosi"
+          "Donazzolo",
+          "Schirò"
         ]
       },
       {
         "giorno": "lunedi",
         "zona": "1° Piano",
         "docenti": [
-          "De Pellegrin",
-          "Liuzzo"
+          "Tonet",
+          "Zadra"
         ]
       },
       {
         "giorno": "lunedi",
         "zona": "2° Piano",
         "docenti": [
-          "De Pizzol",
-          "Pellizzari"
+          "Decet",
+          "Cassarino"
         ]
       },
       {
         "giorno": "lunedi",
         "zona": "Laboratori",
         "docenti": [
-          "Feltrin"
+          "Boschello"
         ]
       },
       {
         "giorno": "martedi",
         "zona": "Scale lato bagni",
         "docenti": [
-          "Da Rold"
+          "Ambrosanio"
         ]
       },
       {
         "giorno": "martedi",
         "zona": "Scale lato didattica",
         "docenti": [
-          "Decet"
+          "Bugana"
         ]
       },
       {
         "giorno": "martedi",
         "zona": "MC Mario",
         "docenti": [
-          "Gasperin"
+          "Cipollone"
         ]
       },
       {
         "giorno": "martedi",
         "zona": "Cortile ingresso",
         "docenti": [
-          "Liuzzo",
-          "Chiariello"
+          "Corso",
+          "Debortoli",
+          "Salton"
         ]
       },
       {
         "giorno": "martedi",
         "zona": "Piano Terra",
         "docenti": [
-          "Schirò",
-          "Zaetta"
+          "Gasperin",
+          "Palma"
         ]
       },
       {
         "giorno": "martedi",
         "zona": "1° Piano",
         "docenti": [
-          "Tonet",
-          "Rento"
+          "Schirò",
+          "Tonet"
         ]
       },
       {
@@ -44605,65 +44452,68 @@
         "zona": "2° Piano",
         "docenti": [
           "Zannol",
-          "Turrin"
+          "Decet"
         ]
       },
       {
         "giorno": "martedi",
         "zona": "Laboratori",
         "docenti": [
-          "De Bacco"
+          "Rigo"
         ]
       },
       {
         "giorno": "mercoledi",
         "zona": "Scale lato bagni",
         "docenti": [
-          "Guizzo"
+          "Campigotto"
         ]
       },
       {
         "giorno": "mercoledi",
         "zona": "Scale lato didattica",
         "docenti": [
-          "Bassani"
+          "Cioppa"
         ]
       },
       {
         "giorno": "mercoledi",
         "zona": "MC Mario",
         "docenti": [
-          "Berlese"
+          "Capozzolo"
         ]
       },
       {
         "giorno": "mercoledi",
         "zona": "Cortile ingresso",
         "docenti": [
-          "Cioppa",
-          "Capozzolo"
+          "Cipollone",
+          "Sardina",
+          "Turchetto"
         ]
       },
       {
         "giorno": "mercoledi",
         "zona": "Piano Terra",
         "docenti": [
-          "Ruosi"
+          "Sartoni",
+          "Vito"
         ]
       },
       {
         "giorno": "mercoledi",
         "zona": "1° Piano",
         "docenti": [
-          "Sardina",
-          "Zannol"
+          "Zannol",
+          "Zirpolo"
         ]
       },
       {
         "giorno": "mercoledi",
         "zona": "2° Piano",
         "docenti": [
-          "Turchetto"
+          "Decet",
+          "De Bortoli"
         ]
       },
       {
@@ -44675,180 +44525,182 @@
       },
       {
         "giorno": "giovedi",
-        "zona": "Scale lato bagni",
-        "docenti": [
-          "Ambrosanio"
-        ]
-      },
-      {
-        "giorno": "giovedi",
-        "zona": "Scale lato didattica",
-        "docenti": [
-          "Bortolamiol"
-        ]
-      },
-      {
-        "giorno": "giovedi",
-        "zona": "MC Mario",
-        "docenti": [
-          "Corso"
-        ]
-      },
-      {
-        "giorno": "giovedi",
-        "zona": "Cortile ingresso",
-        "docenti": [
-          "De Min",
-          "Vivacqua"
-        ]
-      },
-      {
-        "giorno": "giovedi",
-        "zona": "Piano Terra",
-        "docenti": [
-          "Decet",
-          "Pelosio"
-        ]
-      },
-      {
-        "giorno": "giovedi",
-        "zona": "1° Piano",
-        "docenti": [
-          "Marini",
-          "De Bacco"
-        ]
-      },
-      {
-        "giorno": "giovedi",
-        "zona": "2° Piano",
-        "docenti": [
-          "Salton",
-          "Gris"
-        ]
-      },
-      {
-        "giorno": "giovedi",
-        "zona": "Laboratori",
-        "docenti": [
-          "Savaris"
-        ]
-      },
-      {
-        "giorno": "venerdi",
-        "zona": "Scale lato bagni",
-        "docenti": [
-          "Basso"
-        ]
-      },
-      {
-        "giorno": "venerdi",
-        "zona": "Scale lato didattica",
-        "docenti": [
-          "Cassarino"
-        ]
-      },
-      {
-        "giorno": "venerdi",
-        "zona": "MC Mario",
-        "docenti": [
-          "Cirillo"
-        ]
-      },
-      {
-        "giorno": "venerdi",
-        "zona": "Cortile ingresso",
-        "docenti": [
-          "D'Incau",
-          "Feltrin"
-        ]
-      },
-      {
-        "giorno": "venerdi",
-        "zona": "Piano Terra",
-        "docenti": [
-          "Guetta",
-          "Turrin"
-        ]
-      },
-      {
-        "giorno": "venerdi",
-        "zona": "1° Piano",
-        "docenti": [
-          "Noce",
-          "Gris"
-        ]
-      },
-      {
-        "giorno": "venerdi",
-        "zona": "2° Piano",
-        "docenti": [
-          "Neri",
-          "Rento"
-        ]
-      },
-      {
-        "giorno": "venerdi",
-        "zona": "Laboratori",
-        "docenti": [
-          "Chiariello"
-        ]
-      },
-      {
-        "giorno": "sabato",
         "zona": "Scale lato bagni",
         "docenti": [
           "Ciarlantini"
         ]
       },
       {
+        "giorno": "giovedi",
+        "zona": "Scale lato didattica",
+        "docenti": [
+          "Pelosio"
+        ]
+      },
+      {
+        "giorno": "giovedi",
+        "zona": "MC Mario",
+        "docenti": [
+          "Liuzzo"
+        ]
+      },
+      {
+        "giorno": "giovedi",
+        "zona": "Cortile ingresso",
+        "docenti": [
+          "De Bacco",
+          "D'Albore"
+        ]
+      },
+      {
+        "giorno": "giovedi",
+        "zona": "Piano Terra",
+        "docenti": [
+          "Marini",
+          "Salton"
+        ]
+      },
+      {
+        "giorno": "giovedi",
+        "zona": "1° Piano",
+        "docenti": [
+          "De Rocco",
+          "Di Palma"
+        ]
+      },
+      {
+        "giorno": "giovedi",
+        "zona": "2° Piano",
+        "docenti": [
+          "Panico",
+          "Bassani"
+        ]
+      },
+      {
+        "giorno": "giovedi",
+        "zona": "Laboratori",
+        "docenti": [
+          "Rattin"
+        ]
+      },
+      {
+        "giorno": "venerdi",
+        "zona": "Scale lato bagni",
+        "docenti": [
+          "Cipollone"
+        ]
+      },
+      {
+        "giorno": "venerdi",
+        "zona": "Scale lato didattica",
+        "docenti": [
+          "Ruosi"
+        ]
+      },
+      {
+        "giorno": "venerdi",
+        "zona": "MC Mario",
+        "docenti": [
+          "Rento"
+        ]
+      },
+      {
+        "giorno": "venerdi",
+        "zona": "Cortile ingresso",
+        "docenti": [
+          "Chiariello",
+          "Carruggio"
+        ]
+      },
+      {
+        "giorno": "venerdi",
+        "zona": "Piano Terra",
+        "docenti": [
+          "Boschello",
+          "De Rocco"
+        ]
+      },
+      {
+        "giorno": "venerdi",
+        "zona": "1° Piano",
+        "docenti": [
+          "Di Palma",
+          "Panico"
+        ]
+      },
+      {
+        "giorno": "venerdi",
+        "zona": "2° Piano",
+        "docenti": [
+          "Curto",
+          "Ruosi"
+        ]
+      },
+      {
+        "giorno": "venerdi",
+        "zona": "Laboratori",
+        "docenti": [
+          "Ciarlantini"
+        ]
+      },
+      {
+        "giorno": "sabato",
+        "zona": "Scale lato bagni",
+        "docenti": [
+          "Marcer M."
+        ]
+      },
+      {
         "giorno": "sabato",
         "zona": "Scale lato didattica",
         "docenti": [
-          "Fantinel"
+          "Della Pietra"
         ]
       },
       {
         "giorno": "sabato",
         "zona": "MC Mario",
         "docenti": [
-          "Gris"
+          "Dalla Torre"
         ]
       },
       {
         "giorno": "sabato",
         "zona": "Cortile ingresso",
         "docenti": [
-          "Pontillo",
-          "Zaetta"
+          "Malè (Curtolo)",
+          "Cassarino"
         ]
       },
       {
         "giorno": "sabato",
         "zona": "Piano Terra",
         "docenti": [
-          "Sardina"
+          "Zaetta",
+          "Marini"
         ]
       },
       {
         "giorno": "sabato",
         "zona": "1° Piano",
         "docenti": [
-          "Zirpolo",
-          "Zannol"
+          "Turchetto",
+          "Bassani"
         ]
       },
       {
         "giorno": "sabato",
         "zona": "2° Piano",
         "docenti": [
-          "Capozzolo"
+          "Donazzolo",
+          "Rattin"
         ]
       },
       {
         "giorno": "sabato",
         "zona": "Laboratori",
         "docenti": [
-          "Pelosio"
+          "Curto"
         ]
       }
     ],
@@ -44857,53 +44709,54 @@
         {
           "zona": "Scale lato bagni",
           "docenti": [
-            "Bordin"
+            "Basso"
           ]
         },
         {
           "zona": "Scale lato didattica",
           "docenti": [
-            "Capozzolo"
+            "Bugana"
           ]
         },
         {
           "zona": "MC Mario",
           "docenti": [
-            "Cozzolino"
+            "Capozzolo"
           ]
         },
         {
           "zona": "Cortile ingresso",
           "docenti": [
-            "Da Rold",
-            "Gaio"
+            "Debortoli",
+            "Feltrin",
+            "Palma"
           ]
         },
         {
           "zona": "Piano Terra",
           "docenti": [
-            "De Boni",
-            "Ruosi"
+            "Donazzolo",
+            "Schirò"
           ]
         },
         {
           "zona": "1° Piano",
           "docenti": [
-            "De Pellegrin",
-            "Liuzzo"
+            "Tonet",
+            "Zadra"
           ]
         },
         {
           "zona": "2° Piano",
           "docenti": [
-            "De Pizzol",
-            "Pellizzari"
+            "Decet",
+            "Cassarino"
           ]
         },
         {
           "zona": "Laboratori",
           "docenti": [
-            "Feltrin"
+            "Boschello"
           ]
         }
       ],
@@ -44911,53 +44764,54 @@
         {
           "zona": "Scale lato bagni",
           "docenti": [
-            "Da Rold"
+            "Ambrosanio"
           ]
         },
         {
           "zona": "Scale lato didattica",
           "docenti": [
-            "Decet"
+            "Bugana"
           ]
         },
         {
           "zona": "MC Mario",
           "docenti": [
-            "Gasperin"
+            "Cipollone"
           ]
         },
         {
           "zona": "Cortile ingresso",
           "docenti": [
-            "Liuzzo",
-            "Chiariello"
+            "Corso",
+            "Debortoli",
+            "Salton"
           ]
         },
         {
           "zona": "Piano Terra",
           "docenti": [
-            "Schirò",
-            "Zaetta"
+            "Gasperin",
+            "Palma"
           ]
         },
         {
           "zona": "1° Piano",
           "docenti": [
-            "Tonet",
-            "Rento"
+            "Schirò",
+            "Tonet"
           ]
         },
         {
           "zona": "2° Piano",
           "docenti": [
             "Zannol",
-            "Turrin"
+            "Decet"
           ]
         },
         {
           "zona": "Laboratori",
           "docenti": [
-            "De Bacco"
+            "Rigo"
           ]
         }
       ],
@@ -44965,45 +44819,48 @@
         {
           "zona": "Scale lato bagni",
           "docenti": [
-            "Guizzo"
+            "Campigotto"
           ]
         },
         {
           "zona": "Scale lato didattica",
           "docenti": [
-            "Bassani"
+            "Cioppa"
           ]
         },
         {
           "zona": "MC Mario",
           "docenti": [
-            "Berlese"
+            "Capozzolo"
           ]
         },
         {
           "zona": "Cortile ingresso",
           "docenti": [
-            "Cioppa",
-            "Capozzolo"
+            "Cipollone",
+            "Sardina",
+            "Turchetto"
           ]
         },
         {
           "zona": "Piano Terra",
           "docenti": [
-            "Ruosi"
+            "Sartoni",
+            "Vito"
           ]
         },
         {
           "zona": "1° Piano",
           "docenti": [
-            "Sardina",
-            "Zannol"
+            "Zannol",
+            "Zirpolo"
           ]
         },
         {
           "zona": "2° Piano",
           "docenti": [
-            "Turchetto"
+            "Decet",
+            "De Bortoli"
           ]
         },
         {
@@ -45017,53 +44874,53 @@
         {
           "zona": "Scale lato bagni",
           "docenti": [
-            "Ambrosanio"
+            "Ciarlantini"
           ]
         },
         {
           "zona": "Scale lato didattica",
           "docenti": [
-            "Bortolamiol"
+            "Pelosio"
           ]
         },
         {
           "zona": "MC Mario",
           "docenti": [
-            "Corso"
+            "Liuzzo"
           ]
         },
         {
           "zona": "Cortile ingresso",
           "docenti": [
-            "De Min",
-            "Vivacqua"
+            "De Bacco",
+            "D'Albore"
           ]
         },
         {
           "zona": "Piano Terra",
           "docenti": [
-            "Decet",
-            "Pelosio"
+            "Marini",
+            "Salton"
           ]
         },
         {
           "zona": "1° Piano",
           "docenti": [
-            "Marini",
-            "De Bacco"
+            "De Rocco",
+            "Di Palma"
           ]
         },
         {
           "zona": "2° Piano",
           "docenti": [
-            "Salton",
-            "Gris"
+            "Panico",
+            "Bassani"
           ]
         },
         {
           "zona": "Laboratori",
           "docenti": [
-            "Savaris"
+            "Rattin"
           ]
         }
       ],
@@ -45071,53 +44928,53 @@
         {
           "zona": "Scale lato bagni",
           "docenti": [
-            "Basso"
+            "Cipollone"
           ]
         },
         {
           "zona": "Scale lato didattica",
           "docenti": [
-            "Cassarino"
+            "Ruosi"
           ]
         },
         {
           "zona": "MC Mario",
           "docenti": [
-            "Cirillo"
+            "Rento"
           ]
         },
         {
           "zona": "Cortile ingresso",
           "docenti": [
-            "D'Incau",
-            "Feltrin"
+            "Chiariello",
+            "Carruggio"
           ]
         },
         {
           "zona": "Piano Terra",
           "docenti": [
-            "Guetta",
-            "Turrin"
+            "Boschello",
+            "De Rocco"
           ]
         },
         {
           "zona": "1° Piano",
           "docenti": [
-            "Noce",
-            "Gris"
+            "Di Palma",
+            "Panico"
           ]
         },
         {
           "zona": "2° Piano",
           "docenti": [
-            "Neri",
-            "Rento"
+            "Curto",
+            "Ruosi"
           ]
         },
         {
           "zona": "Laboratori",
           "docenti": [
-            "Chiariello"
+            "Ciarlantini"
           ]
         }
       ],
@@ -45125,51 +44982,53 @@
         {
           "zona": "Scale lato bagni",
           "docenti": [
-            "Ciarlantini"
+            "Marcer M."
           ]
         },
         {
           "zona": "Scale lato didattica",
           "docenti": [
-            "Fantinel"
+            "Della Pietra"
           ]
         },
         {
           "zona": "MC Mario",
           "docenti": [
-            "Gris"
+            "Dalla Torre"
           ]
         },
         {
           "zona": "Cortile ingresso",
           "docenti": [
-            "Pontillo",
-            "Zaetta"
+            "Malè (Curtolo)",
+            "Cassarino"
           ]
         },
         {
           "zona": "Piano Terra",
           "docenti": [
-            "Sardina"
+            "Zaetta",
+            "Marini"
           ]
         },
         {
           "zona": "1° Piano",
           "docenti": [
-            "Zirpolo",
-            "Zannol"
+            "Turchetto",
+            "Bassani"
           ]
         },
         {
           "zona": "2° Piano",
           "docenti": [
-            "Capozzolo"
+            "Donazzolo",
+            "Rattin"
           ]
         },
         {
           "zona": "Laboratori",
           "docenti": [
-            "Pelosio"
+            "Curto"
           ]
         }
       ]
@@ -45177,177 +45036,215 @@
     "per_docente": {
       "Ambrosanio": [
         {
-          "giorno": "giovedi",
+          "giorno": "martedi",
           "zona": "Scale lato bagni"
         }
       ],
       "Bassani": [
         {
-          "giorno": "mercoledi",
-          "zona": "Scale lato didattica"
+          "giorno": "giovedi",
+          "zona": "2° Piano"
+        },
+        {
+          "giorno": "sabato",
+          "zona": "1° Piano"
         }
       ],
       "Basso": [
-        {
-          "giorno": "venerdi",
-          "zona": "Scale lato bagni"
-        }
-      ],
-      "Berlese": [
-        {
-          "giorno": "mercoledi",
-          "zona": "MC Mario"
-        }
-      ],
-      "Bordin": [
         {
           "giorno": "lunedi",
           "zona": "Scale lato bagni"
         }
       ],
-      "Bortolamiol": [
+      "Boschello": [
         {
-          "giorno": "giovedi",
+          "giorno": "lunedi",
+          "zona": "Laboratori"
+        },
+        {
+          "giorno": "venerdi",
+          "zona": "Piano Terra"
+        }
+      ],
+      "Bugana": [
+        {
+          "giorno": "lunedi",
           "zona": "Scale lato didattica"
+        },
+        {
+          "giorno": "martedi",
+          "zona": "Scale lato didattica"
+        }
+      ],
+      "Campigotto": [
+        {
+          "giorno": "mercoledi",
+          "zona": "Scale lato bagni"
         }
       ],
       "Capozzolo": [
         {
           "giorno": "lunedi",
-          "zona": "Scale lato didattica"
+          "zona": "MC Mario"
         },
         {
           "giorno": "mercoledi",
-          "zona": "Cortile ingresso"
-        },
+          "zona": "MC Mario"
+        }
+      ],
+      "Carruggio": [
         {
-          "giorno": "sabato",
-          "zona": "2° Piano"
+          "giorno": "venerdi",
+          "zona": "Cortile ingresso"
         }
       ],
       "Cassarino": [
         {
-          "giorno": "venerdi",
-          "zona": "Scale lato didattica"
+          "giorno": "lunedi",
+          "zona": "2° Piano"
+        },
+        {
+          "giorno": "sabato",
+          "zona": "Cortile ingresso"
         }
       ],
       "Chiariello": [
         {
-          "giorno": "martedi",
-          "zona": "Cortile ingresso"
-        },
-        {
           "giorno": "venerdi",
-          "zona": "Laboratori"
+          "zona": "Cortile ingresso"
         }
       ],
       "Ciarlantini": [
         {
-          "giorno": "sabato",
+          "giorno": "giovedi",
           "zona": "Scale lato bagni"
+        },
+        {
+          "giorno": "venerdi",
+          "zona": "Laboratori"
         }
       ],
       "Cioppa": [
         {
           "giorno": "mercoledi",
-          "zona": "Cortile ingresso"
+          "zona": "Scale lato didattica"
         }
       ],
-      "Cirillo": [
+      "Cipollone": [
+        {
+          "giorno": "martedi",
+          "zona": "MC Mario"
+        },
+        {
+          "giorno": "mercoledi",
+          "zona": "Cortile ingresso"
+        },
         {
           "giorno": "venerdi",
-          "zona": "MC Mario"
+          "zona": "Scale lato bagni"
         }
       ],
       "Corso": [
         {
-          "giorno": "giovedi",
-          "zona": "MC Mario"
+          "giorno": "martedi",
+          "zona": "Cortile ingresso"
         }
       ],
-      "Cozzolino": [
-        {
-          "giorno": "lunedi",
-          "zona": "MC Mario"
-        }
-      ],
-      "D'Incau": [
+      "Curto": [
         {
           "giorno": "venerdi",
+          "zona": "2° Piano"
+        },
+        {
+          "giorno": "sabato",
+          "zona": "Laboratori"
+        }
+      ],
+      "D'Albore": [
+        {
+          "giorno": "giovedi",
           "zona": "Cortile ingresso"
         }
       ],
-      "Da Rold": [
+      "Dalla Torre": [
         {
-          "giorno": "lunedi",
-          "zona": "Cortile ingresso"
-        },
-        {
-          "giorno": "martedi",
-          "zona": "Scale lato bagni"
+          "giorno": "sabato",
+          "zona": "MC Mario"
         }
       ],
       "De Bacco": [
         {
-          "giorno": "martedi",
-          "zona": "Laboratori"
-        },
-        {
-          "giorno": "giovedi",
-          "zona": "1° Piano"
-        }
-      ],
-      "De Boni": [
-        {
-          "giorno": "lunedi",
-          "zona": "Piano Terra"
-        }
-      ],
-      "De Min": [
-        {
           "giorno": "giovedi",
           "zona": "Cortile ingresso"
         }
       ],
-      "De Pellegrin": [
+      "De Bortoli": [
         {
-          "giorno": "lunedi",
-          "zona": "1° Piano"
+          "giorno": "mercoledi",
+          "zona": "2° Piano"
         }
       ],
-      "De Pizzol": [
+      "De Rocco": [
+        {
+          "giorno": "giovedi",
+          "zona": "1° Piano"
+        },
+        {
+          "giorno": "venerdi",
+          "zona": "Piano Terra"
+        }
+      ],
+      "Debortoli": [
         {
           "giorno": "lunedi",
-          "zona": "2° Piano"
+          "zona": "Cortile ingresso"
+        },
+        {
+          "giorno": "martedi",
+          "zona": "Cortile ingresso"
         }
       ],
       "Decet": [
         {
-          "giorno": "martedi",
-          "zona": "Scale lato didattica"
+          "giorno": "lunedi",
+          "zona": "2° Piano"
         },
         {
-          "giorno": "giovedi",
-          "zona": "Piano Terra"
+          "giorno": "martedi",
+          "zona": "2° Piano"
+        },
+        {
+          "giorno": "mercoledi",
+          "zona": "2° Piano"
         }
       ],
-      "Fantinel": [
+      "Della Pietra": [
         {
           "giorno": "sabato",
           "zona": "Scale lato didattica"
         }
       ],
-      "Feltrin": [
+      "Di Palma": [
         {
-          "giorno": "lunedi",
-          "zona": "Laboratori"
+          "giorno": "giovedi",
+          "zona": "1° Piano"
         },
         {
           "giorno": "venerdi",
-          "zona": "Cortile ingresso"
+          "zona": "1° Piano"
         }
       ],
-      "Gaio": [
+      "Donazzolo": [
+        {
+          "giorno": "lunedi",
+          "zona": "Piano Terra"
+        },
+        {
+          "giorno": "sabato",
+          "zona": "2° Piano"
+        }
+      ],
+      "Feltrin": [
         {
           "giorno": "lunedi",
           "zona": "Cortile ingresso"
@@ -45356,134 +45253,132 @@
       "Gasperin": [
         {
           "giorno": "martedi",
-          "zona": "MC Mario"
-        }
-      ],
-      "Gris": [
-        {
-          "giorno": "giovedi",
-          "zona": "2° Piano"
-        },
-        {
-          "giorno": "venerdi",
-          "zona": "1° Piano"
-        },
-        {
-          "giorno": "sabato",
-          "zona": "MC Mario"
-        }
-      ],
-      "Guetta": [
-        {
-          "giorno": "venerdi",
           "zona": "Piano Terra"
-        }
-      ],
-      "Guizzo": [
-        {
-          "giorno": "mercoledi",
-          "zona": "Scale lato bagni"
         }
       ],
       "Liuzzo": [
         {
-          "giorno": "lunedi",
-          "zona": "1° Piano"
-        },
+          "giorno": "giovedi",
+          "zona": "MC Mario"
+        }
+      ],
+      "Malè (Curtolo)": [
         {
-          "giorno": "martedi",
+          "giorno": "sabato",
           "zona": "Cortile ingresso"
+        }
+      ],
+      "Marcer M.": [
+        {
+          "giorno": "sabato",
+          "zona": "Scale lato bagni"
         }
       ],
       "Marini": [
         {
           "giorno": "giovedi",
-          "zona": "1° Piano"
-        }
-      ],
-      "Neri": [
+          "zona": "Piano Terra"
+        },
         {
-          "giorno": "venerdi",
-          "zona": "2° Piano"
+          "giorno": "sabato",
+          "zona": "Piano Terra"
         }
       ],
-      "Noce": [
-        {
-          "giorno": "venerdi",
-          "zona": "1° Piano"
-        }
-      ],
-      "Pellizzari": [
+      "Palma": [
         {
           "giorno": "lunedi",
+          "zona": "Cortile ingresso"
+        },
+        {
+          "giorno": "martedi",
+          "zona": "Piano Terra"
+        }
+      ],
+      "Panico": [
+        {
+          "giorno": "giovedi",
           "zona": "2° Piano"
+        },
+        {
+          "giorno": "venerdi",
+          "zona": "1° Piano"
         }
       ],
       "Pelosio": [
         {
           "giorno": "giovedi",
-          "zona": "Piano Terra"
+          "zona": "Scale lato didattica"
+        }
+      ],
+      "Rattin": [
+        {
+          "giorno": "giovedi",
+          "zona": "Laboratori"
         },
         {
           "giorno": "sabato",
-          "zona": "Laboratori"
-        }
-      ],
-      "Pontillo": [
-        {
-          "giorno": "sabato",
-          "zona": "Cortile ingresso"
+          "zona": "2° Piano"
         }
       ],
       "Rento": [
         {
+          "giorno": "venerdi",
+          "zona": "MC Mario"
+        }
+      ],
+      "Rigo": [
+        {
           "giorno": "martedi",
-          "zona": "1° Piano"
+          "zona": "Laboratori"
+        }
+      ],
+      "Ruosi": [
+        {
+          "giorno": "venerdi",
+          "zona": "Scale lato didattica"
         },
         {
           "giorno": "venerdi",
           "zona": "2° Piano"
         }
       ],
-      "Ruosi": [
-        {
-          "giorno": "lunedi",
-          "zona": "Piano Terra"
-        },
-        {
-          "giorno": "mercoledi",
-          "zona": "Piano Terra"
-        }
-      ],
       "Salton": [
         {
+          "giorno": "martedi",
+          "zona": "Cortile ingresso"
+        },
+        {
           "giorno": "giovedi",
-          "zona": "2° Piano"
+          "zona": "Piano Terra"
         }
       ],
       "Sardina": [
         {
           "giorno": "mercoledi",
-          "zona": "1° Piano"
-        },
-        {
-          "giorno": "sabato",
-          "zona": "Piano Terra"
+          "zona": "Cortile ingresso"
         }
       ],
-      "Savaris": [
+      "Sartoni": [
         {
-          "giorno": "giovedi",
-          "zona": "Laboratori"
+          "giorno": "mercoledi",
+          "zona": "Piano Terra"
         }
       ],
       "Schirò": [
         {
-          "giorno": "martedi",
+          "giorno": "lunedi",
           "zona": "Piano Terra"
+        },
+        {
+          "giorno": "martedi",
+          "zona": "1° Piano"
         }
       ],
       "Tonet": [
+        {
+          "giorno": "lunedi",
+          "zona": "1° Piano"
+        },
         {
           "giorno": "martedi",
           "zona": "1° Piano"
@@ -45492,37 +45387,33 @@
       "Turchetto": [
         {
           "giorno": "mercoledi",
-          "zona": "2° Piano"
-        }
-      ],
-      "Turrin": [
-        {
-          "giorno": "martedi",
-          "zona": "2° Piano"
+          "zona": "Cortile ingresso"
         },
         {
-          "giorno": "venerdi",
+          "giorno": "sabato",
+          "zona": "1° Piano"
+        }
+      ],
+      "Vito": [
+        {
+          "giorno": "mercoledi",
           "zona": "Piano Terra"
         }
       ],
-      "Vivacqua": [
+      "Zadra": [
         {
-          "giorno": "giovedi",
-          "zona": "Cortile ingresso"
+          "giorno": "lunedi",
+          "zona": "1° Piano"
         }
       ],
       "Zaetta": [
-        {
-          "giorno": "martedi",
-          "zona": "Piano Terra"
-        },
         {
           "giorno": "mercoledi",
           "zona": "Laboratori"
         },
         {
           "giorno": "sabato",
-          "zona": "Cortile ingresso"
+          "zona": "Piano Terra"
         }
       ],
       "Zannol": [
@@ -45533,15 +45424,11 @@
         {
           "giorno": "mercoledi",
           "zona": "1° Piano"
-        },
-        {
-          "giorno": "sabato",
-          "zona": "1° Piano"
         }
       ],
       "Zirpolo": [
         {
-          "giorno": "sabato",
+          "giorno": "mercoledi",
           "zona": "1° Piano"
         }
       ]

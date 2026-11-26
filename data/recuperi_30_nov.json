@@ -1,0 +1,706 @@
+{
+  "meta": {
+    "documento": "RECUPER dal 30 novembre 2026",
+    "in_vigore_dal": "2026-11-30",
+    "in_vigore_label": "lunedì 30 novembre 2026",
+    "fonte": "Index Education 2026"
+  },
+  "recuperi": [
+    {
+      "docente_id": "VITO",
+      "docente_nome": "Vito",
+      "giorno": "lunedi",
+      "ora": 1,
+      "settimana": "Q1"
+    },
+    {
+      "docente_id": "GAIO",
+      "docente_nome": "Gaio",
+      "giorno": "lunedi",
+      "ora": 1,
+      "settimana": "Q2"
+    },
+    {
+      "docente_id": "GUETTA",
+      "docente_nome": "Guetta",
+      "giorno": "mercoledi",
+      "ora": 1,
+      "settimana": "Q1"
+    },
+    {
+      "docente_id": "PLUTINO_CALIGIURI",
+      "docente_nome": "Plutino (Caligiuri)",
+      "giorno": "giovedi",
+      "ora": 1,
+      "settimana": "Q1"
+    },
+    {
+      "docente_id": "GUARRELLA",
+      "docente_nome": "Guarrella",
+      "giorno": "giovedi",
+      "ora": 1,
+      "settimana": "Q2"
+    },
+    {
+      "docente_id": "BASSO",
+      "docente_nome": "Basso",
+      "giorno": "lunedi",
+      "ora": 2,
+      "settimana": "Q1"
+    },
+    {
+      "docente_id": "MENEGUZ_SCIENZE",
+      "docente_nome": "Meneguz (Scienze)",
+      "giorno": "lunedi",
+      "ora": 2,
+      "settimana": "Q2"
+    },
+    {
+      "docente_id": "NERI",
+      "docente_nome": "Neri",
+      "giorno": "martedi",
+      "ora": 2,
+      "settimana": "Q1"
+    },
+    {
+      "docente_id": "ZIRPOLO",
+      "docente_nome": "Zirpolo",
+      "giorno": "martedi",
+      "ora": 2,
+      "settimana": "Q2"
+    },
+    {
+      "docente_id": "DE_MIN",
+      "docente_nome": "De Min",
+      "giorno": "mercoledi",
+      "ora": 2,
+      "settimana": "Q2"
+    },
+    {
+      "docente_id": "NART",
+      "docente_nome": "Nart",
+      "giorno": "giovedi",
+      "ora": 2,
+      "settimana": "Q1"
+    },
+    {
+      "docente_id": "TURRIN",
+      "docente_nome": "Turrin",
+      "giorno": "venerdi",
+      "ora": 2,
+      "settimana": "Q1"
+    },
+    {
+      "docente_id": "NOCE",
+      "docente_nome": "Noce",
+      "giorno": "venerdi",
+      "ora": 2,
+      "settimana": "Q2"
+    },
+    {
+      "docente_id": "FOLTRAN_LUSUARDI",
+      "docente_nome": "Foltran (Lusuardi)",
+      "giorno": "sabato",
+      "ora": 2,
+      "settimana": "Q2"
+    },
+    {
+      "docente_id": "DINCAU",
+      "docente_nome": "D'Incau",
+      "giorno": "lunedi",
+      "ora": 3,
+      "settimana": "Q1"
+    },
+    {
+      "docente_id": "CAMPIGOTTO",
+      "docente_nome": "Campigotto",
+      "giorno": "martedi",
+      "ora": 3,
+      "settimana": "Q1"
+    },
+    {
+      "docente_id": "COZZOLINO",
+      "docente_nome": "Cozzolino",
+      "giorno": "martedi",
+      "ora": 3,
+      "settimana": "Q2"
+    },
+    {
+      "docente_id": "ANTOLE",
+      "docente_nome": "Antole",
+      "giorno": "mercoledi",
+      "ora": 3,
+      "settimana": "Q1"
+    },
+    {
+      "docente_id": "MARCER_J",
+      "docente_nome": "Marcer J.",
+      "giorno": "giovedi",
+      "ora": 3,
+      "settimana": "Q2"
+    },
+    {
+      "docente_id": "ZATTA",
+      "docente_nome": "Zatta",
+      "giorno": "sabato",
+      "ora": 3,
+      "settimana": "Q1"
+    },
+    {
+      "docente_id": "PELLIZZARI",
+      "docente_nome": "Pellizzari",
+      "giorno": "lunedi",
+      "ora": 4,
+      "settimana": "Q2"
+    },
+    {
+      "docente_id": "VIVACQUA",
+      "docente_nome": "Vivacqua",
+      "giorno": "martedi",
+      "ora": 4,
+      "settimana": "Q1"
+    },
+    {
+      "docente_id": "SAVARIS",
+      "docente_nome": "Savaris",
+      "giorno": "martedi",
+      "ora": 4,
+      "settimana": "Q2"
+    },
+    {
+      "docente_id": "GRIS",
+      "docente_nome": "Gris",
+      "giorno": "mercoledi",
+      "ora": 4,
+      "settimana": "Q1"
+    },
+    {
+      "docente_id": "ZADRA",
+      "docente_nome": "Zadra",
+      "giorno": "mercoledi",
+      "ora": 4,
+      "settimana": "Q2"
+    },
+    {
+      "docente_id": "DE_GREGORIO",
+      "docente_nome": "De Gregorio",
+      "giorno": "venerdi",
+      "ora": 4,
+      "settimana": "Q1"
+    },
+    {
+      "docente_id": "BORTOLAMIOL",
+      "docente_nome": "Bortolamiol",
+      "giorno": "lunedi",
+      "ora": 5,
+      "settimana": "Q1"
+    },
+    {
+      "docente_id": "DE_PIZZOL",
+      "docente_nome": "De Pizzol",
+      "giorno": "lunedi",
+      "ora": 5,
+      "settimana": "Q2"
+    },
+    {
+      "docente_id": "CASSARINO",
+      "docente_nome": "Cassarino",
+      "giorno": "lunedi",
+      "ora": 6,
+      "settimana": "Q1"
+    },
+    {
+      "docente_id": "DE_PELLEGRIN",
+      "docente_nome": "De Pellegrin",
+      "giorno": "lunedi",
+      "ora": 6,
+      "settimana": "Q2"
+    },
+    {
+      "docente_id": "DE_BONI",
+      "docente_nome": "De Boni",
+      "giorno": "martedi",
+      "ora": 6,
+      "settimana": "Q1"
+    },
+    {
+      "docente_id": "TONET",
+      "docente_nome": "Tonet",
+      "giorno": "martedi",
+      "ora": 6,
+      "settimana": "Q2"
+    },
+    {
+      "docente_id": "CIARLANTINI",
+      "docente_nome": "Ciarlantini",
+      "giorno": "mercoledi",
+      "ora": 6,
+      "settimana": "Q1"
+    },
+    {
+      "docente_id": "RIGO",
+      "docente_nome": "Rigo",
+      "giorno": "mercoledi",
+      "ora": 6,
+      "settimana": "Q2"
+    }
+  ],
+  "per_docente": {
+    "ANTOLE": [
+      {
+        "giorno": "mercoledi",
+        "ora": 3,
+        "settimana": "Q1"
+      }
+    ],
+    "BASSO": [
+      {
+        "giorno": "lunedi",
+        "ora": 2,
+        "settimana": "Q1"
+      }
+    ],
+    "BORTOLAMIOL": [
+      {
+        "giorno": "lunedi",
+        "ora": 5,
+        "settimana": "Q1"
+      }
+    ],
+    "CAMPIGOTTO": [
+      {
+        "giorno": "martedi",
+        "ora": 3,
+        "settimana": "Q1"
+      }
+    ],
+    "CASSARINO": [
+      {
+        "giorno": "lunedi",
+        "ora": 6,
+        "settimana": "Q1"
+      }
+    ],
+    "CIARLANTINI": [
+      {
+        "giorno": "mercoledi",
+        "ora": 6,
+        "settimana": "Q1"
+      }
+    ],
+    "COZZOLINO": [
+      {
+        "giorno": "martedi",
+        "ora": 3,
+        "settimana": "Q2"
+      }
+    ],
+    "DE_BONI": [
+      {
+        "giorno": "martedi",
+        "ora": 6,
+        "settimana": "Q1"
+      }
+    ],
+    "DE_GREGORIO": [
+      {
+        "giorno": "venerdi",
+        "ora": 4,
+        "settimana": "Q1"
+      }
+    ],
+    "DE_MIN": [
+      {
+        "giorno": "mercoledi",
+        "ora": 2,
+        "settimana": "Q2"
+      }
+    ],
+    "DE_PELLEGRIN": [
+      {
+        "giorno": "lunedi",
+        "ora": 6,
+        "settimana": "Q2"
+      }
+    ],
+    "DE_PIZZOL": [
+      {
+        "giorno": "lunedi",
+        "ora": 5,
+        "settimana": "Q2"
+      }
+    ],
+    "DINCAU": [
+      {
+        "giorno": "lunedi",
+        "ora": 3,
+        "settimana": "Q1"
+      }
+    ],
+    "FOLTRAN_LUSUARDI": [
+      {
+        "giorno": "sabato",
+        "ora": 2,
+        "settimana": "Q2"
+      }
+    ],
+    "GAIO": [
+      {
+        "giorno": "lunedi",
+        "ora": 1,
+        "settimana": "Q2"
+      }
+    ],
+    "GRIS": [
+      {
+        "giorno": "mercoledi",
+        "ora": 4,
+        "settimana": "Q1"
+      }
+    ],
+    "GUARRELLA": [
+      {
+        "giorno": "giovedi",
+        "ora": 1,
+        "settimana": "Q2"
+      }
+    ],
+    "GUETTA": [
+      {
+        "giorno": "mercoledi",
+        "ora": 1,
+        "settimana": "Q1"
+      }
+    ],
+    "MARCER_J": [
+      {
+        "giorno": "giovedi",
+        "ora": 3,
+        "settimana": "Q2"
+      }
+    ],
+    "MENEGUZ_SCIENZE": [
+      {
+        "giorno": "lunedi",
+        "ora": 2,
+        "settimana": "Q2"
+      }
+    ],
+    "NART": [
+      {
+        "giorno": "giovedi",
+        "ora": 2,
+        "settimana": "Q1"
+      }
+    ],
+    "NERI": [
+      {
+        "giorno": "martedi",
+        "ora": 2,
+        "settimana": "Q1"
+      }
+    ],
+    "NOCE": [
+      {
+        "giorno": "venerdi",
+        "ora": 2,
+        "settimana": "Q2"
+      }
+    ],
+    "PELLIZZARI": [
+      {
+        "giorno": "lunedi",
+        "ora": 4,
+        "settimana": "Q2"
+      }
+    ],
+    "PLUTINO_CALIGIURI": [
+      {
+        "giorno": "giovedi",
+        "ora": 1,
+        "settimana": "Q1"
+      }
+    ],
+    "RIGO": [
+      {
+        "giorno": "mercoledi",
+        "ora": 6,
+        "settimana": "Q2"
+      }
+    ],
+    "SAVARIS": [
+      {
+        "giorno": "martedi",
+        "ora": 4,
+        "settimana": "Q2"
+      }
+    ],
+    "TONET": [
+      {
+        "giorno": "martedi",
+        "ora": 6,
+        "settimana": "Q2"
+      }
+    ],
+    "TURRIN": [
+      {
+        "giorno": "venerdi",
+        "ora": 2,
+        "settimana": "Q1"
+      }
+    ],
+    "VITO": [
+      {
+        "giorno": "lunedi",
+        "ora": 1,
+        "settimana": "Q1"
+      }
+    ],
+    "VIVACQUA": [
+      {
+        "giorno": "martedi",
+        "ora": 4,
+        "settimana": "Q1"
+      }
+    ],
+    "ZADRA": [
+      {
+        "giorno": "mercoledi",
+        "ora": 4,
+        "settimana": "Q2"
+      }
+    ],
+    "ZATTA": [
+      {
+        "giorno": "sabato",
+        "ora": 3,
+        "settimana": "Q1"
+      }
+    ],
+    "ZIRPOLO": [
+      {
+        "giorno": "martedi",
+        "ora": 2,
+        "settimana": "Q2"
+      }
+    ]
+  },
+  "per_giorno": {
+    "lunedi": [
+      {
+        "ora": 1,
+        "docente_id": "VITO",
+        "docente_nome": "Vito",
+        "settimana": "Q1"
+      },
+      {
+        "ora": 1,
+        "docente_id": "GAIO",
+        "docente_nome": "Gaio",
+        "settimana": "Q2"
+      },
+      {
+        "ora": 2,
+        "docente_id": "BASSO",
+        "docente_nome": "Basso",
+        "settimana": "Q1"
+      },
+      {
+        "ora": 2,
+        "docente_id": "MENEGUZ_SCIENZE",
+        "docente_nome": "Meneguz (Scienze)",
+        "settimana": "Q2"
+      },
+      {
+        "ora": 3,
+        "docente_id": "DINCAU",
+        "docente_nome": "D'Incau",
+        "settimana": "Q1"
+      },
+      {
+        "ora": 4,
+        "docente_id": "PELLIZZARI",
+        "docente_nome": "Pellizzari",
+        "settimana": "Q2"
+      },
+      {
+        "ora": 5,
+        "docente_id": "BORTOLAMIOL",
+        "docente_nome": "Bortolamiol",
+        "settimana": "Q1"
+      },
+      {
+        "ora": 5,
+        "docente_id": "DE_PIZZOL",
+        "docente_nome": "De Pizzol",
+        "settimana": "Q2"
+      },
+      {
+        "ora": 6,
+        "docente_id": "CASSARINO",
+        "docente_nome": "Cassarino",
+        "settimana": "Q1"
+      },
+      {
+        "ora": 6,
+        "docente_id": "DE_PELLEGRIN",
+        "docente_nome": "De Pellegrin",
+        "settimana": "Q2"
+      }
+    ],
+    "martedi": [
+      {
+        "ora": 2,
+        "docente_id": "NERI",
+        "docente_nome": "Neri",
+        "settimana": "Q1"
+      },
+      {
+        "ora": 2,
+        "docente_id": "ZIRPOLO",
+        "docente_nome": "Zirpolo",
+        "settimana": "Q2"
+      },
+      {
+        "ora": 3,
+        "docente_id": "CAMPIGOTTO",
+        "docente_nome": "Campigotto",
+        "settimana": "Q1"
+      },
+      {
+        "ora": 3,
+        "docente_id": "COZZOLINO",
+        "docente_nome": "Cozzolino",
+        "settimana": "Q2"
+      },
+      {
+        "ora": 4,
+        "docente_id": "VIVACQUA",
+        "docente_nome": "Vivacqua",
+        "settimana": "Q1"
+      },
+      {
+        "ora": 4,
+        "docente_id": "SAVARIS",
+        "docente_nome": "Savaris",
+        "settimana": "Q2"
+      },
+      {
+        "ora": 6,
+        "docente_id": "DE_BONI",
+        "docente_nome": "De Boni",
+        "settimana": "Q1"
+      },
+      {
+        "ora": 6,
+        "docente_id": "TONET",
+        "docente_nome": "Tonet",
+        "settimana": "Q2"
+      }
+    ],
+    "mercoledi": [
+      {
+        "ora": 1,
+        "docente_id": "GUETTA",
+        "docente_nome": "Guetta",
+        "settimana": "Q1"
+      },
+      {
+        "ora": 2,
+        "docente_id": "DE_MIN",
+        "docente_nome": "De Min",
+        "settimana": "Q2"
+      },
+      {
+        "ora": 3,
+        "docente_id": "ANTOLE",
+        "docente_nome": "Antole",
+        "settimana": "Q1"
+      },
+      {
+        "ora": 4,
+        "docente_id": "GRIS",
+        "docente_nome": "Gris",
+        "settimana": "Q1"
+      },
+      {
+        "ora": 4,
+        "docente_id": "ZADRA",
+        "docente_nome": "Zadra",
+        "settimana": "Q2"
+      },
+      {
+        "ora": 6,
+        "docente_id": "CIARLANTINI",
+        "docente_nome": "Ciarlantini",
+        "settimana": "Q1"
+      },
+      {
+        "ora": 6,
+        "docente_id": "RIGO",
+        "docente_nome": "Rigo",
+        "settimana": "Q2"
+      }
+    ],
+    "giovedi": [
+      {
+        "ora": 1,
+        "docente_id": "PLUTINO_CALIGIURI",
+        "docente_nome": "Plutino (Caligiuri)",
+        "settimana": "Q1"
+      },
+      {
+        "ora": 1,
+        "docente_id": "GUARRELLA",
+        "docente_nome": "Guarrella",
+        "settimana": "Q2"
+      },
+      {
+        "ora": 2,
+        "docente_id": "NART",
+        "docente_nome": "Nart",
+        "settimana": "Q1"
+      },
+      {
+        "ora": 3,
+        "docente_id": "MARCER_J",
+        "docente_nome": "Marcer J.",
+        "settimana": "Q2"
+      }
+    ],
+    "venerdi": [
+      {
+        "ora": 2,
+        "docente_id": "TURRIN",
+        "docente_nome": "Turrin",
+        "settimana": "Q1"
+      },
+      {
+        "ora": 2,
+        "docente_id": "NOCE",
+        "docente_nome": "Noce",
+        "settimana": "Q2"
+      },
+      {
+        "ora": 4,
+        "docente_id": "DE_GREGORIO",
+        "docente_nome": "De Gregorio",
+        "settimana": "Q1"
+      }
+    ],
+    "sabato": [
+      {
+        "ora": 2,
+        "docente_id": "FOLTRAN_LUSUARDI",
+        "docente_nome": "Foltran (Lusuardi)",
+        "settimana": "Q2"
+      },
+      {
+        "ora": 3,
+        "docente_id": "ZATTA",
+        "docente_nome": "Zatta",
+        "settimana": "Q1"
+      }
+    ]
+  }
+}
